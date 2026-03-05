@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>B-612号宇宙漫游指南</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', '宋体', serif;
+            background-color: #0a0f1a;
+            color: #e0e6f0;
+            line-height: 1.7;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ===== 动态星空背景 ===== */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+            background: radial-gradient(ellipse at 30% 40%, #1a2a4a 0%, #0a0f1a 80%);
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff;
+            animation: twinkle var(--duration) infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: var(--min-opacity); transform: scale(1); }
+            100% { opacity: var(--max-opacity); transform: scale(1.2); }
+        }
+
+        /* 行星环 (仅首页可见) */
+        .planet-ring {
+            position: fixed;
+            top: 20%;
+            right: -20%;
+            width: 400px;
+            height: 200px;
+            border: 2px solid rgba(255,215,0,0.2);
+            border-radius: 50%;
+            transform: rotate(30deg);
+            box-shadow: 0 0 40px rgba(255,215,0,0.2);
+            animation: rotateRing 60s linear infinite;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        @keyframes rotateRing {
+            0% { transform: rotate(30deg); }
+            100% { transform: rotate(390deg); }
+        }
+
+        /* ===== 页面容器 ===== */
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 100vh;
+            padding: 30px 20px 80px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease, visibility 0.8s;
+            overflow-y: auto;
+            background: rgba(10, 15, 26, 0.3);
+            backdrop-filter: blur(2px);
+        }
+
+        .page.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(20, 25, 35, 0.6);
+            backdrop-filter: blur(12px);
+            border-radius: 48px;
+            padding: 30px 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,215,0,0.2);
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+		
+		/* 磨砂玻璃卡片容器 */
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 40px;
+            padding: 25px 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px var(--border-glow);
+            border: 1px solid rgba(255,215,0,0.2);
+        }
+
+        /* 标题 */
+        .chapter-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px currentColor;
+            background: linear-gradient(135deg, #ffaa33, gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .chapter-subtitle {
+            font-size: 1rem;
+            color: #aab8d9;
+            margin-bottom: 25px;
+            font-style: italic;
+            border-bottom: 1px dashed rgba(255,215,0,0.3);
+            padding-bottom: 10px;
+        }
+
+        /* ===== 卡片样式 ===== */
+        .scene-card {
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(4px);
+            border-radius: 32px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,215,0,0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            color: #f0e6d2;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .fox-note {
+            border-left: 4px solid #ffaa33;
+            background: rgba(255,170,51,0.1);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 20px 20px 0;
+            font-style: italic;
+            box-shadow: inset 0 0 10px rgba(255,170,51,0.2);
+        }
+
+        /* 插画占位区域 */
+        .illustration-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .placeholder {
+            background: rgba(255,255,255,0.1);
+            border: 2px dashed rgba(255,215,0,0.3);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aab8d9;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .placeholder-sm {
+            width: 120px;
+            height: 120px;
+        }
+
+        .placeholder-md {
+            width: 160px;
+            height: 160px;
+        }
+
+        .placeholder-lg {
+            width: 200px;
+            height: 200px;
+        }
+
+        .placeholder-xl {
+            width: 250px;
+            height: 180px;
+        }
+		
+		/* 动画类 */
+        .spin-slow {
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .sway {
+            animation: sway 2s ease-in-out infinite;
+        }
+
+        @keyframes sway {
+            0% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+            100% { transform: rotate(-3deg); }
+        }
+
+        /* ===== 解谜区域 ===== */
+        .puzzle-area {
+            background: rgba(30, 40, 60, 0.8);
+            backdrop-filter: blur(4px);
+            border-radius: 28px;
+            padding: 25px;
+            margin: 30px 0;
+            border: 2px solid #ffaa33;
+            box-shadow: 0 0 20px rgba(255,170,51,0.3);
+        }
+
+        .question {
+            font-size: 1.2rem;
+            color: #ffd966;
+            margin-bottom: 20px;
+            font-weight: 500;
+            text-shadow: 0 0 5px #ffaa33;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .option-btn {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid #3f5170;
+            border-radius: 60px;
+            padding: 16px 20px;
+            color: white;
+            font-size: 1.1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .option-btn:hover {
+            background: rgba(255,170,51,0.3);
+            border-color: #ffaa33;
+            transform: scale(1.02);
+            box-shadow: 0 0 20px #ffaa33;
+        }
+
+        .option-btn.selected {
+            background: #ffaa33;
+            border-color: #ffaa33;
+            color: #0a0f1a;
+            font-weight: bold;
+            box-shadow: 0 0 30px #ffaa33;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid #3f5170;
+            border-radius: 60px;
+            color: white;
+            font-size: 1.1rem;
+            margin: 20px 0;
+            backdrop-filter: blur(2px);
+        }
+
+        .input-field:focus {
+            border-color: #ffaa33;
+            outline: none;
+            box-shadow: 0 0 20px #ffaa33;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #ffaa33, #ff8c42);
+            color: #0a0f1a;
+            border: none;
+            border-radius: 60px;
+            padding: 18px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+            box-shadow: 0 5px 15px rgba(255,170,51,0.5);
+            border: 1px solid gold;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px #ffaa33;
+        }
+
+        /* ===== 成功故事区域 ===== */
+        .success-story {
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            border-radius: 32px;
+            padding: 30px 25px;
+            margin: 30px 0;
+            border: 2px solid gold;
+            box-shadow: 0 0 40px gold;
+            color: #fff8e7;
+        }
+
+        .continue-btn {
+            background: gold;
+            color: #0a0f1a;
+            border: none;
+            border-radius: 60px;
+            padding: 16px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px gold;
+            transition: 0.2s;
+        }
+
+        .continue-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px gold;
+        }
+		
+		.mirror-frame {
+    width: 100%;
+    max-width: 500px;
+    height: 1000px;
+    margin: 30px auto;
+    border: 2px solid gold;
+    border-radius: 30px;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.mirror-text {
+    width: 100%;
+    height: 100%;
+    padding: 30px 25px;
+    font-size: 1.1rem;
+    text-align: center;
+    color: gold;
+    line-height: 2;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: opacity 2s ease;
+    opacity: 1;
+}
+
+.mirror-text p {
+    margin: 0.5em 0;
+    width: 100%;
+}
+
+        /* ===== 固定UI ===== */
+        .stars-collected {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            padding: 10px 18px;
+            border-radius: 40px;
+            font-size: 1rem;
+            z-index: 100;
+            border: 1px solid gold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 0 15px gold;
+        }
+
+        .stars-collected i {
+            color: gold;
+            font-size: 1.2rem;
+            animation: starPulse 2s infinite;
+        }
+
+        @keyframes starPulse {
+            0% { transform: scale(1); text-shadow: 0 0 5px gold; }
+            50% { transform: scale(1.2); text-shadow: 0 0 20px gold; }
+            100% { transform: scale(1); text-shadow: 0 0 5px gold; }
+        }
+
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            border: 2px solid gold;
+            color: gold;
+            font-size: 1.4rem;
+            transition: 0.2s;
+            box-shadow: 0 0 20px gold;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+            background: gold;
+            color: #0a0f1a;
+        }
+
+        .wheat-egg {
+            position: fixed;
+			bottom: 30px;
+            left: 40%;
+            transform: translateX(-50%);
+            width: 56px;
+            height: 56px;
+            background: rgba(255,215,0,0.2);
+            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid gold;
+            color: gold;
+            font-size: 1.5rem;
+            z-index: 200;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+            box-shadow: 0 0 15px gold;
+        }
+
+        .wheat-egg.show {
+            opacity: 1;
+            visibility: visible;
+            animation: wheatPulse 2s infinite;
+        }
+
+        @keyframes wheatPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* ===== 狐狸剪影（首页） ===== */
+        .fox-silhouette {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23ffaa33" opacity="0.8" d="M70,50 Q75,35 85,30 Q80,20 70,25 Q60,15 50,20 Q40,15 30,25 Q20,20 15,30 Q25,35 30,50 Q25,65 30,75 Q40,85 50,85 Q60,85 70,75 Q75,65 70,50 Z M40,45 Q45,45 45,50 Q45,55 40,55 Q35,55 35,50 Q35,45 40,45 M60,45 Q65,45 65,50 Q65,55 60,55 Q55,55 55,50 Q55,45 60,45" /></svg>') no-repeat center;
+            background-size: contain;
+            filter: drop-shadow(0 0 10px #ffaa33);
+            animation: tailWag 3s infinite alternate;
+            z-index: 5;
+        }
+
+        @keyframes tailWag {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(5deg); }
+        }
+
+        /* ===== 隐藏类 ===== */
+        .hidden {
+            display: none !important;
+        }
+		
+		/* 狐狸页 */
+        .fox-page-content {
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .fox-quote {
+            border-left: 4px solid #d4a373;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        /* ===== 彩蛋页飘麦穗动画 ===== */
+        .floating-wheat {
+            position: fixed;
+            pointer-events: none;
+            color: gold;
+            font-size: 2rem;
+            animation: floatUp 3s forwards;
+            z-index: 1000;
+            text-shadow: 0 0 10px gold;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-200px) rotate(20deg); opacity: 0; }
+        }
+
+        .twenty-one {
+            text-align: center;
+            margin: 40px 0 20px;
+            font-size: 1.3rem;
+            color: gold;
+            cursor: pointer;
+            transition: 0.3s;
+            padding: 15px;
+            border-radius: 60px;
+            border: 2px solid gold;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .twenty-one:hover {
+            background: gold;
+            color: #0a0f1a;
+            box-shadow: 0 0 30px gold;
+        }
+
+        /* ===== 结局页镜子样式 ===== */
+        .mirror-text {
+            font-size: 1.3rem;
+            text-align: center;
+            color: gold;
+            border: 2px solid gold;
+            border-radius: 40px;
+            padding: 30px 20px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            line-height: 2;
+            margin: 30px 0;
+            box-shadow: 0 0 30px gold;
+        }
+
+        .final-quote {
+            font-size: 1.2rem;
+            color: #ffd966;
+            text-align: center;
+            margin: 30px 0;
+            font-style: italic;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 2px solid #ffaa33;
+            color: #ffaa33;
+            border-radius: 60px;
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #ffaa33;
+            color: #0a0f1a;
+            box-shadow: 0 0 30px #ffaa33;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 480px) {
+            .container { padding: 20px 18px; }
+            .chapter-title { font-size: 1.8rem; }
+            .fox-silhouette { width: 50px; height: 50px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 动态星空 -->
+    <div id="starfield"></div>
+    <div class="planet-ring" id="planetRing"></div>
+
+    <!-- 星星计数 -->
+    <div class="stars-collected" id="starsCounter">
+        <i class="fas fa-star"></i>
+        <span id="starCount">0</span>/6
+    </div>
+
+    <!-- 音乐控制 -->
+    <div class="music-control" id="musicToggle">
+        <i class="fas fa-music"></i>
+    </div>
+    <audio id="bgMusic" loop></audio>
+
+    <!-- 麦穗彩蛋入口 (右下角) -->
+    <div class="wheat-egg" id="wheatEgg" onclick="goToFoxPage()">
+        <i class="fas fa-wheat-alt"></i>
+    </div>
+
+    <!-- ========== 序幕 ========== -->
+    <section class="page active" id="pagePrologue">
+        <div class="container">
+            <div class="illustration-area" style="justify-content: flex-end;">
+                <!-- 狐狸剪影占位 -->
+                <div class="placeholder placeholder-md float" style="background: #4a3a2a; border-color: #ffaa33;">🦊 狐狸剪影</div>
+            </div>
+            <h1 class="chapter-title" style="text-align: center;">B-612号宇宙漫游指南</h1>
+            <p class="chapter-subtitle" style="text-align: center;">一位匿名星际向导为你定制的自我探索之旅</p>
+
+            <div class="scene-card">
+                <p>在遥远的B-612小行星上，住着一个小王子。他每天打扫火山，拔除猴面包树，照顾一朵玫瑰。但后来他离开了，去拜访其他星球，遇到了国王、商人、点灯人，还有一只狐狸。</p>
+                <p>狐狸告诉他：“重要的东西用眼睛是看不见的。”</p>
+                <p>今天，你收到一张没有寄件人的船票，它夹在你常看的那本诗集里。票面上用歪歪扭扭的字体写着：“请前往B-612号宇宙，拜访那些你从未见过的自己。”</p>
+                <p>它将带你飞过六个星球，每个星球上都有一个你——你曾经的模样、你藏起来的渴望、你不敢承认的恐惧、你偷偷喜欢的旋律、你沉默时的叹息、你未来想成为的人。</p>
+                <p>向导不会出现，但会留下线索。当你走完这段旅程，你将收到一份礼物：关于你自己的真相。</p>
+                <p>注意：在每个星球上，你需要回答一个关于你自己的问题。答案只有你知道。如果你诚实，星星会为你点亮。</p>
+            </div>
+            <button class="submit-btn" onclick="goToPlanet(1)">启程</button>
+        </div>
+    </section>
+
+    <!-- ========== 童年星球 ========== -->
+    <section class="page" id="pagePlanet1">
+        <div class="container">
+            <h2 class="chapter-title">童年星球 · 未完成的画</h2>
+			
+			<!-- 插画区：画架(左) 摄影机(右) 颜料(散落) -->
+            <div class="illustration-area">
+                <div class="placeholder placeholder-md float" style="align-self: flex-start;">🖼️ 旧画架+未完成画</div>
+                <div class="placeholder placeholder-md sway" style="align-self: flex-end;">📽️ 老式摄影机</div>
+                <div class="placeholder placeholder-sm" style="width:60px; height:60px;">🎨 颜料管</div>
+                <div class="placeholder placeholder-sm" style="width:60px; height:60px;">🖌️ 颜料管</div>
+            </div>
+			
+            <div class="scene-card">
+                <p>你降落在一个很小的星球上。光线柔和得像童年的傍晚，带着淡淡的金色，洒在每一寸土地上。这里有一个旧画架，画架上是一幅未完成的画——只有铅笔勾勒的轮廓，隐约能看出是一个人的背影，站在一片麦田前，麦浪被风吹出温柔的弧度。画架旁边散落着几管颜料，颜色都有些干了，像被遗忘的时光。不远处，一台老式胶片摄影机静静地架在那里，镜头对准画架，仿佛在等待某个瞬间被按下快门。摄影机旁边有一个木质相框，里面是一张微微泛黄的照片，但照片上的人影模糊不清，只能看到一片光影，像是某个故事的开头。</p>
+                <p>你走近画架，发现画纸边缘有几行手写的字，笔迹稚嫩，像是很久以前写下的：</p>
+                <div class="fox-note">
+                    “小时候，我总想抓住那些会动的东西——风里的麦浪，屏幕里的故事，还有那些一闪而过的表情。后来我发现，用画笔和镜头，能把它们留下来。但留下来的，到底是它们，还是我眼里的它们？我试过画画，也试过拍片，每次按下快门或落下最后一笔，心里都会有一种奇怪的满足感，好像世界被我偷走了一小块。”
+                </div>
+                <p>画架底座刻着一行小字：<br>“他曾用这两种方式，讲述过别人的故事。其中一个故事，他至今仍为之骄傲，甚至会在深夜偶尔想起，嘴角微微上扬。”</p>
+                <p>你低头，看到调色盘里唯一没干的一管颜料，上面贴着一张纸条：<br>“那个让他骄傲的故事，藏在一个词里——他在这个故事里扮演的角色是什么？”</p>
+                <p>调色盘旁边还有一本泛黄的笔记本，翻开第一页，写着：“如果有一天我忘了自己是谁，请让我想起那个镜头，那个属于我的瞬间。”</p>
+            </div>
+
+            <div id="puzzle1" class="puzzle-area">
+                <div class="question">请输入那个词：</div>
+                <input type="text" class="input-field" id="planet1Input" placeholder="例如：导演、摄影师...">
+                <button class="submit-btn" onclick="checkPlanet1()">提交答案</button>
+            </div>
+
+            <div id="story1" class="success-story hidden">
+                <p>你轻轻输入了那个词。</p>
+                <p>画架上的画突然泛起微光，像被注入了生命。那个模糊的背影渐渐清晰——是一个少年的身影，穿着简单的T恤，正站在一个简陋的片场中央，手里拿着场记板，脸上带着专注而骄傲的神情。旁边的摄影机自动开始转动，发出轻微的“咔哒”声，仿佛正在记录这个瞬间。画纸上的麦田开始轻轻摇曳，金色的麦浪仿佛能闻到阳光的味道。</p>
+               <div class="illustration-area">
+                    <div class="placeholder placeholder-xl">🎬 少年站在片场（手绘）</div>
+                </div>
+			    <p>摄影机里缓缓吐出一段胶片，胶片上浮现出一行行文字：</p>
+                <p>“是的，那个故事。他曾经用镜头讲述过一个关于成长的短片，每一个镜头都经过反复打磨，每一个画面都藏着他对世界的理解。那时他还很年轻，不懂得隐藏，不怕表达，也不怕被人看见。他站在摄像机后面，指挥着很多人，心里既紧张又兴奋。后来，他很少再提起它，不是忘记了，是怕现在的自己配不上曾经的骄傲。”</p>
+                <p>胶片继续转动，画面切换到那个少年拍片的场景：他蹲在地上调整灯光，他踮起脚尖调整镜头，他和演员说戏时认真的侧脸。最后，画面定格在那个少年对着镜头微笑的瞬间，那笑容清澈而真实，像是世界还未曾让他疲惫。</p>
+                <p>画架下方，原本空白的地方浮现出一行小字：<br>“那个少年还在。他只是在等一个机会，重新拿起画笔或摄像机，讲一个关于自己的故事。”</p>
+                <p>摄影机里的胶卷缓缓转出，落在地上，变成一颗发光的星星碎片，上面刻着：<br>“他曾是导演，也是自己故事的主角。”</p>
+                <p>你捡起这颗碎片，第一颗星星点亮了。光芒从碎片中溢出，照亮了整个星球，也照亮了画架上那个少年的背影。</p>
+                <p style="color: gold; margin-top:20px;">【收集到】一颗星星碎片 “童年的光”。</p>
+                <p>第一颗星已点亮。继续航行，寻找下一个自己。</p>
+                <button class="continue-btn" onclick="goToPlanet(2)">前往下一站</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 少年星球 ========== -->
+    <section class="page" id="pagePlanet2">
+        <div class="container">
+            <h2 class="chapter-title">少年星球 · 衣柜里的花衬衫</h2>
+			
+			<!-- 插画区：花衬衫(左) 全身镜(右) -->
+            <div class="illustration-area">
+                <div class="placeholder placeholder-md float">👕 花衬衫（带防尘罩）</div>
+                <div class="placeholder placeholder-md sway" style="background: #2a2a3a;">🪞 全身镜</div>
+            </div>
+			
+            <div class="scene-card">
+                <p>你降落在第二个星球。这里静得能听见自己的呼吸，四周是一排排望不到尽头的衣架，像一座巨大的、沉默的迷宫。光线从头顶洒下，柔和而均匀，照亮了每一件悬挂着的衣服——黑色T恤、白色polo衫、深灰色外套、藏青色卫衣……它们整齐得近乎严肃，仿佛在等待一场永不举行的检阅。你穿过这条由黑白两色构成的走廊，指尖划过那些柔软的布料，心里升起一种奇怪的压抑感：这里似乎缺少了什么，一种本该存在的色彩。</p>
+                <p>走了很久，你终于在迷宫的最深处发现了一处异样的光亮。那是一个独立的衣架，孤零零地站在一面全身镜前。衣架上挂着一件花衬衫——浅蓝的底色，印着深红色的热带花卉，绿得发亮的叶片缠绕其中，像把一整个夏天都穿在了身上。衬衫被套在透明的防尘罩里，整洁如新，却带着一种被珍藏多年的寂寥。</p>
+                <p>你走近，看见衬衫旁边的小架子上摆着一张纸条，笔迹有些潦草：</p>
+                <div class="fox-note">
+                    “他第一次买这件衬衫是在一个周末的下午，阳光很好，他路过一家小店，橱窗里这件衬衫正对着他笑。他试穿时，镜子里的自己好像变了一个人——没那么累，没那么紧绷，连眼神都柔软了些。那天他穿着它去了公园，看了场电影，买了杯柠檬茶。风吹过来时，他觉得这才是自己该有的样子。可后来，周末越来越少，甚至消失了好长一段时间。衬衫被收进衣柜深处，成了偶尔拿出来看一眼的‘过去’。他不知道的是，每次他看它，它都在等一个重新穿上的机会。”
+                </div>
+                <p>你低头，发现镜子下方有一排按钮，每个按钮上写着一个词。镜子边缘刻着一行字：<br>“当他穿上这件衬衫时，他最想做的是______。”</p>
+            </div>
+
+            <div id="puzzle2" class="puzzle-area">
+                <div class="question">请选择：</div>
+                <div class="options">
+                    <div class="option-btn" onclick="selectOption(this, 'A')">A. 叛逆</div>
+                    <div class="option-btn" onclick="selectOption(this, 'B')">B. 真实</div>
+                    <div class="option-btn" onclick="selectOption(this, 'C')">C. 快乐</div>
+                    <div class="option-btn" onclick="selectOption(this, 'D')">D. 放松</div>
+                </div>
+                <button class="submit-btn" onclick="checkPlanet2()" id="planet2Submit" disabled>提交答案</button>
+            </div>
+
+            <div id="story2" class="success-story hidden">
+                <p>当你按下“真实”的按钮，镜子突然变得明亮起来，像被擦去了多年的灰尘。镜面中渐渐浮现出一个身影——是他，穿着那件花衬衫，站在某个午后的公园里，阳光透过树叶洒在他肩上，他手里端着一杯柠檬茶，嘴角带着若有若无的笑意。那笑容和平时不太一样，没有疲惫，没有伪装，像一个刚从漫长的冬眠中醒来的人。</p>
+                <div class="illustration-area">
+                    <div class="placeholder placeholder-lg">🌳 镜子中的他（穿花衬衫，拿柠檬茶）</div>
+                </div>
+				<p>镜子里传来声音，很轻，像从很远的地方飘来：</p>
+                <p>“是的……真实。穿上它时，我可以不是那个永远要撑住一切的人。我可以发呆，可以慢吞吞地走路，可以想一些没用的事。衬衫上的花不会问我‘最近怎么样’，它们只是开着，开成我想成为的样子。可后来，周末消失了，我也忘了这件衬衫还在等我。直到现在……你帮我找回来了。”</p>
+                <p>镜子里的他转过身，朝你点了点头。然后，整个衣柜开始发生变化——那些黑白衣服一件件染上淡淡的金色，像被阳光晒透的云。空气里弥漫起柠檬茶的清香，远处似乎有风吹过，带来若有若无的旋律，是那首他喜欢了很久的歌。</p>
+                <p>花衬衫的衣领上，不知什么时候多了一颗发光的星星碎片。你轻轻取下它，上面刻着一行小字：<br>“真实的他从未走远，只是在等一个不需要伪装的周末。”</p>
+                <p>你把这颗碎片握在手里，它温暖而轻盈，像攥着一片被风吹落的阳光。第二颗星星点亮了，整个星球被染成淡淡的暖色调，衣柜里所有的衣服都轻轻晃动，仿佛在向他挥手告别。</p>
+                <p style="color: gold; margin-top:20px;">【收集到】一颗星星碎片 “少年的真实”。</p>
+                <p>第二颗星已点亮。继续航行，你会遇见更多自己。</p>
+                <button class="continue-btn" onclick="goToPlanet(3)">前往下一站</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 青年星球 ========== -->
+    <section class="page" id="pagePlanet3">
+        <div class="container">
+            <h2 class="chapter-title">青年星球 · 蝙蝠侠的叹息</h2>
+			<!-- 插画区：扶手椅(中) 面具(上) 录音机(左) 书(右) -->
+            <div class="illustration-area">
+                <div class="placeholder placeholder-sm float">📚 深度学习入门</div>
+                <div class="placeholder placeholder-md" style="width:180px;">🪑 黑色扶手椅</div>
+                <div class="placeholder placeholder-sm sway">🎙️ 录音机</div>
+                <div class="placeholder placeholder-sm" style="margin-top:10px;">🦇 蝙蝠侠面具</div>
+            </div>
+			
+            <div class="scene-card">
+                <p>你降落在第三个星球。这里和前面两个完全不同——到处是闪烁的屏幕、嗡嗡作响的服务器、此起彼伏的消息提示音，像一个永不休息的控制中心。地面上散落着各种文件，有些标着“已完成”，有些标着“待处理”，还有一堆标着“永远做不完”。你抬头，看见无数根数据线从空中垂下，连接着每一台屏幕，像这个星球的血脉。</p>
+                <p>在星球的中央，有一把孤零零的椅子，黑色的皮质扶手椅，已经有些磨损。椅子上放着一个蝙蝠侠面具——不是那种精致的周边，而是一个普通的、戴过很多次的面具，边缘有些褪色，内侧却异常干净，像是被反复擦拭过。</p>
+                <p>你走近，发现椅子旁边立着一盏小台灯，灯光昏黄，照着面具下压着的一封信。信纸皱皱的，像被攥过很多次，又展平了。上面写着：</p>
+                <div class="fox-note">
+                    “他喜欢蝙蝠侠不是因为那身战衣，也不是因为那些酷炫的装备。他喜欢的是那个道理——布鲁斯·韦恩在白天是个什么都有的富豪，晚上却要穿上盔甲，变成别人眼中的‘无所不能’。他说他懂那种感觉。在同事面前，他要解决所有问题，要扛住所有压力，要假装一切都尽在掌握。但只有他自己知道，每次关上门，每次回到家，每次一个人坐在车里，他都在问自己：我真的行吗？我真的配吗？还是说，我只是在假装那个‘万能的人’，直到所有人都相信了，只剩下我自己还在怀疑？”
+                </div>
+                <p>你拿起面具，发现面具内侧密密麻麻刻着日期。有些用笔写的，有些像是用指甲划出来的。每个日期后面都有一个极小的符号——有时是一个点，有时是一道浅浅的划痕。最上面的一个日期旁，划痕特别深，几乎穿透了面具。</p>
+                <p>台灯旁有一台老旧的录音机，上面有个红色的按钮。按钮旁贴着一张纸条：“按下去，你会听见他从未对人说过的话。”你按下按钮，录音机里传来一声长长的叹息。那叹息持续了很久，像把所有没出口的话都装在里面。叹息之后，是一阵沉默，然后是一个极轻的声音：“如果有一天我不再是蝙蝠侠……我想成为……”声音戛然而止，像说话的人被什么打断了。</p>
+                <p>纸条下面，是一道选择题。台灯的底座上刻着一行字：<br>“当他摘下面具，他最渴望成为的是______。”</p>
+            </div>
+
+            <div id="puzzle3" class="puzzle-area">
+                <div class="question">请选择：</div>
+                <div class="options">
+                    <div class="option-btn" onclick="selectOption(this, 'A')">A. 无所不能的人</div>
+                    <div class="option-btn" onclick="selectOption(this, 'B')">B. 被需要的人</div>
+                    <div class="option-btn" onclick="selectOption(this, 'C')">C. 值得被信赖的人</div>
+                    <div class="option-btn" onclick="selectOption(this, 'D')">D. 可以脆弱的人</div>
+                </div>
+                <button class="submit-btn" onclick="checkPlanet3()" id="planet3Submit" disabled>提交答案</button>
+            </div>
+
+            <div id="story3" class="success-story hidden">
+                <p>你选择了“值得被信赖的人”。</p>
+                <p>话音刚落，整个星球突然安静下来。那些闪烁的屏幕同时熄灭，嗡嗡的服务器停止了运转，消息提示音消失了——世界陷入一种奇异的宁静。</p>
+                <p>椅子上的蝙蝠侠面具开始发光，光线从内侧透出，像有什么东西正在苏醒。面具缓缓升起，悬浮在空中，然后像融化了一样，变成无数细小的光点。光点汇聚成一个模糊的人形，渐渐清晰——那是他，穿着普通的衣服，没有面具，没有披风，脸上带着一种复杂的表情，像疲惫，又像释然。</p>
+                <p>那个人影朝你走近一步，声音从四面八方传来，温和而低沉：</p>
+                <p>“你知道吗，蝙蝠侠最害怕的不是失败，不是死亡，而是有一天，哥谭的人发现他其实也会怕，也会累，也会不知道怎么办。所以他拼命训练，拼命准备，拼命让自己看起来‘值得信赖’。他要的从来不是被崇拜，而是——当危机来临时，所有人能安心地说：‘他在，就没事了。’”</p>
+                <p>他低下头，看着自己的手，苦笑了一下。</p>
+                <p>“可我也知道，那个‘值得信赖’的标准，从来不是别人定的。是我自己定的。我总觉得，只要我再努力一点，再完美一点，再无所不能一点，就能配得上所有人的期待。我不是想超过谁，是怕自己掉队，怕哪天有人问我‘你会吗’的时候，我只能摇头。”</p>
+                <p>他抬起头，看着你，眼神里有一种奇怪的光。</p>
+                <p>“但你知道吗，刚才你选的那个词……让我想起一件事。”</p>
+                <p>他身后浮现出一个画面：某个深夜，他靠在一个人的肩膀上，眼泪无声地流下来。那个人没有说话，只是轻轻拍着他的背。画面里的他说了一句什么，但声音很轻，听不清。</p>
+				<div class="illustration-area">
+                    <div class="placeholder placeholder-lg">👤 他靠在某人肩上哭的画面（剪影）</div>
+                </div>
+                <p>“那一刻，我觉得自己不是蝙蝠侠。但那个人看我的眼神，好像……我依然是值得信赖的。不是因为我能解决所有问题，只是因为……我是我。”</p>
+                <p>画面消散，他的身影也开始变淡。</p>
+                <p>“谢谢你帮我找回这个答案。它比蝙蝠侠重要得多。”</p>
+                <p>最后的光点凝聚成一颗发光的星星碎片，缓缓落进你手心。上面刻着一行小字：<br>“真正的值得，不是从不失败，是有人看见你的脆弱，依然选择相信。”</p>
+                <p>第三颗星星点亮了。周围那些屏幕重新亮起，但这次不再是工作消息——每一个屏幕上都变成了一片星空，星星安静地闪烁着，像在替他守护这个秘密。</p>
+                <p style="color: gold; margin-top:20px;">【收集到】一颗星星碎片 “深夜的答案”。</p>
+                <p>第三颗星已点亮。有些答案，藏在他自己都不敢看的地方。</p>
+                <button class="continue-btn" onclick="goToPlanet(4)">前往下一站</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 爱好星球 ========== -->
+    <section class="page" id="pagePlanet4">
+        <div class="container">
+            <h2 class="chapter-title">爱好星球 · 桌游与旋律</h2>
+			 <!-- 插画区：桌游城堡(左) 唱片机(右) 耳机(挂) -->
+            <div class="illustration-area">
+                <div class="placeholder placeholder-md float">🏰 桌游盒子城堡</div>
+                <div class="placeholder placeholder-md sway">📀 唱片机</div>
+                <div class="placeholder placeholder-sm">🎧 耳机</div>
+            </div>
+            <div class="scene-card">
+                <p>你降落在第四个星球。这里像一个被精心布置的秘密基地——脚下是柔软的地毯，头顶挂着暖黄色的星星灯，四周散落着大大小小的桌游盒子，堆成一座座小山。你看见《勃艮第城堡》的盒子半开着，露出里面精致的版图；《暑假日记》被摆在最显眼的位置，封面上的卡通人物冲你眨眼睛；还有《璀璨宝石》《SCOUT》《命悬一线》……每一盒都整整齐齐，像收藏家最珍贵的藏品。</p>
+                <p>你沿着桌游堆成的小路往里走，发现一座由盒子垒成的城堡。城堡最高处放着一张原木色的圆桌，桌上摆着一盒特别的桌游——它被单独放在一个玻璃罩里，像博物馆的展品。你凑近看，是那盒叫“情书”的桌游，盒子的边角已经有些磨损，显然被玩过很多次。玻璃罩上贴着一张纸条：</p>
+                <div class="fox-note">
+                    “他玩过很多游戏，赢过也输过。有些游戏他喜欢是因为策略，有些是因为运气，有些是因为可以和人一起笑。但这一盒，他喜欢是因为——每一次打开它，都会想起一个瞬间。那个瞬间和输赢无关，只和坐在对面的人有关。”
+                </div>
+                <p>你绕过桌游城堡，发现后面藏着一台老式唱片机。唱针轻轻搭在唱片上，却没有声音。唱片机旁摞着一叠黑胶唱片，最上面一张是《爱乐之城》的原声带，下面是《你的名字。》，再下面是郭顶的《飞行器的执行周期》、陈粒的《如也》、旅行团的《永远都会在》……每一张都带着细细的划痕，显然被听过很多遍。唱片机的旁边，有一个小小的耳机支架，上面挂着一副头戴式耳机。耳机上贴着一张便签：“他习惯一个人听歌，在通勤的路上，在加完班回家的深夜，在睡不着的时候。有些旋律陪他走过很长的路，有些歌词他悄悄抄下来，有些歌他从不对人提起——因为它们太像他，像得让他有点不好意思。”</p>
+                <p>你戴上耳机，终于听到了声音。是一段混剪——陈粒的《怪情歌》前奏，朴树的《New boy》副歌，宋冬野的《莉莉安》里的那句吉他，毛不易的《消愁》里那几声轻叹，阿肆的《世界上的另一个我》里俏皮的鼓点……它们交织在一起，像一个私人歌单在轻声诉说他的这些年。</p>
+                <p>耳机里的音乐渐渐淡去，换成一个熟悉的声音（是他自己的声音，但听起来像年轻几岁）：</p>
+                <div class="fox-note">
+                    “小时候我觉得，喜欢什么就要大声说出来。后来我发现，有些喜欢是不用说的。你会在某个疲惫的傍晚，刚好听到一首歌，然后觉得‘啊，就是这个’。你会在某个周末的下午，刚好约到一个人，然后打开一盒游戏，然后发现‘啊，就这样待着也挺好的’……那些东西——游戏和音乐——它们陪我的时间，比人还多。但它们从来不问我‘你怎么了’，也不要求我‘好起来’。它们只是在，一直。”
+                </div>
+                <p>你摘下耳机，发现唱片机旁边有一个小小的显示屏，上面显示着一个问题。显示屏下方有两个按钮，每个按钮上有一个词。</p>
+            </div>
+
+            <div id="puzzle4" class="puzzle-area">
+                <div class="question">“对他来说，桌游和音乐，更像是______？”</div>
+                <div class="options">
+                    <div class="option-btn" onclick="selectOption(this, 'A')">A. 逃避现实的方式</div>
+                    <div class="option-btn" onclick="selectOption(this, 'B')">B. 连接世界的桥梁</div>
+                </div>
+                <button class="submit-btn" onclick="checkPlanet4()" id="planet4Submit" disabled>提交答案</button>
+            </div>
+
+            <div id="story4" class="success-story hidden">
+                <p>你按下了“连接世界的桥梁”。</p>
+                <p>话音刚落，整个星球突然变得明亮起来。那些桌游盒子自己打开，里面的版图、卡牌、棋子缓缓升起，在空中拼成一幅巨大的画面——是他和朋友们围坐一桌，笑着争辩某条规则，有人懊恼地拍桌子，有人得意地举起手，他坐在中间，笑得眼睛都弯了。</p>
+                <p>唱片机开始转动，这次是一首完整的歌——朴树的《那些花儿》。旋律轻轻流淌，像水漫过沙滩。随着音乐，空中又浮现出另一个画面：他一个人走在深夜的街头，戴着耳机，脚步随着节奏轻轻晃动，路灯把影子拉得很长。但那个影子并不孤独，因为它正跟着歌里的鼓点一起摇摆。</p>
+				<div class="illustration-area">
+                    <div class="placeholder placeholder-md">👥 他和朋友们围坐玩桌游</div>
+                    <div class="placeholder placeholder-md">🌃 他深夜戴耳机走路</div>
+                </div>
+                <p>空中传来一个声音，是他自己的，但比刚才温柔：</p>
+                <p>“你知道吗，游戏和音乐从来不是我的‘退路’。它们是‘来路’。每一次打开一盒新游戏，都是在认识一种新的快乐；每一次发现一首好歌，都是在认识一个新的自己。然后，用这些快乐和这些新认识的我，去和这个世界打招呼。”</p>
+                <p>画面变换——他正在教一个朋友玩《勃艮第城堡》，耐心地解释规则；他正在把耳机分给另一个人，说“你听听这首”；他正把一盒桌游当作礼物送出去，盒子上系着简单的丝带。</p>
+                <p>“那些时刻，我不是一个人在玩，不是在一个人听。我是在用它们，和另一个人待在一起。”</p>
+                <p>最后一帧画面定格——他手里拿着那盒“情书”，对面坐着一个模糊的人影。两个人都在笑，桌上摊着卡牌，阳光从旁边照进来，把一切都染成暖色。</p>
+                <p>那盒“情书”从玻璃罩里缓缓升起，盖子自动打开，里面飞出一颗发光的星星碎片。它轻轻落进你手里，上面刻着一行小字：<br>“他送给别人的，从来不只是游戏，是‘我在这里，你要一起吗’。”</p>
+                <p>第四颗星星点亮了。周围的桌游盒子轻轻晃动，发出沙沙的声响，像在鼓掌。唱片机里，那首《那些花儿》刚好唱到最后一句：<br>“有些故事还没讲完，那就算了吧，那些心情在岁月中，已经难辨真假……”</p>
+                <p>但你知道，他的故事还在继续。</p>
+                <p style="color: gold; margin-top:20px;">【收集到】一颗星星碎片 “连接的证据”。</p>
+                <p>第四颗星已点亮。有些连接，比我们以为的更早就在那里。</p>
+                <button class="continue-btn" onclick="goToPlanet(5)">前往下一站</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 情感星球 ========== -->
+    <section class="page" id="pagePlanet5">
+        <div class="container">
+            <h2 class="chapter-title">情感星球 · 沉默的星空</h2>
+			<!-- 插画区：泪珠树(中) 长椅(下) 纸条(散落) -->
+            <div class="illustration-area" style="flex-direction: column;">
+                <div class="placeholder placeholder-lg float">🌳 泪珠石头树</div>
+                <div class="placeholder placeholder-md">🪑 旧长椅+本子</div>
+                <div style="display: flex; gap:10px;">
+                    <div class="placeholder placeholder-sm">📝 纸条“对不起”</div>
+                    <div class="placeholder placeholder-sm">📝 纸条“我没事”</div>
+                </div>
+            </div>
+            <div class="scene-card">
+                <p>你降落在第五个星球。这里的天空很低，深蓝色的穹顶仿佛触手可及。满天的星星不像平时那样闪烁，而是以一种极慢的速度明暗交替，像某种古老的呼吸。你踩在地面上，发现脚下不是泥土，而是一片柔软的、会泛起涟漪的暗色水面。每走一步，水面下就会有一道光轻轻掠过，像是触动了什么沉睡的东西。</p>
+                <p>你走了一会儿，发现地上散落着许多小纸条。有些是叠起来的，有些被揉皱了又展平，有些干脆撕成了碎片。你随手捡起一张，展开，上面只写着两个字：“对不起”。另一张上是“我没事”。还有一张，反复涂改过，最后只剩下一个词：“……算了”。越往前走，这样的纸条越多，铺成一条通往星球中心的路。</p>
+                <p>路的尽头，是一片空地。空地上立着一棵奇怪的树——银色的树干，树枝向四面八方伸展，但每根枝条的末端都挂着一颗泪珠形状的石头。那些石头在星光下泛着微光，像被凝固的叹息。风吹过，石头轻轻碰撞，发出极轻的声响，像是某种遥远的旋律。</p>
+                <p>树下有一张长椅，木头已经有些旧了。长椅上放着一本翻开的本子，旁边搁着一支笔。本子的第一页上写着：</p>
+                <div class="fox-note">
+                    “他不会吵架。从小到大，他都没学会怎么在冲突中保护自己。别人声音一大，他就沉默；别人一指责，他就后退；别人一期待，他就拼命。他觉得说出来的话会伤人，所以宁愿咽回去。咽回去的那些话，变成叹气，变成失眠，变成一个人坐着发呆的深夜。他不知道的是——有些话咽回去，伤的其实是自己。”
+                </div>
+                <p>你翻开本子，里面记录着一些片段：</p>
+                <p style="background: rgba(0,0,0,0.3); padding:15px; border-radius:12px; font-size:0.9rem;">
+                    2019.3.17 今天又没说出那句话。算了，她应该懂。<br>
+                    2021.8.22 他好像生气了，我不知道怎么解释。先消失几天吧。<br>
+                    2023.5.9 想打个电话，打了又挂。说什么呢，又不能说真话。<br>
+                </p>
+                <p>最后这一页，日期很近。上面只有一行字，字迹有些潦草：<br>“如果有一天，有人问我‘你到底在想什么’，我希望能说出那个词。”</p>
+                <p>本子的最后一页，贴着一张纸条，上面是一个问题。纸条下面有几个选项。</p>
+            </div>
+
+            <div id="puzzle5" class="puzzle-area">
+                <div class="question">“他叹气的时候，其实最想说出口的是______？”</div>
+                <div class="options">
+                    <div class="option-btn" onclick="selectOption(this, 'A')">A. 我累了</div>
+                    <div class="option-btn" onclick="selectOption(this, 'B')">B. 帮帮我</div>
+                    <div class="option-btn" onclick="selectOption(this, 'C')">C. 别走</div>
+                    <div class="option-btn" onclick="selectOption(this, 'D')">D. 对不起</div>
+                </div>
+                <button class="submit-btn" onclick="checkPlanet5()" id="planet5Submit" disabled>提交答案</button>
+            </div>
+
+            <div id="story5" class="success-story hidden">
+                <p>你选择了“别走”。</p>
+                <p>话音刚落，整棵树的泪珠石同时亮起。它们不再是悲伤的模样，而是变得透明、温暖，像一颗颗小小的月亮。石头轻轻摇晃，相互碰撞，发出一连串清脆的声音——那声音渐渐连成一段旋律，你听出来了，是某首歌的前奏，那首他曾经在深夜单曲循环过的歌。</p>
+                <p>长椅上的本子自动翻页，一页页快速掠过，最后停在某一页。这一页上，所有的字迹突然活了过来，像被注入了生命，从纸上飘起来，在空中组成一个画面：</p>
+                <p>是他，站在某个熟悉的地方。他背对着镜头，肩膀微微颤抖。一个模糊的人影走过来，没有说任何话，只是在他身后站着，然后轻轻把手放在他背上。</p>
+				<div class="illustration-area">
+                    <div class="placeholder placeholder-md">👥 他被人轻轻拍着背（背影）</div>
+                </div>
+                <p>画面里的他慢慢转过身，看着那个人，嘴唇动了动，像要说什么。但最终，他只叹了口气。</p>
+                <p>但这一次，叹气里有了别的东西——不是无奈，是一种“还好你在”的释然。</p>
+                <p>空中传来他的声音，很轻，像怕惊动什么：</p>
+                <p>“你知道吗，每次我叹气，心里都在说一句话。但我从来没真的说出口。我怕说出来，就显得我太需要了，太弱了，太……不像那个‘应该什么都能搞定’的我。”</p>
+                <p>画面里，他抬起手，犹豫了一下，然后轻轻握住了那只放在他背上的手。</p>
+                <p>“但我后来发现，有一个人，就算我不说，她也懂。她从不逼我说，只是等。等我沉默完，等我叹完气，等我准备好。有时候我消失几天，回来一看，她还在。”</p>
+                <p>他低下头，声音有点哑：</p>
+                <p>“那几次，我心里其实都在喊——别走。但我喊不出来。我只能用沉默说‘对不起’，用叹气说‘我很累’，用消失说‘你还会在吗’。”</p>
+                <p>画面慢慢消散，所有的光点重新凝聚，落在长椅上，变成一颗发光的星星碎片。你拿起它，上面刻着一行小字：<br>“每次叹气背后，都藏着一句‘别走’。有人听懂了，所以一直在。”</p>
+                <p>第五颗星星点亮了。树上的泪珠石不再摇晃，而是静静地亮着，像一盏盏温暖的灯，照亮了这片曾经沉默的星空。</p>
+                <p style="color: gold; margin-top:20px;">【收集到】一颗星星碎片 “未说出口的温柔”。</p>
+                <p>第五颗星已点亮。有些话，不说，也有人懂。</p>
+                <button class="continue-btn" onclick="goToPlanet(6)">前往下一站</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 未来星球 ========== -->
+    <section class="page" id="pagePlanet6">
+        <div class="container">
+            <h2 class="chapter-title">未来星球 · 等待发芽的种子</h2>
+			<!-- 插画区：大树(中) 笔记本堆(下) 平板(侧) -->
+            <div class="illustration-area">
+                <div class="placeholder placeholder-lg float">🌳 挂满物件的大树</div>
+                <div class="placeholder placeholder-md">📚 笔记本堆</div>
+                <div class="placeholder placeholder-md">📱 平板电脑（收藏夹）</div>
+            </div>
+			
+            <div class="scene-card">
+                <p>你降落在第六个星球。这里的天空是一种温柔的灰蓝色，像黎明前或黄昏后，介于光明与黑暗之间。地面上铺满了柔软的苔藓，踩上去会留下浅浅的脚印，但很快又恢复原状。远处有一棵巨大的树，树冠像一把撑开的伞，树干上挂满了各种奇怪的东西——鼠标、键盘、一本翻开的书、一杯喝了一半的咖啡、还有几个表情包打印成的挂件，挤眉弄眼地晃来晃去。</p>
+                <p>你走近那棵树，发现树根处堆着一叠叠的笔记本，有些封面写着“AI学习笔记”，有些写着“副业想法”，但翻开一看，大多只记了开头几页，后面全是空白。笔记本旁边是一个平板电脑，屏幕停留在B站的收藏夹页面，上面密密麻麻攒了几十个视频：《深度学习入门》《如何用AI赚钱》《下班后能做的小副业》……播放进度条都停在前三分钟。</p>
+                <p>平板下面压着一张纸条，是他自己的笔迹：<br>“收藏了=学了。……至少心里踏实了一点。”</p>
+                <p>你忍不住笑了，但又觉得有点心酸。</p>
+                <p>树干上有一块显示屏，屏幕里循环播放着一些画面：他在深夜打开一个收藏夹，点开视频看五分钟，然后被工作消息打断；他刷到某个“副业月入三万”的帖子，默默存进收藏夹；他和朋友聊天时说“等我以后有钱了天天打桌游”，但转头又打开那本AI书。画面旁边有一行字：</p>
+                <div class="fox-note">
+                    “他总说自己想退休，想躺平，想天天玩游戏。但他不是不想努力，他只是太累了——累到连‘开始’都变成一种压力。可那个‘万一呢’的念头，又一直在那里，像一颗埋在土里还没发芽的种子，等着哪天有阳光、有水、有一点多余的时间，就悄悄破土。”
+                </div>
+                <p>显示屏下方，有一排小小的按钮，每个按钮上有一个词。旁边写着一行字：<br>“那颗种子，其实早就种下了。它在等他说出那个词。”</p>
+            </div>
+
+            <div id="puzzle6" class="puzzle-area">
+                <div class="question">“他心里真正想成为的，是______？”</div>
+                <div class="options">
+                    <div class="option-btn" onclick="selectOption(this, 'A')">A. 能躺平的人</div>
+                    <div class="option-btn" onclick="selectOption(this, 'B')">B. 能赚钱的人</div>
+                    <div class="option-btn" onclick="selectOption(this, 'C')">C. 有更多选择的人</div>
+                </div>
+                <button class="submit-btn" onclick="checkPlanet6()" id="planet6Submit" disabled>提交答案</button>
+            </div>
+
+            <div id="story6" class="success-story hidden">
+                <p>你按下了“有更多选择的人”。</p>
+                <p>话音刚落，整棵树突然安静下来。那些晃动的表情包挂件停止了摇摆，屏幕上的收藏夹页面自动关闭，笔记本轻轻合上。然后，树干上亮起无数细小的光点，像萤火虫一样缓缓飞起，在空中汇聚成一幅画面：</p>
+                <p>是他，坐在某个安静的午后。阳光透过窗户照进来，他面前的桌上摊着一本笔记，但这一次，他不是只写了几行。他正在认真地画着什么——不是代码，不是公式，而是一张未来规划图。图上有一条主线，是现在的主业；旁边分出几条虚线，写着“AI副业”、“桌游店合伙人”、“学点新东西”。他没有放弃任何一条，只是在慢慢画，慢慢想。</p>
+                <div class="illustration-area">
+                    <div class="placeholder placeholder-lg">👤 他画未来规划图</div>
+                </div>
+				<p>画面里的他抬起头，对着某个看不见的人说：</p>
+                <p>“你知道吗，我其实不怕累。我怕的是累了之后，还是只能站在原地。所以我才收藏那些东西，看那些视频，想那些‘万一’。不是我真的有精力去做，是我想告诉自己——我还有路可以选，我不是被困住的。”</p>
+                <p>他笑了笑，那种带着点疲惫但依然温柔的笑：</p>
+                <p>“等我攒够一点时间，一点力气，我就从那些收藏里挑一个，认真试一试。不是为了发财，不是为了超过谁。只是……想看看，除了现在的我，还能不能变成另一个我。”</p>
+                <p>画面缓缓淡出，所有光点重新凝聚，落进树下一个小小的盒子里。你打开盒子，里面是一颗发光的星星碎片，形状像一颗刚破土的嫩芽。上面刻着一行小字：<br>“他收藏的不是视频，是‘未来还有可能’的证明。”</p>
+                <p>第六颗星星点亮了。整棵树开始发光，那些原本只是挂着的笔记本、平板、表情包，都染上了温暖的色彩。风吹过，树叶沙沙作响，像在说：慢慢来，不急。</p>
+                <p style="color: gold; margin-top:20px;">【收集到】一颗星星碎片 “未来的种子”。</p>
+                <p>第六颗星已点亮。有些种子，埋在土里久一点，只是为了将来长得更稳。</p>
+                <button class="continue-btn" onclick="goToPlanet(7)">前往结局</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 结局页 ========== -->
+    <section class="page" id="pageFinal">
+        <div class="container">
+            <h2 class="chapter-title" style="text-align: center;">他是什么样的人</h2>
+
+            <!-- 场景卡片 -->
+            <div class="scene-card">
+                <p>当你集齐六颗星星碎片后，它们会自动从你的背包中飞出，悬浮在你面前。六颗碎片围成一个圆圈，缓缓旋转，每一颗都发出不同颜色的光芒——童年的光是暖金色，少年的光是薄荷绿，青年的光是深蓝色，爱好的光是橙黄色，情感的光是柔粉色，未来的光是嫩芽青。</p>
+                <p>碎片越转越快，最后突然静止，光芒汇聚成一道光束，直直照向你的前方。光束落下的地方，原本空无一物，现在却缓缓升起一面巨大的镜子。镜框由六种颜色的藤蔓交织而成，藤蔓上还挂着那些星星碎片的微缩版，像小小的果实。</p>
+                <p>你走近镜子，发现镜子里映出的不是你自己，而是——他。</p>
+                <p>他站在一片金色的麦田里，穿着那件花衬衫，手里端着一杯柠檬茶，肩上停着一只小小的狐狸剪影。他看起来比现实中轻松一些，眉眼间没有那些疲惫的痕迹，像刚从一场漫长的午睡中醒来。</p>
+                <p>镜子下方，有一块光滑的石板。六颗星星碎片从空中缓缓落下，嵌进石板上对应的凹槽里。每嵌入一颗，石板上就浮现出一行字，由他之前的选择拼成。</p>
+            </div>
+
+            <!-- 镜子（石板文字） -->
+            <div id="mirrorFrame" class="mirror-frame">
+    <div id="finalMirror" class="mirror-text">✨ 触摸镜子，看见自己 ✨</div>
+</div>
+
+            <!-- 镜中的他 -->
+            <div class="scene-card" id="mirrorScene" style="display: none;">
+                <p>当最后一行字浮现，镜子里的他转过身，正对着你。他看起来有点惊讶，好像第一次听人这样描述自己。他张了张嘴，想说什么，但又没说出来。</p>
+                <p>过了很久，他轻轻笑了一下。那笑容很淡，但是真的。</p>
+                <p>然后，他朝你点了点头。不是感谢，是——“我看见了”。</p>
+                <p>镜面开始泛起涟漪，像水面被风吹皱。他的身影渐渐模糊，最后完全消散，只剩下那片金色的麦田，和麦田尽头一个极小的、狐狸的剪影。</p>
+                <p>镜子上缓缓浮现最后一行字：</p>
+                <p class="final-quote">“重要的东西，用眼睛是看不见的。但如果你走过这些星球，你已经在心里看见了。”</p>
+                <p>石板上的六颗星星碎片同时亮起，然后化作六道流光，飞向天空，消失在茫茫宇宙中。</p>
+                <p>页面上出现一行小字：</p>
+                <p style="color: gold; text-align: center;">【旅程结束。但你可以在麦田里多待一会儿。】</p>
+            </div>
+<!-- 插画区：镜子、石板、麦田狐狸剪影（占位） -->
+            <div class="illustration-area">
+                <div class="placeholder placeholder-xl">🪞 巨大镜子（六色藤蔓）</div>
+                <div class="placeholder placeholder-md">📜 石板（六颗星星碎片）</div>
+                <div class="placeholder placeholder-sm float" style="background: #4a3a2a;">🦊 麦田尽头狐狸剪影</div>
+            </div>
+            <button class="nav-btn" onclick="restartJourney()">再看一次麦田</button>
+        </div>
+    </section>
+
+    <!-- ========== 狐狸星球（彩蛋） ========== -->
+    <section class="page" id="pageFox">
+        <div class="container" style="background: rgba(58,44,31,0.8);">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <i class="fas fa-fox" style="font-size: 4rem; color: #d4a373;"></i>
+            </div>
+            <h2 class="chapter-title" style="color: #f8c471;">麦田里的狐狸</h2>
+			
+			<!-- 插画区：狐狸、麦田小路、小物件 -->
+            <div class="illustration-area" style="flex-direction: column;">
+                <div class="placeholder placeholder-lg sway" style="background: #b8860b;">🦊 金黄色狐狸（白爪）</div>
+                <div class="placeholder placeholder-md" style="width:80%;">🛤️ 麦田中的小路</div>
+                <div style="display: flex; gap:10px;">
+                    <div class="placeholder placeholder-sm">🪶 羽毛</div>
+                    <div class="placeholder placeholder-sm">🪨 石子</div>
+                    <div class="placeholder placeholder-sm">🌸 野花</div>
+                </div>
+                <div class="placeholder placeholder-md">🌳 远处孤树</div>
+                <div class="placeholder placeholder-sm float">🦊 狐狸消失的背影</div>
+            </div>
+			
+
+            <div class="scene-card fox-page-content" style="background: #4a3a2a;">
+                <p>你睁开眼睛，发现自己站在一片无边无际的金色麦田里。</p>
+                <p>风从远处吹来，麦浪一层一层地涌向你，又退回去，发出沙沙的轻响，像大地在低声说着什么。天空是暖橙色的，分不清是日出还是黄昏——那种介于告别和重逢之间的光。</p>
+                <p>你往前走，麦田里有一条若隐若现的小路，是被什么动物踩出来的。路两旁偶尔会出现一些小小的物件：一根掉落的羽毛、一颗圆润的石子、一朵压干的野花。它们像是路标，又像是某个谁留下的礼物。</p>
+                <p>走了很久，你终于看见——</p>
+                <p>田埂上坐着一只狐狸。</p>
+                <p>它的毛色是麦子成熟时的金黄，只有尾巴尖和四只爪子是雪白的。它没有回头看你，只是静静地望着麦田的尽头，那里有一棵孤零零的树。</p>
+                <p>你走近，在它身边坐下。</p>
+                <p>很久，狐狸开口了。声音很轻，像风吹过麦穗：</p>
+                <div class="fox-quote">“你来了。”</div>
+                <p>它终于转过头，用那双琥珀色的眼睛看着你。那眼神很熟悉，像某个深夜，某个人看着你时的样子。</p>
+                <div class="fox-quote">“我等了很久。”狐狸说，“不是等一个特定的人，是等一个人能认出我。”</div>
+                <p>你问它：“你在等谁？”</p>
+                <p>狐狸没有直接回答，而是反问你：</p>
+                <div class="fox-quote">“你知道驯养是什么意思吗？”</div>
+                <p>不等你回答，它继续说：</p>
+                <div class="fox-quote">
+                    “小王子遇到我的时候，我也不知道。我只是想和他做朋友。但他问我‘什么是驯养’，我告诉他——驯养就是建立联系。对我来说，你只是一个小男孩，和其他千千万万个小男孩没有区别。我不需要你。你也不需要我。对你来说，我只是一只狐狸，和其他千千万万只狐狸没有区别。但如果你驯养了我，我们就互相需要了。对我来说，你就是世界上唯一的了；对你来说，我也是世界上唯一的了。”
+                </div>
+                <p>狐狸低下头，用爪子拨弄着一根麦穗。</p>
+                <div class="fox-quote">“后来他走了。他去找他的玫瑰了。但他走之前，我告诉了他一个秘密。”</div>
+                <p>它抬起头，看着你：</p>
+                <div class="fox-quote">“重要的东西，用眼睛是看不见的。”</div>
+                <p>风吹过，麦浪起伏。</p>
+                <div class="fox-quote">
+                    “你知道吗，他走后，我每天都会来这片麦田。不是因为我在等他——我知道他不会回来了。是因为麦子的颜色。每次看见金色的麦浪，我就会想起他头发的颜色。每次听见风吹麦田的声音，我就会想起他的笑声。他驯养我的那段时间，其实也在被驯养。只是他不知道。”
+                </div>
+                <p>狐狸站起来，朝你走了两步。</p>
+                <div class="fox-quote">
+                    “这些年，我一直在这片麦田里。我见过很多人经过，但我没有再让谁驯养我。因为驯养这件事，一生一次就够了。”
+                </div>
+                <p>它歪着头，看着你，眼神里突然多了一点别的东西——是好奇，是打量，是某种小心翼翼的确认。</p>
+                <div class="fox-quote">“但你不一样。”</div>
+                <p>你问它：“我哪里不一样？”</p>
+                <p>狐狸没有回答，而是开始讲起一个故事：</p>
+                <div class="fox-quote">
+                    “有一个人，他喜欢穿黑白衣服，但衣柜深处藏着一件花衬衫。他周末偶尔会穿它出门，但后来周末越来越少，衬衫就很少见了。”
+                </div>
+                <p>你愣住了。</p>
+                <p>狐狸继续讲：</p>
+                <div class="fox-quote">
+                    “有一个人，他在所有人面前都像蝙蝠侠一样万能，但只有他自己知道，每次关上门，他都在问自己‘我真的行吗’。他偷偷学一些东西，收藏很多视频，其实不是真的有时间学，只是想告诉自己——我还有路可以选，我不是被困住的。”
+                </div>
+                <p>风停了，麦田安静下来。</p>
+                <div class="fox-quote">
+                    “有一个人，他不会吵架，只会沉默。他叹气的时候，心里其实在喊‘别走’，但他喊不出来。他消失几天，回来一看，发现有人还在等他。他不知道的是——那个等他的人，一直在这片麦田里，看着他。”
+                </div>
+                <p>狐狸的声音越来越轻，但每一个字都像落进心里。</p>
+                <div class="fox-quote">
+                    “有一个人，他喜欢桌游，喜欢音乐。他用这些和人连接。他送过一盒叫‘情书’的桌游，不知道那个收到的人，把它当成了最重要的藏品。”
+                </div>
+                <p>狐狸低下头，用爪子轻轻碰了碰你的手。</p>
+                <div class="fox-quote">
+                    “有一个人，他在某个深夜靠在别人肩上哭过。那个人没有说话，只是轻轻拍着他。那一刻，他觉得自己不是蝙蝠侠了。但那个人看他的眼神，让他觉得——就算不是蝙蝠侠，也值得被信赖。”
+                </div>
+                <p>你的眼眶开始发酸。</p>
+                <p>狐狸抬起头，看着你的眼睛：</p>
+                <div class="fox-quote">
+                    “有一个人，他以为自己在偷偷观察世界。他不知道，有一只狐狸，一直在观察他。”
+                </div>
+                <p>风吹起来，麦浪重新开始涌动。</p>
+                <p>狐狸的声音变得很温柔：</p>
+                <div class="fox-quote">
+                    “小王子问我：‘什么是仪式？’我告诉他，仪式就是定下一个时间，让它和其他时间不一样。比如，你每天下午四点来，那么从三点开始，我就开始感到幸福了。时间越近，我就越幸福。到了四点，我会坐立不安，我会让你看见我有多幸福。”
+                </div>
+                <p>它站起来，后退了两步。</p>
+                <div class="fox-quote">
+                    “这些年，我每天都会在这个时间，来这片麦田。”
+                </div>
+                <p>它笑了笑，那笑容和某人很像。</p>
+                <div class="fox-quote">“你猜，我在等什么？”</div>
+                <p>你没有回答。但你知道。</p>
+                <p>狐狸转身，向麦田深处走去。走了几步，它停下来，回头看着你：</p>
+                <div class="fox-quote">
+                    “那个人刚才走过了六个星球。他看见了自己童年的骄傲，少年的真实，青年的渴望，爱好的连接，沉默里的‘别走’，和未来的无限可能。他可能没意识到，他走过的每一步，都有一只狐狸，远远地跟着。”
+                </div>
+                <p>它抬起一只爪子，轻轻挥了挥：</p>
+                <div class="fox-quote">“回去吧。他还在等。等一个他自己都不知道在等的东西。”</div>
+                <p>你问：“他等的是什么？”</p>
+                <p>狐狸的背影停在金色的麦浪里，过了很久，它说：</p>
+                <div class="fox-quote">“他等的，就是有一天，能认出这片麦田的颜色。”</div>
+                <p>说完，它消失在麦田深处。</p>
+                <p>你站在原地，风吹过来，麦浪沙沙作响。你突然想起很久以前，有人对你说过一句话——</p>
+                <p style="color: gold; font-size: 1.2rem;">“麦子的颜色，会让我想起你。”</p>
+            </div>
+
+            <!-- 彩蛋页结尾：点击文字飘麦穗 -->
+            <div class="twenty-one" id="twentyOneTrigger">你还有二十六分钟的机会。它一直在那里。</div>
+
+            <button class="nav-btn" onclick="goToPage('pageFinal')">返回星图</button>
+        </div>
+    </section>
+
+    <script>
+        // 全局变量
+        let currentPage = 'pagePrologue';
+        let stars = 0;
+        let selectedOption = null; // 用于存储当前选中的选项值
+		let mirrorRevealed = false;      // 标记是否已揭示
+		let mirrorContent = '';          // 存储完整镜子文字
+
+        // 正确答案
+        const answers = {
+            planet1: '副导演',
+            planet2: 'B',
+            planet3: 'C',
+            planet4: 'B',
+            planet5: 'C',
+            planet6: 'C'
+        };
+
+        // 音乐控制
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        let musicPlaying = false;
+        musicToggle.addEventListener('click', () => {
+            if (musicPlaying) {
+                bgMusic.pause();
+                musicToggle.innerHTML = '<i class="fas fa-music"></i>';
+            } else {
+                bgMusic.src = 'https://assets.mixkit.co/music/preview/mixkit-deep-space-583.mp3';
+                bgMusic.loop = true;
+                bgMusic.volume = 0.3;
+                bgMusic.play().catch(() => {});
+                musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+            }
+            musicPlaying = !musicPlaying;
+        });
+
+        // 星空生成
+        function createStars() {
+            const starfield = document.getElementById('starfield');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                const size = Math.random() * 3;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                const dur = Math.random() * 5 + 3;
+                const minOp = Math.random() * 0.3;
+                const maxOp = Math.random() * 0.5 + 0.5;
+                star.style.setProperty('--duration', dur + 's');
+                star.style.setProperty('--min-opacity', minOp);
+                star.style.setProperty('--max-opacity', maxOp);
+                starfield.appendChild(star);
+            }
+        }
+
+        // 页面切换
+        function goToPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            currentPage = pageId;
+            window.scrollTo(0, 0);
+            // 如果在结局页且星星满6，显示麦穗入口
+            if (pageId === 'pageFinal' && stars === 6) {
+    document.getElementById('wheatEgg').classList.add('show');
+    document.getElementById('mirrorScene').style.display = 'block';
+    // 生成镜子文字并存储
+    mirrorContent = generateFinalText();
+    // 重置揭示状态
+    mirrorRevealed = false;
+    // 设置初始提示语
+    const mirrorTextDiv = document.getElementById('finalMirror');
+    mirrorTextDiv.innerHTML = '✨ 触摸镜子，看见自己 ✨';
+    mirrorTextDiv.style.opacity = '1';
+} else if (pageId === 'pageFinal') {
+    // 星星不足时的提示
+    const mirrorTextDiv = document.getElementById('finalMirror');
+    mirrorTextDiv.innerHTML = '你尚未集齐六颗星星，无法看见完整的自己。<br>继续探索吧。';
+    mirrorTextDiv.style.opacity = '1';
+}
+        }
+
+        // 按序号跳转星球 (1-6 分别对应 planet1-6, 7为结局)
+        function goToPlanet(num) {
+            if (num === 1) goToPage('pagePlanet1');
+            else if (num === 2) goToPage('pagePlanet2');
+            else if (num === 3) goToPage('pagePlanet3');
+            else if (num === 4) goToPage('pagePlanet4');
+            else if (num === 5) goToPage('pagePlanet5');
+            else if (num === 6) goToPage('pagePlanet6');
+            else if (num === 7) {
+                goToPage('pageFinal');
+                generateFinalText(); // 生成镜子文字
+            }
+        }
+
+        // 增加星星
+        function addStar() {
+            if (stars < 6) {
+                stars++;
+                document.getElementById('starCount').innerText = stars;
+                // 简单动画
+                const counter = document.getElementById('starsCounter');
+                counter.style.transform = 'scale(1.2)';
+                setTimeout(() => counter.style.transform = 'scale(1)', 200);
+            }
+        }
+
+        // 选项点击
+        function selectOption(el, value) {
+            const parent = el.parentNode;
+            Array.from(parent.children).forEach(child => child.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedOption = value;
+            // 启用对应的提交按钮
+            const submitBtn = parent.parentNode.querySelector('.submit-btn');
+            if (submitBtn) submitBtn.disabled = false;
+        }
+
+        // 各星球答案检查
+        function checkPlanet1() {
+            const input = document.getElementById('planet1Input').value.trim();
+            if (input === answers.planet1) {
+                addStar();
+                document.getElementById('puzzle1').classList.add('hidden');
+                document.getElementById('story1').classList.remove('hidden');
+            } else {
+                alert('再想想，和镜头有关，和那个让他骄傲的学生时代的夏天有关。');
+            }
+        }
+
+        function checkPlanet2() {
+            if (selectedOption === answers.planet2) {
+                addStar();
+                document.getElementById('puzzle2').classList.add('hidden');
+                document.getElementById('story2').classList.remove('hidden');
+                selectedOption = null;
+            } else {
+                alert('再想想，那个被藏起来的自己，最想要的是什么？');
+            }
+        }
+
+        function checkPlanet3() {
+            if (selectedOption === answers.planet3) {
+                addStar();
+                document.getElementById('puzzle3').classList.add('hidden');
+                document.getElementById('story3').classList.remove('hidden');
+                selectedOption = null;
+            } else {
+                alert('再想想，他那么努力，到底是想让别人觉得他什么？');
+            }
+        }
+
+        function checkPlanet4() {
+            if (selectedOption === answers.planet4) {
+                addStar();
+                document.getElementById('puzzle4').classList.add('hidden');
+                document.getElementById('story4').classList.remove('hidden');
+                selectedOption = null;
+            } else {
+                alert('再想想，他那么喜欢和人一起玩，真的只是逃避吗？');
+            }
+        }
+
+        function checkPlanet5() {
+            if (selectedOption === answers.planet5) {
+                addStar();
+                document.getElementById('puzzle5').classList.add('hidden');
+                document.getElementById('story5').classList.remove('hidden');
+                selectedOption = null;
+            } else {
+                alert('再想想，他沉默的时候，最怕的到底是什么？');
+            }
+        }
+
+        function checkPlanet6() {
+            if (selectedOption === answers.planet6) {
+                addStar();
+                document.getElementById('puzzle6').classList.add('hidden');
+                document.getElementById('story6').classList.remove('hidden');
+                selectedOption = null;
+            } else {
+                alert('再想想，他收藏的那些东西，真的是为了立刻去学，还是为了……将来有一天，可以不用害怕？');
+            }
+        }
+		
+		function revealMirror() {
+    const mirrorTextDiv = document.getElementById('finalMirror');
+    if (stars < 6) {
+        alert('你尚未集齐六颗星星，无法看见完整的自己。');
+        return;
+    }
+    if (mirrorRevealed) return;
+
+    mirrorRevealed = true;
+    mirrorTextDiv.style.transition = 'opacity 2s ease';  // 与CSS保持一致
+    mirrorTextDiv.style.opacity = '0';
+
+    setTimeout(() => {
+        mirrorTextDiv.innerHTML = mirrorContent;
+        mirrorTextDiv.style.opacity = '1';
+    }, 200);  // 稍微延迟200ms再替换，避免闪烁，同时让淡出完成一部分
+}
+
+        // 生成结局页镜子文字
+        function generateFinalText() {
+    if (stars < 6) return '';
+    const text = `
+        <p>你是——</p>
+        <p>那个用光影记录过时光的人，<br>
+        把真实藏在衣柜最深处的人，<br>
+        在蝙蝠侠面具下偷偷叹息却依然努力的人，<br>
+        用桌游和音乐连接世界的人，<br>
+        用沉默说“别走”的人，<br>
+        收藏着未来所有可能的人。</p>
+        <p>你是——</p>
+        <p>一个在疲惫中依然温柔的人。<br>
+        一个藏起来却始终被看见的人。<br>
+        一个值得被好好对待的人。</p>
+    `;
+    console.log('mirrorContent:', text);  // 添加日志，确保内容完整
+    return text;
+}
+
+        // 进入狐狸彩蛋页
+        function goToFoxPage() {
+            goToPage('pageFox');
+        }
+
+        // 飘麦穗效果
+        function floatWheat() {
+            const wheat = document.createElement('div');
+            wheat.classList.add('floating-wheat');
+            wheat.innerHTML = '<i class="fas fa-wheat-alt"></i>';
+            wheat.style.left = Math.random() * window.innerWidth + 'px';
+            wheat.style.bottom = '20px';
+            document.body.appendChild(wheat);
+            setTimeout(() => wheat.remove(), 3000);
+        }
+
+        // 绑定彩蛋页点击事件
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            goToPage('pagePrologue');
+
+            const twentyOne = document.getElementById('twentyOneTrigger');
+            if (twentyOne) {
+                twentyOne.addEventListener('click', function() {
+                    // 连续飘出几朵麦穗
+                    for (let i = 0; i < 5; i++) {
+                        setTimeout(floatWheat, i * 200);
+                    }
+                });
+            }
+			
+			const mirrorFrame = document.getElementById('mirrorFrame');
+if (mirrorFrame) {
+    mirrorFrame.addEventListener('click', revealMirror);
+}
+        });
+
+        // 重启旅程
+        function restartJourney() {
+            if (confirm('重新开始会重置所有星星，确定吗？')) {
+                stars = 0;
+                document.getElementById('starCount').innerText = '0';
+                // 重置所有页面：隐藏成功故事，显示谜题
+                document.querySelectorAll('.success-story').forEach(s => s.classList.add('hidden'));
+                document.querySelectorAll('.puzzle-area').forEach(p => p.classList.remove('hidden'));
+                // 隐藏镜中的他段落
+                document.getElementById('mirrorScene').style.display = 'none';
+				mirrorRevealed = false;
+				mirrorContent = '';
+                // 回到序幕
+                goToPage('pagePrologue');
+            }
+        }
+    </script>
+</body>
+</html>
