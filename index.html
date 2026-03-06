@@ -1160,7 +1160,7 @@
 		let mirrorContent = '';          // 存储完整镜子文字
 		
 		
-const MUSIC_BASE = 'https://github.com/suqi0626/M-s-30ty-Birthday/raw/refs/heads/main/';
+const MUSIC_BASE = 'https://raw.githubusercontent.com/suqi0626/M-s-30ty-Birthday/main/';
 const pageMusic = {
     pagePlanet1: MUSIC_BASE + '1.mp3',
     pagePlanet2: MUSIC_BASE + '2.mp3',
@@ -1188,18 +1188,16 @@ const pageMusic = {
         const musicToggle = document.getElementById('musicToggle');
         let musicPlaying = false;
         musicToggle.addEventListener('click', () => {
-            if (musicPlaying) {
-                bgMusic.pause();
-                musicToggle.innerHTML = '<i class="fas fa-music"></i>';
-            } else {
-                bgMusic.src = 'https://assets.mixkit.co/music/preview/mixkit-deep-space-583.mp3';
-                bgMusic.loop = true;
-                bgMusic.volume = 0.3;
-                bgMusic.play().catch(() => {});
-                musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
-            }
-            musicPlaying = !musicPlaying;
-        });
+    if (musicPlaying) {
+        bgMusic.pause();
+        musicToggle.innerHTML = '<i class="fas fa-music"></i>';
+    } else {
+        // 直接播放当前已设置的 src（不重新设置）
+        bgMusic.play().catch(() => {});
+        musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+    }
+    musicPlaying = !musicPlaying;
+});
 
         // 星空生成
         function createStars() {
