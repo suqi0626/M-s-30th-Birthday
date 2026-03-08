@@ -1348,50 +1348,54 @@ font-weight: 600; /* 适当加粗 */
 .planet1-illustration {
     position: relative;
     width: 100%;
-    max-width: 500px;        /* 限制最大宽度，防止过宽 */
-    height: 200px;           /* 固定高度，可根据实际图片高度调整 */
-    margin: 20px auto 10px;  /* 上下留出间距 */
-    background: transparent;  /* 无背景，透出星空 */
+    max-width: 500px;
+    height: 200px;
+    background: transparent;
     filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
 }
 
 /* 所有图标通用样式 */
-.planet1-icon {
+.planet1-illustration .planet1-icon {
     position: absolute;
-    width: 100px;            /* 基础宽度，可根据实际图片比例调整 */
-    height: auto;
-    filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) 
-            drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+    filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
     transition: transform 0.3s ease;
-    pointer-events: auto;    /* 如果需要点击可改为 auto，但此处仅为装饰 */
+    pointer-events: auto;
 }
 
 /* 左图标：绘画工具 */
-.icon-left {
+.planet1-illustration .icon-left {
     left: 5%;
-    top: 50%;
+    top: 20%;
     transform: translateY(-50%);
-    width: 50px;             /* 适当调整大小 */
+    width: 60px;             /* 可根据实际大小调整 */
     animation: float 3s ease-in-out infinite;
 }
 
 /* 中图标：画架 */
-.icon-center {
-    left: 20%;
-    top: 10%;
+.planet1-illustration .icon-center {
+    left: 25%;
+    top: 20%;
     transform: translate(-50%, -50%);
-    width: 180px;            /* 画架可以稍大 */
+    width: 150px;            /* 画架大小 */
     animation: sway 2.5s ease-in-out infinite;
 }
 
 /* 右图标：摄像机 */
-.icon-right {
+.planet1-illustration .icon-right {
     right: 5%;
-    top: 50%;
+    top: 20%;
     transform: translateY(-50%);
-    width: 95px;
+    width: 80px;
     animation: blink 1.5s step-end infinite; /* 闪动效果 */
 }
+
+/* 悬停效果 */
+.planet1-illustration .planet1-icon:hover {
+    transform: scale(1.05) translateY(-50%) translateX(0);
+    filter: drop-shadow(0 0 25px gold);
+    transition: 0.2s;
+}
+
 
 /* 闪动动画（明暗交替，模拟摄像机闪光） */
 @keyframes blink {
@@ -1713,6 +1717,248 @@ font-weight: 600; /* 适当加粗 */
     50% { text-shadow: 0 0 30px gold; }
     100% { text-shadow: 0 0 10px gold; }
 }
+
+/* 少年星球头图容器 */
+.planet2-illustration {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    height: 200px;
+    margin: 20px auto 30px;
+    background-image: url('http://m-birthday-music.test.upcdn.net/yijiamigong.png');
+    background-size: cover;
+    background-position: center;
+
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+}
+
+/* 左图标：花衬衫 */
+.planet2-left {
+    position: absolute;
+    left: 20%;
+    top: 15%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: auto;
+    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+}
+
+/* 右图标：镜子 */
+.planet2-right {
+    position: absolute;
+    right: 20%;
+    top: 3%;
+    transform: translateY(-50%);
+    width: 80px;
+    height: auto;
+    animation: sway 2.5s ease-in-out infinite;
+    filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+}
+
+/* 悬停效果 */
+.planet2-left:hover,
+.planet2-right:hover {
+    transform: translateY(-50%) scale(1.05);
+    filter: drop-shadow(0 0 25px gold);
+    transition: 0.2s;
+}
+
+/* 手机适配 */
+@media (max-width: 480px) {
+    .planet2-illustration {
+        height: 150px;
+    }
+    .planet2-left {
+        width: 70px;
+    }
+    .planet2-right {
+        width: 85px;
+    }
+}
+
+/* 青年星球头图容器 */
+.planet3-illustration {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    height: 200px;
+    margin: 20px auto 30px;
+    background-image: url('http://m-birthday-music.test.upcdn.net/kongzhishi.png');
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+}
+
+/* 图标通用样式 */
+.planet3-icon {
+    position: absolute;
+    filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+    transition: filter 0.3s ease;
+    pointer-events: auto;
+}
+
+/* 中间：椅子 */
+.planet3-illustration .icon-middle {
+    left: 25%;
+    top: 35%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    animation: sway 2.5s ease-in-out infinite;
+}
+
+/* 右边：台灯 */
+.planet3-illustration .icon-right {
+    right: 20%;
+    top: 45%;
+    transform: translateY(-50%);
+    width: 40px;
+    
+	animation: float 3s ease-in-out infinite;
+}
+
+/* 最右边：录音机 */
+.planet3-illustration .icon-right2 {
+    right: 5%;
+    top: 80%;
+    transform: translateY(-50%);
+    width: 90px;
+    animation: blink 1.5s step-end infinite;
+}
+
+/* 悬停效果（仅改变光晕，不影响位置） */
+.planet3-icon:hover {
+    filter: drop-shadow(0 0 25px gold);
+}
+
+/* 手机适配 */
+@media (max-width: 480px) {
+    .planet3-illustration {
+        height: 150px;
+    }
+    .planet3-illustration .icon-middle {
+        width: 90px;
+    }
+    .planet3-illustration .icon-right {
+        width: 60px;
+    }
+    .planet3-illustration .icon-right2 {
+        width: 70px;
+    }
+}
+
+
+.petal-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden;
+    display: none; /* 默认隐藏，由页面激活控制 */
+}
+
+#pagePlanet2.active .petal-particles {
+    display: block;
+}
+
+/* 单个花瓣 */
+.petal {
+    position: absolute;
+    width: 12px;
+    height: 8px;
+    background: radial-gradient(circle at 30% 30%, #ffb7c5, #ff8da1);
+    border-radius: 50% 50% 50% 50%;
+    transform: rotate(45deg);
+    box-shadow: 0 0 10px #ffb7c5;
+    opacity: 0.7;
+    animation: petalFall linear infinite;
+}
+
+@keyframes petalFall {
+    0% {
+        transform: translateY(-10vh) translateX(0) rotate(0deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(110vh) translateX(20px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* 故障粒子容器 */
+.glitch-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden;
+    display: none; /* 默认隐藏，由页面激活控制 */
+}
+
+#pagePlanet3.active .glitch-particles {
+    display: block;
+}
+
+/* 单个故障粒子 */
+.glitch-particle {
+    position: absolute;
+    width: var(--size);
+    height: var(--size);
+    background: var(--color);
+    opacity: 0.6;
+    animation: glitchMove linear infinite;
+    box-shadow: 0 0 8px currentColor;
+    border-radius: 2px; /* 轻微圆角，可不加 */
+}
+
+/* 不同形状的粒子通过单独的类实现，但这里统一为矩形，尺寸随机由JS设置 */
+.glitch-particle.line {
+    width: var(--width);
+    height: 2px; /* 线条 */
+    background: cyan;
+}
+.glitch-particle.square {
+    /* 默认就是方块 */
+}
+.glitch-particle.glitch-blink {
+    animation: glitchBlink 0.2s infinite alternate;
+}
+
+@keyframes glitchMove {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0.6;
+    }
+    25% {
+        transform: translate(5px, -3px) rotate(5deg);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translate(-4px, 4px) rotate(-5deg);
+        opacity: 0.4;
+    }
+    75% {
+        transform: translate(3px, -2px) rotate(3deg);
+        opacity: 0.9;
+    }
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0.6;
+    }
+}
+
+@keyframes glitchBlink {
+    0% { opacity: 0.3; filter: hue-rotate(0deg); }
+    100% { opacity: 1; filter: hue-rotate(30deg); }
+}
 	
 	</style>
 </head>
@@ -1857,12 +2103,14 @@ font-weight: 600; /* 适当加粗 */
 			<img src="http://m-birthday-music.test.upcdn.net/tshaonian.png" 
      alt="少年星球 · 衣柜里的花衬衫" 
      class="handwritten-title">
+	 
+	 <div class="petal-particles" id="petals"></div>
 			
-			<!-- 插画区：花衬衫(左) 全身镜(右) -->
-            <div class="illustration-area">
-                <div class="placeholder placeholder-md float">👕 花衬衫（带防尘罩）</div>
-                <div class="placeholder placeholder-md sway" style="background: #2a2a3a;">🪞 全身镜</div>
-            </div>
+			<!-- 少年星球头图区域：背景迷宫 + 花衬衫与镜子 -->
+<div class="planet2-illustration">
+    <img src="http://m-birthday-music.test.upcdn.net/huachenshan.png" alt="花衬衫" class="planet2-left" id="shirtIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/jingzi.png" alt="镜子" class="planet2-right" id="mirrorIcon">
+</div>
 			
             <div class="scene-card">
                 <p>你降落在第二个星球。这里静得能听见自己的呼吸，四周是一排排望不到尽头的衣架，像一座巨大的、沉默的迷宫。光线从头顶洒下，柔和而均匀，照亮了每一件悬挂着的衣服——黑色T恤、白色polo衫、深灰色外套、藏青色卫衣……它们整齐得近乎严肃，仿佛在等待一场永不举行的检阅。你穿过这条由黑白两色构成的走廊，指尖划过那些柔软的布料，心里升起一种奇怪的压抑感：这里似乎缺少了什么，一种本该存在的色彩。</p>
@@ -1914,14 +2162,15 @@ font-weight: 600; /* 适当加粗 */
 			<img src="http://m-birthday-music.test.upcdn.net/tqingnian.png" 
      alt="青年星球 · 蝙蝠侠的叹息" 
      class="handwritten-title">
+	 
+	 <div class="glitch-particles" id="glitchParticles"></div>
 			
-			<!-- 插画区：扶手椅(中) 面具(上) 录音机(左) 书(右) -->
-            <div class="illustration-area">
-                <div class="placeholder placeholder-sm float">📚 深度学习入门</div>
-                <div class="placeholder placeholder-md" style="width:180px;">🪑 黑色扶手椅</div>
-                <div class="placeholder placeholder-sm sway">🎙️ 录音机</div>
-                <div class="placeholder placeholder-sm" style="margin-top:10px;">🦇 蝙蝠侠面具</div>
-            </div>
+			<!-- 青年星球头图区域：控制室背景 + 椅子、台灯、录音机 -->
+<div class="planet3-illustration">
+    <img src="http://m-birthday-music.test.upcdn.net/yizi.png" alt="椅子" class="planet3-icon icon-middle" id="chairIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/taideng.png" alt="台灯" class="planet3-icon icon-right" id="lampIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/luyinji.png" alt="录音机" class="planet3-icon icon-right2" id="recorderIcon">
+</div>
 			
             <div class="scene-card">
                 <p>你降落在第三个星球。这里和前面两个完全不同——到处是闪烁的屏幕、嗡嗡作响的服务器、此起彼伏的消息提示音，像一个永不休息的控制中心。地面上散落着各种文件，有些标着“已完成”，有些标着“待处理”，还有一堆标着“永远做不完”。你抬头，看见无数根数据线从空中垂下，连接着每一台屏幕，像这个星球的血脉。</p>
@@ -2571,6 +2820,90 @@ function generateParticlesForPlanet1() {
         createParticles();
     }
 }
+
+
+// 生成少年星球的花瓣
+function createPetals() {
+    const petalContainer = document.getElementById('petals');
+    if (!petalContainer) return;
+    petalContainer.innerHTML = ''; // 清空原有花瓣
+    const numberOfPetals = 40; // 花瓣数量
+    for (let i = 0; i < numberOfPetals; i++) {
+        const petal = document.createElement('div');
+        petal.classList.add('petal');
+        
+        // 随机大小
+        const size = Math.random() * 8 + 6;
+        petal.style.width = size + 'px';
+        petal.style.height = size * 0.7 + 'px';
+        
+        // 随机起始横向位置
+        petal.style.left = Math.random() * 100 + '%';
+        
+        // 随机动画时长（5s ~ 15s）
+        const duration = Math.random() * 10 + 5;
+        petal.style.animationDuration = duration + 's';
+        
+        // 随机动画延迟
+        petal.style.animationDelay = Math.random() * 5 + 's';
+        
+        // 随机颜色变化
+        const hue = Math.random() * 20 + 340; // 偏向粉红
+        petal.style.background = `radial-gradient(circle at 30% 30%, hsl(${hue}, 80%, 80%), hsl(${hue}, 80%, 60%))`;
+        
+        petalContainer.appendChild(petal);
+    }
+}
+
+// 生成青年星球的故障粒子
+function createGlitchParticles() {
+    const container = document.getElementById('glitchParticles');
+    if (!container) return;
+    container.innerHTML = ''; // 清空原有粒子
+    const numberOfParticles = 50; // 粒子数量
+    const colors = ['#00ffff', '#ff00ff', '#00ff9f', '#ffcc00', '#aa80ff']; // 故障风颜色
+
+    for (let i = 0; i < numberOfParticles; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('glitch-particle');
+
+        // 随机选择形状：70% 方块，30% 线条
+        if (Math.random() < 0.3) {
+            particle.classList.add('line');
+            // 线条宽度随机 10-40px
+            const width = Math.random() * 30 + 10;
+            particle.style.setProperty('--width', width + 'px');
+            particle.style.height = '2px';
+        } else {
+            // 方块大小随机 3-15px
+            const size = Math.random() * 12 + 3;
+            particle.style.setProperty('--size', size + 'px');
+        }
+
+        // 随机颜色
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.setProperty('--color', color);
+
+        // 随机起始位置
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+
+        // 随机动画时长（3s ~ 8s）
+        const duration = Math.random() * 5 + 3;
+        particle.style.animationDuration = duration + 's';
+
+        // 随机动画延迟
+        particle.style.animationDelay = Math.random() * 2 + 's';
+
+        // 部分粒子添加闪烁类
+        if (Math.random() < 0.2) {
+            particle.classList.add('glitch-blink');
+        }
+
+        container.appendChild(particle);
+    }
+}
+
 		
 
         // 页面切换
@@ -2595,6 +2928,13 @@ function generateParticlesForPlanet1() {
 	
 	if (pageId === 'pagePlanet1') {
     generateParticlesForPlanet1();
+}
+if (pageId === 'pagePlanet2') {
+    createPetals();
+}
+
+if (pageId === 'pagePlanet3') {
+    createGlitchParticles();
 }
 
     // 音乐 & 滚动逻辑（保持不变）
