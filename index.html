@@ -666,23 +666,21 @@ font-weight: 600; /* 适当加粗 */
 		
 		/* 结局页镜子 - 魔法增强版 */
 .mirror-frame {
-    width: 100%;
+    width: 110%;
     max-width: 500px;
-    height: 1000px;
+    height: 1200px;
     margin: 30px auto;
-    border: 4px solid #b28b5e;          /* 基础边框 */
-    border-radius: 30px;
-    background: rgba(20, 15, 10, 0.7);
-    backdrop-filter: blur(4px);
+    background-image: url('http://m-birthday-music.test.upcdn.net/jingzibiankuang.png');
+    background-size: 100% 100%;   /* 拉伸图片以填满容器，边框不变形 */
+    background-position: center;
+    background-repeat: no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
     cursor: pointer;
-    /* 两层阴影：内阴影加深，外阴影发光，宽度一致 */
-    box-shadow: 0 0 0 2px #5e3e2b,       /* 内层深色 */
-                0 0 0 4px #8b6b42,       /* 中层金色 */
-                0 20px 30px #000;         /* 外层投影 */
+    /* 移除原来的 border 和 box-shadow */
+    border: none;
+    box-shadow: none;
 }
 
 .mirror-text {
@@ -1244,9 +1242,9 @@ font-weight: 600; /* 适当加粗 */
         }
 
         @keyframes floatUp {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-200px) rotate(20deg); opacity: 0; }
-        }
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(-200px) translateX(var(--driftX, 0)) rotate(360deg); opacity: 0; }
+}
 
         .twenty-one {
 		font-family: 'Cormorant Garamond', 'Noto Serif SC', serif;
@@ -1278,7 +1276,7 @@ font-weight: 600; /* 适当加粗 */
             border: none;
             padding: 30px 20px;
             background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
+
             line-height: 2;
             margin: 30px 0;
         }
@@ -1350,8 +1348,13 @@ font-weight: 600; /* 适当加粗 */
     width: 100%;
     max-width: 500px;
     height: 200px;
-    background: transparent;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+    margin: 20px auto 30px;
+    background-image: url('http://m-birthday-music.test.upcdn.net/huashi.png');
+    background-size: cover;
+    background-position: center;
+
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
 }
 
 /* 所有图标通用样式 */
@@ -1364,26 +1367,26 @@ font-weight: 600; /* 适当加粗 */
 
 /* 左图标：绘画工具 */
 .planet1-illustration .icon-left {
-    left: 5%;
-    top: 20%;
+    right: 5%;
+    top: 65%;
     transform: translateY(-50%);
-    width: 60px;             /* 可根据实际大小调整 */
+    width: 75px;             /* 可根据实际大小调整 */
     animation: float 3s ease-in-out infinite;
 }
 
 /* 中图标：画架 */
 .planet1-illustration .icon-center {
-    left: 25%;
-    top: 20%;
+    left: 35%;
+    top: 30%;
     transform: translate(-50%, -50%);
-    width: 150px;            /* 画架大小 */
+    width: 90px;            /* 画架大小 */
     animation: sway 2.5s ease-in-out infinite;
 }
 
 /* 右图标：摄像机 */
 .planet1-illustration .icon-right {
-    right: 5%;
-    top: 20%;
+    left: 5%;
+    top: 65%;
     transform: translateY(-50%);
     width: 80px;
     animation: blink 1.5s step-end infinite; /* 闪动效果 */
@@ -1559,7 +1562,7 @@ font-weight: 600; /* 适当加粗 */
 }
 
 
-/* 收集进度模态框 */
+/* ===== 星图收集册 - 修正版 ===== */
 .progress-modal {
     display: none;
     position: fixed;
@@ -1568,77 +1571,116 @@ font-weight: 600; /* 适当加粗 */
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(8px);
-    z-index: 1000;
+
+    backdrop-filter: blur(10px);
+    z-index: 2000;
     align-items: center;
     justify-content: center;
+    animation: modalFadeIn 0.5s;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; backdrop-filter: blur(0); }
+    to { opacity: 1; backdrop-filter: blur(10px); }
 }
 
 .modal-content {
+    position: relative;
     width: 90%;
-    max-width: 600px;
+    max-width: 650px;
     max-height: 80vh;
     background: rgba(30, 20, 15, 0.95);
-    border: 3px solid #b28b5e;
-    border-radius: 40px;
-    padding: 25px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 50px gold;
+	border: 3px solid #b28b5e;
+    border-radius: 50px 10px 50px 10px;
+    padding: 30px 25px;
+    box-shadow: 0 30px 50px rgba(0,0,0,0.8), 0 0 40px gold;
     backdrop-filter: blur(4px);
     overflow-y: auto;
+    animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1;
+}
+
+
+
+@keyframes modalPop {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
     border-bottom: 2px dashed #b28b5e;
+    position: relative;
+}
+
+.modal-header::after {
+    content: '✦';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: gold;
+    font-size: 1.5rem;
+    text-shadow: 0 0 10px gold;
 }
 
 .modal-header h3 {
     color: gold;
     font-family: 'Playfair Display', 'Noto Serif SC', serif;
-    font-size: 1.5rem;
-    text-shadow: 0 0 10px gold;
+    font-size: 1.8rem;
+    text-shadow: 0 0 15px gold, 2px 2px 4px #000;
+    letter-spacing: 3px;
+    margin: 0 auto;
 }
 
 .close-modal {
     color: #b28b5e;
-    font-size: 2rem;
+    font-size: 2.5rem;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s;
+    line-height: 1;
+    position: absolute;
+    right: 0;
+    top: -5px;
 }
 
 .close-modal:hover {
     color: gold;
-    transform: scale(1.2);
+    transform: rotate(90deg) scale(1.2);
 }
 
 .fragments-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
 }
 
 .fragment-card {
-    background: rgba(20, 15, 10, 0.7);
+    background: rgba(20, 15, 10, 0.8);
     border: 2px solid;
     border-radius: 30px 5px 30px 5px;
-    padding: 15px;
+    padding: 20px 12px;
     text-align: center;
-    transition: 0.3s;
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* 仅保留平滑过渡，无呼吸 */
     position: relative;
     overflow: hidden;
+    backdrop-filter: blur(2px);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.5), inset 0 0 15px rgba(255,215,0,0.2);
 }
 
 .fragment-card.collected {
     filter: none;
+    /* 移除 cardPulse 动画 */
 }
 
 .fragment-card.uncollected {
-    filter: grayscale(0.9) brightness(0.6);
-    opacity: 0.7;
+    filter: grayscale(0.9) brightness(0.5);
+    opacity: 0.6;
 }
 
 .fragment-card.uncollected::after {
@@ -1647,30 +1689,59 @@ font-weight: 600; /* 适当加粗 */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 4rem;
-    color: rgba(255,255,255,0.2);
+    font-size: 5rem;
+    color: rgba(255,255,255,0.15);
     font-weight: bold;
+    font-family: 'Playfair Display', serif;
+}
+
+/* 魔法粒子背景 - 使用主题色（通过 currentColor 继承边框颜色） */
+.fragment-card.collected::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,215,0,0.2), transparent 70%);
+    animation: rotateGlow 8s linear infinite;
+    z-index: 0;
+    opacity: 0.4;
+    /* 颜色默认金色，但我们可以利用 currentColor 改变色调？背景不支持直接继承颜色，需要借助 mix-blend-mode 或 filter */
+    /* 更简单的方法：在每张卡片的 style 中通过内联样式设置 --theme-color，然后在 background 中使用该变量 */
+}
+
+/* 为了让光晕颜色随主题变化，我们改用 CSS 变量，并在每张卡片上内联设置 --theme-color */
+.fragment-card.collected::before {
+    background: radial-gradient(circle at 30% 30%, var(--theme-color, rgba(255,215,0,0.3)), transparent 50%);
+}
+
+/* 在 showProgress 函数中，为 collected 卡片设置 --theme-color 变量 */
+/* 需要修改 JS 生成卡片的部分 */
+
+@keyframes rotateGlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .fragment-star {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     line-height: 1;
     margin-bottom: 10px;
-    filter: drop-shadow(0 0 10px currentColor);
-    animation: cardStarTwinkle 2s infinite alternate;
-}
-
-@keyframes cardStarTwinkle {
-    from { text-shadow: 0 0 5px currentColor; }
-    to { text-shadow: 0 0 20px currentColor; }
+    filter: drop-shadow(0 0 15px currentColor);
+    animation: starTwinkle 2s infinite alternate;
+    position: relative;
+    z-index: 1;
 }
 
 .fragment-name {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     color: inherit;
-     font-family: 'Caveat', 'Noto Serif SC', cursive;
+    font-family: 'Caveat', 'Noto Serif SC', cursive;
+    position: relative;
+    z-index: 1;
 }
 
 .fragment-text {
@@ -1679,8 +1750,16 @@ font-weight: 600; /* 适当加粗 */
     color: #f0e6d2;
     font-family: 'Lora', serif;
     padding: 8px;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0,0,0,0.4);
     border-radius: 15px;
+    position: relative;
+    z-index: 1;
+    border: 1px dashed rgba(255,215,0,0.3);
+}
+
+.fragment-card:hover {
+    box-shadow: 0 0 25px currentColor, 0 0 40px gold;
+    transform: scale(1.02);
 }
 
 .complete-message {
@@ -1688,34 +1767,38 @@ font-weight: 600; /* 适当加粗 */
     margin-top: 30px;
     padding: 20px;
     border-top: 2px dashed gold;
-}
-.complete-glow {
-    font-size: 1.5rem;
-    color: gold;
-    text-shadow: 0 0 15px gold;
     animation: glowPulse 2s infinite;
-    margin-bottom: 15px;
 }
+
+.complete-glow {
+    font-size: 1.6rem;
+    color: gold;
+    text-shadow: 0 0 20px gold, 2px 2px 4px #000;
+    margin-bottom: 20px;
+}
+
 .complete-btn {
     background: linear-gradient(145deg, #b28b5e, #8b6b42);
     color: #1e160f;
     border: 2px solid gold;
     border-radius: 60px;
-    padding: 12px 25px;
-    font-size: 1.2rem;
+    padding: 12px 30px;
+    font-size: 1.3rem;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 5px 0 #5e3e2b, 0 0 20px gold;
+    box-shadow: 0 6px 0 #5e3e2b, 0 0 30px gold;
     transition: 0.2s;
+    letter-spacing: 2px;
 }
 .complete-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 0 #5e3e2b, 0 0 30px gold;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 0 #5e3e2b, 0 0 50px gold;
 }
+
 @keyframes glowPulse {
-    0% { text-shadow: 0 0 10px gold; }
-    50% { text-shadow: 0 0 30px gold; }
-    100% { text-shadow: 0 0 10px gold; }
+    0% { text-shadow: 0 0 15px gold; }
+    50% { text-shadow: 0 0 40px gold; }
+    100% { text-shadow: 0 0 15px gold; }
 }
 
 /* 少年星球头图容器 */
@@ -1725,7 +1808,7 @@ font-weight: 600; /* 适当加粗 */
     max-width: 500px;
     height: 200px;
     margin: 20px auto 30px;
-    background-image: url('http://m-birthday-music.test.upcdn.net/yijiamigong.png');
+    background-image: url('http://m-birthday-music.test.upcdn.net/yijiamigong1.png');
     background-size: cover;
     background-position: center;
 
@@ -1739,7 +1822,7 @@ font-weight: 600; /* 适当加粗 */
     left: 20%;
     top: 15%;
     transform: translateY(-50%);
-    width: 60px;
+    width: 40px;
     height: auto;
     animation: float 3s ease-in-out infinite;
     filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
@@ -1751,7 +1834,7 @@ font-weight: 600; /* 适当加粗 */
     right: 20%;
     top: 3%;
     transform: translateY(-50%);
-    width: 80px;
+    width: 50px;
     height: auto;
     animation: sway 2.5s ease-in-out infinite;
     filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
@@ -1785,7 +1868,7 @@ font-weight: 600; /* 适当加粗 */
     max-width: 500px;
     height: 200px;
     margin: 20px auto 30px;
-    background-image: url('http://m-birthday-music.test.upcdn.net/kongzhishi.png');
+    background-image: url('http://m-birthday-music.test.upcdn.net/kongzhishi2.png');
     background-size: cover;
     background-position: center;
     box-shadow: 0 10px 20px rgba(0,0,0,0.5);
@@ -1847,6 +1930,405 @@ font-weight: 600; /* 适当加粗 */
     .planet3-illustration .icon-right2 {
         width: 70px;
     }
+}
+
+/* 爱好星球头图容器 */
+.planet4-illustration {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    height: 250px;
+    margin: 20px auto 30px;
+    background-image: url('http://m-birthday-music.test.upcdn.net/mimijidi1.png');
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+}
+
+/* 图标通用样式 */
+.planet4-icon {
+    position: absolute;
+    filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+    transition: filter 0.3s ease;
+    pointer-events: auto;
+}
+
+/* 中间：情书 */
+.planet4-illustration .icon-middle {
+    left: 20%;
+    top: 30%;
+    transform: translate(-50%, -50%);
+    width: 100px;            /* 可根据实际大小调整 */
+    animation: sway 2.5s ease-in-out infinite;
+}
+
+/* 右边：耳机 */
+.planet4-illustration .icon-right {
+    right: 30%;
+    top: 40%;
+    transform: translateY(-50%);
+    width: 50px;
+    animation: float 3s ease-in-out infinite;
+}
+
+/* 最右边：唱片机 */
+.planet4-illustration .icon-right2 {
+    right: 2%;
+    top: 60%;
+    transform: translateY(-50%);
+    width: 120px;
+    animation: float 3s ease-in-out infinite;
+}
+
+/* 悬停效果（仅改变光晕） */
+.planet4-icon:hover {
+    filter: drop-shadow(0 0 25px gold);
+}
+
+
+/* 情感星球头图容器 */
+.planet5-illustration {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    height: 200px;
+    margin: 20px auto 30px;
+    background-image: url('http://m-birthday-music.test.upcdn.net/qinggan.png');
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+}
+
+/* 图标通用样式 */
+.planet5-icon {
+    position: absolute;
+    filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+    transition: filter 0.3s ease;
+    pointer-events: auto;
+}
+
+/* 左边：对不起（闪烁） */
+.planet5-illustration .icon-left {
+    left: 5%;
+    top: 70%;
+    transform: translateY(-50%);
+    width: 80px;
+    animation: blink 2s step-end infinite;
+}
+
+/* 中间：泪珠树（摇摆） */
+.planet5-illustration .icon-middle {
+    left: 20%;
+    top: 5%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    animation: sway 3s ease-in-out infinite;
+}
+
+/* 右边：怅忆如果（浮动） */
+.planet5-illustration .icon-right {
+    right: 5%;
+    top: 45%;
+    transform: translateY(-50%);
+    width: 90px;
+    animation: float 4s ease-in-out infinite;
+}
+
+/* 悬停效果 */
+.planet5-icon:hover {
+    filter: drop-shadow(0 0 25px gold);
+}
+
+/* 未来星球头图容器 */
+.planet6-illustration {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    height: 200px;
+    margin: 20px auto 30px;
+    background-image: url('http://m-birthday-music.test.upcdn.net/weilaixingqiu.png');
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+}
+
+/* 图标通用样式 */
+.planet6-icon {
+    position: absolute;
+    filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+    transition: filter 0.3s ease;
+    pointer-events: auto;
+}
+
+/* 左边：爱学习（轻微闪烁） */
+.planet6-illustration .icon-left {
+    left: 5%;
+    top: 70%;
+    transform: translateY(-50%);
+    width: 80px;
+    animation: gentleBlink 2s ease-in-out infinite;
+}
+
+/* 中间：表情包树（摇摆） */
+.planet6-illustration .icon-middle {
+    left: 20%;
+    top: 5%;
+    transform: translate(-50%, -50%);
+    width: 150px; /* 树较大，可调整 */
+    animation: sway 3s ease-in-out infinite;
+}
+
+/* 右边：iPad（浮动） */
+.planet6-illustration .icon-right {
+    right: 5%;
+    top: 70%;
+    transform: translateY(-50%);
+    width: 90px;
+    animation: gentleFloat 4s ease-in-out infinite;
+}
+
+/* 悬停效果 */
+.planet6-icon:hover {
+    filter: drop-shadow(0 0 25px gold);
+}
+
+
+/* 彩蛋页头图容器 */
+.planet7-illustration {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    height: 200px;
+    margin: 20px auto 30px;
+    background-image: url('http://m-birthday-music.test.upcdn.net/caidanmaitian.png');
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+}
+
+/* 图标通用样式 */
+.planet7-icon {
+    position: absolute;
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+    transition: transform 0.3s ease;
+    pointer-events: auto;
+}
+
+/* 中间：狐狸（轻微摇摆） */
+.planet7-illustration .icon-center {
+    left: 40%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;            /* 可根据实际大小调整 */
+    animation: sway 3s ease-in-out infinite;
+}
+
+/* 羽毛（左上） */
+.planet7-illustration .icon-feather {
+    left: 35%;
+    top: 25%;
+    width: 40px;
+    animation: floatFeather 4s ease-in-out infinite;
+}
+
+/* 石子（右上） */
+.planet7-illustration .icon-stone {
+    right: 10%;
+    top: 30%;
+    width: 35px;
+    animation: bounce 5s ease-in-out infinite;
+}
+
+/* 野花（左下） */
+.planet7-illustration .icon-flower {
+    left: 15%;
+    bottom: 20%;
+    width: 45px;
+    animation: sway 4s ease-in-out infinite;
+}
+
+/* 悬停效果 */
+.planet7-icon:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 15px gold);
+}
+
+
+.planet1-illustration::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit; /* 继承容器的圆角 */
+    background: radial-gradient(circle at center, transparent 50%, rgba(10, 15, 26, 0.6) 100%);
+    pointer-events: none;    /* 确保不干扰点击 */
+    z-index: 1;
+}
+
+.planet2-illustration::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit; /* 继承容器的圆角 */
+    background: radial-gradient(circle at center, transparent 50%, rgba(10, 15, 26, 0.6) 100%);
+    pointer-events: none;    /* 确保不干扰点击 */
+    z-index: 1;
+}
+
+.planet3-illustration::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit; /* 继承容器的圆角 */
+    background: radial-gradient(circle at center, transparent 50%, rgba(10, 15, 26, 0.6) 100%);
+    pointer-events: none;    /* 确保不干扰点击 */
+    z-index: 1;
+}
+
+.planet4-illustration::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit; /* 继承容器的圆角 */
+    background: radial-gradient(circle at center, transparent 50%, rgba(10, 15, 26, 0.6) 100%);
+    pointer-events: none;    /* 确保不干扰点击 */
+    z-index: 1;
+}
+
+/* 情感星球头图容器边缘柔和 */
+.planet5-illustration::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit; /* 继承容器的圆角 */
+    background: radial-gradient(circle at center, transparent 50%, rgba(10, 15, 26, 0.6) 100%);
+    pointer-events: none;    /* 确保不干扰点击 */
+    z-index: 1;
+}
+
+/* 未来星球头图容器边缘柔和 */
+.planet6-illustration::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: radial-gradient(circle at center, transparent 50%, rgba(10, 15, 26, 0.6) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* 彩蛋页头图容器边缘柔和 */
+.planet7-illustration::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: radial-gradient(circle at center, transparent 50%, rgba(10, 15, 26, 0.6) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* 结局页头图容器 */
+.final-illustration {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    height: 200px;
+    margin: 20px auto 30px;
+    background-image: url('http://m-birthday-music.test.upcdn.net/jiejumaitian.png');
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+}
+
+/* 图标通用样式 */
+.final-icon {
+    position: absolute;
+    filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+    transition: filter 0.3s ease;
+    pointer-events: auto;
+}
+
+/* 左边：背包（上下浮动） */
+.final-illustration .icon-left {
+    left: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 80px;
+    animation: float 3s ease-in-out infinite;
+}
+
+/* 中间：石板（轻微摇摆） */
+.final-illustration .icon-middle {
+    left: 30%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    animation: sway 2.5s ease-in-out infinite;
+}
+
+/* 右边：镜子（缓慢旋转 + 发光） */
+.final-illustration .icon-right {
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 90px;
+    animation: gentleFloat 4s ease-in-out infinite, glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes gentleSpin {
+    from { transform: translateY(-50%) rotate(0deg); }
+    to { transform: translateY(-50%) rotate(360deg); }
+}
+
+@keyframes glowPulse {
+    0% { filter: drop-shadow(0 5px 15px rgba(180,140,80,0.6)) drop-shadow(0 0 20px rgba(255,215,0,0.3)); }
+    50% { filter: drop-shadow(0 5px 25px gold) drop-shadow(0 0 30px gold); }
+    100% { filter: drop-shadow(0 5px 15px rgba(180,140,80,0.6)) drop-shadow(0 0 20px rgba(255,215,0,0.3)); }
+}
+
+/* 悬停效果 */
+.final-icon:hover {
+    filter: drop-shadow(0 0 25px gold);
+}
+
+/* 结局页头图容器边缘柔和 */
+.final-illustration::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: radial-gradient(circle at center, transparent 50%, rgba(10, 15, 26, 0.6) 100%);
+    pointer-events: none;
+    z-index: 1;
 }
 
 
@@ -1959,6 +2441,194 @@ font-weight: 600; /* 适当加粗 */
     0% { opacity: 0.3; filter: hue-rotate(0deg); }
     100% { opacity: 1; filter: hue-rotate(30deg); }
 }
+
+/* 音乐粒子容器 */
+.music-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden;
+    display: none; /* 默认隐藏，由页面激活控制 */
+}
+
+#pagePlanet4.active .music-particles {
+    display: block;
+}
+
+/* 单个粒子 */
+.music-particle {
+    position: absolute;
+    color: #ffb347; /* 基础暖橙色 */
+    font-size: 1.2rem;
+    opacity: 0.4;
+    animation: musicFloat linear infinite;
+    filter: drop-shadow(0 0 5px #ffaa33);
+    font-family: 'Arial', 'Segoe UI Symbol', sans-serif; /* 确保符号显示 */
+    white-space: nowrap;
+}
+
+@keyframes musicFloat {
+    0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg);
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(-100px) translateX(20px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* ===== 粒子容器通用样式 ===== */
+.tear-particles,
+.seed-particles,
+.magic-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden;
+    display: none;
+}
+
+#pagePlanet5.active .tear-particles { display: block; }
+#pagePlanet6.active .seed-particles { display: block; }
+#pageFox.active .magic-particles { display: block; }
+
+/* 情感星球：多种情感粒子 */
+.tear-particle {
+    position: absolute;
+    width: 6px;
+    height: 10px;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(200, 230, 255, 0.6));
+    box-shadow: 0 0 10px rgba(150, 200, 255, 0.8);
+    border-radius: 50% 50% 50% 50%;
+    transform: rotate(-10deg);
+    opacity: 0.5;
+    animation: tearFall linear infinite;
+}
+.tear-particle.heart {
+    width: 12px;
+    height: 10px;
+    background: radial-gradient(circle at 40% 40%, #ff8da1, #b96b8a);
+    clip-path: path('M12 4.5C10-0.5 2-0.5 0 4.5c2 5 6 7 6 7s4-2 6-7z');
+    animation: tearFall 8s linear infinite;
+}
+.tear-particle.star {
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.9), rgba(180, 220, 250, 0.6));
+    box-shadow: 0 0 12px rgba(100, 180, 255, 0.8);
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+@keyframes tearFall {
+    0% { transform: translateY(-10vh) rotate(0deg); opacity: 0.6; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+
+/* 未来星球：多种成长粒子 */
+.seed-particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, #9acd32, #5f9f4f);
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: seedRise linear infinite;
+    box-shadow: 0 0 8px #9acd32;
+}
+.seed-particle.sprout {
+    width: 8px;
+    height: 12px;
+    background: linear-gradient(135deg, #7ccd7c, #3cb371);
+    clip-path: polygon(50% 0%, 80% 40%, 60% 40%, 80% 80%, 50% 60%, 20% 80%, 40% 40%, 20% 40%);
+}
+.seed-particle.leaf {
+    width: 10px;
+    height: 8px;
+    background: radial-gradient(circle at 30% 30%, #adff2f, #6b8e23);
+    border-radius: 50% 50% 0 50%;
+    transform: rotate(45deg);
+}
+@keyframes seedRise {
+    0% { transform: translateY(110vh) translateX(0) scale(0.8); opacity: 0.8; }
+    50% { transform: translateY(50vh) translateX(10px) scale(1.2); opacity: 1; }
+    100% { transform: translateY(-20vh) translateX(-10px) scale(0.6); opacity: 0; }
+}
+/* ===== 彩蛋页：魔法粒子（丰富麦田） ===== */
+.magic-particle {
+    position: absolute;
+    pointer-events: none;
+    color: gold;
+    font-size: 1rem;
+    animation: magicFloat linear infinite;
+    filter: drop-shadow(0 0 5px gold);
+	opacity: 0.4;
+}
+
+@keyframes magicFloat {
+    0% { transform: translateY(110vh) rotate(0deg); opacity: 0.3; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+
+/* 增强原飘麦穗效果：添加多种符号和颜色 */
+.magic-particle::before {
+    /* 占位，实际符号在JS中设置 */
+}
+
+
+/* 结局页粒子容器 */
+.final-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden;
+    display: none; /* 默认隐藏，由页面激活控制 */
+}
+
+#pageFinal.active .final-particles {
+    display: block;
+}
+
+/* 单个粒子 */
+.final-particle {
+    position: absolute;
+    color: gold;
+    font-size: 0.8rem;
+    opacity: 0.2;
+    animation: finalFloat linear infinite;
+    filter: drop-shadow(0 0 5px currentColor);
+    font-family: 'Arial', 'Segoe UI Symbol', sans-serif;
+    white-space: nowrap;
+}
+
+@keyframes finalFloat {
+    0% {
+        transform: translateY(110vh) translateX(0) rotate(0deg);
+        opacity: 0.2;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateY(-20vh) translateX(20px) rotate(360deg);
+        opacity: 0;
+    }
+}
 	
 	</style>
 </head>
@@ -2044,9 +2714,9 @@ font-weight: 600; /* 适当加粗 */
 			<div class="golden-particles" id="particles"></div>
 			<!-- 童年星球插画区：高级浮动图像组合 -->
 <div class="planet1-illustration">
-    <img src="http://m-birthday-music.test.upcdn.net/huihuagongju.png" alt="绘画工具" class="planet1-icon icon-left" id="toolIcon">
-    <img src="http://m-birthday-music.test.upcdn.net/hua.png" alt="画架" class="planet1-icon icon-center" id="huaIcon">
-    <img src="http://m-birthday-music.test.upcdn.net/shexiangji.png" alt="摄像机" class="planet1-icon icon-right" id="camIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/shexiangji1.png" alt="摄像机" class="planet1-icon icon-right" id="camIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/youhua1.png" alt="画架" class="planet1-icon icon-center" id="huaIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/huihuagongju1.png" alt="绘画工具" class="planet1-icon icon-left" id="toolIcon">
 </div>
 			
             <div class="scene-card">
@@ -2237,13 +2907,15 @@ font-weight: 600; /* 适当加粗 */
 			<img src="http://m-birthday-music.test.upcdn.net/taihao.png" 
      alt="爱好星球 · 桌游与旋律" 
      class="handwritten-title">
+	 
+	 <div class="music-particles" id="musicParticles"></div>
 			
-			 <!-- 插画区：桌游城堡(左) 唱片机(右) 耳机(挂) -->
-            <div class="illustration-area">
-                <div class="placeholder placeholder-md float">🏰 桌游盒子城堡</div>
-                <div class="placeholder placeholder-md sway">📀 唱片机</div>
-                <div class="placeholder placeholder-sm">🎧 耳机</div>
-            </div>
+			 <!-- 爱好星球头图区域：秘密基地背景 + 情书、耳机、唱片机 -->
+<div class="planet4-illustration">
+    <img src="http://m-birthday-music.test.upcdn.net/qingshu.png" alt="情书" class="planet4-icon icon-middle" id="loveLetterIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/erji.png" alt="耳机" class="planet4-icon icon-right" id="headphoneIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/changpianji.png" alt="唱片机" class="planet4-icon icon-right2" id="recordPlayerIcon">
+</div>
             <div class="scene-card">
                 <p>你降落在第四个星球。这里像一个被精心布置的秘密基地——脚下是柔软的地毯，头顶挂着暖黄色的星星灯，四周散落着大大小小的桌游盒子，堆成一座座小山。你看见《勃艮第城堡》的盒子半开着，露出里面精致的版图；《暑假日记》被摆在最显眼的位置，封面上的卡通人物冲你眨眼睛；还有《璀璨宝石》《SCOUT》《命悬一线》……每一盒都整整齐齐，像收藏家最珍贵的藏品。</p>
                 <p>你沿着桌游堆成的小路往里走，发现一座由盒子垒成的城堡。城堡最高处放着一张原木色的圆桌，桌上摆着一盒特别的桌游——它被单独放在一个玻璃罩里，像博物馆的展品。你凑近看，是那盒叫“情书”的桌游，盒子的边角已经有些磨损，显然被玩过很多次。玻璃罩上贴着一张纸条：</p>
@@ -2304,16 +2976,16 @@ font-weight: 600; /* 适当加粗 */
 			<img src="http://m-birthday-music.test.upcdn.net/tqinggan.png" 
      alt="情感星球 · 沉默的星空" 
      class="handwritten-title">
+	 
+	 <div class="tear-particles" id="tearParticles"></div>
 			
 			<!-- 插画区：泪珠树(中) 长椅(下) 纸条(散落) -->
-            <div class="illustration-area" style="flex-direction: column;">
-                <div class="placeholder placeholder-lg float">🌳 泪珠石头树</div>
-                <div class="placeholder placeholder-md">🪑 旧长椅+本子</div>
-                <div style="display: flex; gap:10px;">
-                    <div class="placeholder placeholder-sm">📝 纸条“对不起”</div>
-                    <div class="placeholder placeholder-sm">📝 纸条“我没事”</div>
-                </div>
-            </div>
+            <!-- 情感星球头图区域：情感背景 + 泪珠树、对不起、怅忆如果 -->
+<div class="planet5-illustration">
+    <img src="http://m-birthday-music.test.upcdn.net/duibuqi.png" alt="对不起" class="planet5-icon icon-left" id="sorryIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/leizhushu.png" alt="泪珠树" class="planet5-icon icon-middle" id="tearTreeIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/changyiruguo.png" alt="怅忆如果" class="planet5-icon icon-right" id="memoryIcon">
+</div>
             <div class="scene-card">
                 <p>你降落在第五个星球。这里的天空很低，深蓝色的穹顶仿佛触手可及。满天的星星不像平时那样闪烁，而是以一种极慢的速度明暗交替，像某种古老的呼吸。你踩在地面上，发现脚下不是泥土，而是一片柔软的、会泛起涟漪的暗色水面。每走一步，水面下就会有一道光轻轻掠过，像是触动了什么沉睡的东西。</p>
                 <p>你走了一会儿，发现地上散落着许多小纸条。有些是叠起来的，有些被揉皱了又展平，有些干脆撕成了碎片。你随手捡起一张，展开，上面只写着两个字：</p>
@@ -2387,13 +3059,15 @@ font-weight: 600; /* 适当加粗 */
 			<img src="http://m-birthday-music.test.upcdn.net/tweilai.png" 
      alt="未来星球 · 等待发芽的种子" 
      class="handwritten-title">
+	 
+	 <div class="seed-particles" id="seedParticles"></div>
 			
-			<!-- 插画区：大树(中) 笔记本堆(下) 平板(侧) -->
-            <div class="illustration-area">
-                <div class="placeholder placeholder-lg float">🌳 挂满物件的大树</div>
-                <div class="placeholder placeholder-md">📚 笔记本堆</div>
-                <div class="placeholder placeholder-md">📱 平板电脑（收藏夹）</div>
-            </div>
+			<!-- 未来星球头图区域：未来星球背景 + 表情包树、爱学习、iPad -->
+<div class="planet6-illustration">
+    <img src="http://m-birthday-music.test.upcdn.net/aixuexi.png" alt="爱学习" class="planet6-icon icon-left" id="studyIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/biaoqingbaoshu.png" alt="表情包树" class="planet6-icon icon-middle" id="treeIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/ipad.png" alt="iPad" class="planet6-icon icon-right" id="ipadIcon">
+</div>
 			
             <div class="scene-card">
                 <p>你降落在第六个星球。这里的天空是一种温柔的灰蓝色，像黎明前或黄昏后，介于光明与黑暗之间。地面上铺满了柔软的苔藓，踩上去会留下浅浅的脚印，但很快又恢复原状。远处有一棵巨大的树，树冠像一把撑开的伞，树干上挂满了各种奇怪的东西——鼠标、键盘、一本翻开的书、一杯喝了一半的咖啡、还有几个表情包打印成的挂件，挤眉弄眼地晃来晃去。</p>
@@ -2451,7 +3125,15 @@ font-weight: 600; /* 适当加粗 */
 			<img src="http://m-birthday-music.test.upcdn.net/tjieju.png" 
      alt="他是什么样的人" 
      class="handwritten-title">
+	 
+	 <div class="final-particles" id="finalParticles"></div>
 			
+			<!-- 结局页头图区域：麦田背景 + 石板、背包、镜子 -->
+<div class="final-illustration">
+    <img src="http://m-birthday-music.test.upcdn.net/shiban.png" alt="石板" class="final-icon icon-middle" id="stoneSlabIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/beibao.png" alt="背包" class="final-icon icon-left" id="bagIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/jiejujingzi.png" alt="镜子" class="final-icon icon-right" id="mirrorIconFinal">
+</div>
 
             <!-- 场景卡片 -->
             <div class="scene-card">
@@ -2481,8 +3163,6 @@ font-weight: 600; /* 适当加粗 */
             </div>
 <!-- 插画区：镜子、石板、麦田狐狸剪影（占位） -->
             <div class="illustration-area">
-                <div class="placeholder placeholder-xl">🪞 巨大镜子（六色藤蔓）</div>
-                <div class="placeholder placeholder-md">📜 石板（六颗星星碎片）</div>
                 <img src="http://m-birthday-music.test.upcdn.net/huli.png" alt="麦田尽头狐狸剪影" class="fox-illustration float" style="width:120px; height:auto;">
             </div>
             <button class="nav-btn" onclick="restartJourney()">再看一次麦田</button>
@@ -2492,26 +3172,21 @@ font-weight: 600; /* 适当加粗 */
     <!-- ========== 狐狸星球（彩蛋） ========== -->
     <section class="page" id="pageFox">
         <div class="container" style="background: rgba(58,44,31,0.8);">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <i class="fas fa-fox" style="font-size: 4rem; color: #d4a373;"></i>
-            </div>
+           
 			
 			<img src="http://m-birthday-music.test.upcdn.net/tcaidan.png" 
      alt="麦田里的狐狸" 
      class="handwritten-title">
+	 
+	 <div class="magic-particles" id="magicParticles"></div>
 			
-			<!-- 插画区：狐狸、麦田小路、小物件 -->
-            <div class="illustration-area" style="flex-direction: column;">
-                <div class="placeholder placeholder-lg sway" style="background: #b8860b;">🦊 金黄色狐狸（白爪）</div>
-                <div class="placeholder placeholder-md" style="width:80%;">🛤️ 麦田中的小路</div>
-                <div style="display: flex; gap:10px;">
-                    <div class="placeholder placeholder-sm">🪶 羽毛</div>
-                    <div class="placeholder placeholder-sm">🪨 石子</div>
-                    <div class="placeholder placeholder-sm">🌸 野花</div>
-                </div>
-                <div class="placeholder placeholder-md">🌳 远处孤树</div>
-                <div class="placeholder placeholder-sm float">🦊 狐狸消失的背影</div>
-            </div>
+			<!-- 彩蛋页头图区域：麦田背景 + 狐狸、羽毛、石子、野花 -->
+<div class="planet7-illustration">
+    <img src="http://m-birthday-music.test.upcdn.net/huli.png" alt="狐狸" class="planet7-icon icon-center" id="foxIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/yumao.png" alt="羽毛" class="planet7-icon icon-feather" id="featherIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/shizi.png" alt="石子" class="planet7-icon icon-stone" id="stoneIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/yehua.png" alt="野花" class="planet7-icon icon-flower" id="flowerIcon">
+</div>
 			
 
             <div class="scene-card fox-page-content" style="background: #2e231b; border: 1px solid #b28b5e; box-shadow: inset 0 0 30px #1a130e;">
@@ -2740,7 +3415,9 @@ function showProgress() {
     const card = document.createElement('div');
     card.className = `fragment-card ${collected ? 'collected' : 'uncollected'}`;
     card.style.borderColor = frag.color;
-    
+    if (collected) {
+    card.style.setProperty('--theme-color', frag.color);
+}
     card.innerHTML = `
         <div class="fragment-star" style="color: ${collected ? frag.color : '#aaa'};">★</div>
         <div class="fragment-name" style="color: ${collected ? frag.color : '#ccc'};">${collected ? frag.name : '???'}</div>
@@ -2904,6 +3581,164 @@ function createGlitchParticles() {
     }
 }
 
+
+// 生成爱好星球的音乐粒子
+function createMusicParticles() {
+    const container = document.getElementById('musicParticles');
+    if (!container) return;
+    container.innerHTML = ''; // 清空原有粒子
+    const numberOfParticles = 25;
+    const symbols = ['♪', '♫', '♩', '♬', '◉', '•']; // 音符和圆点
+
+    for (let i = 0; i < numberOfParticles; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('music-particle');
+
+        // 随机选择符号
+        const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+        particle.textContent = symbol;
+
+        // 随机大小（从0.6rem到1.3rem）
+        const size = Math.random() * 0.7 + 0.6; // 最小值0.6，最大值1.3
+        particle.style.fontSize = size + 'rem';
+
+        // 随机起始横向位置
+        particle.style.left = Math.random() * 100 + '%';
+
+        // 随机动画时长（6s ~ 16s）
+        const duration = Math.random() * 10 + 6;
+        particle.style.animationDuration = duration + 's';
+
+        // 随机动画延迟（0 ~ 5s）
+        particle.style.animationDelay = Math.random() * 5 + 's';
+
+        // 随机颜色（橙色系：hsl 30-60）
+        const hue = Math.floor(Math.random() * 30 + 30); // 30-60
+        particle.style.color = `hsl(${hue}, 100%, 60%)`;
+
+        container.appendChild(particle);
+    }
+}
+
+// 情感星球：泪滴粒子
+function createTearParticles() {
+    const container = document.getElementById('tearParticles');
+    if (!container) return;
+    container.innerHTML = '';
+    const count = 40;
+    const types = ['tear', 'heart', 'star'];
+    for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'tear-particle';
+        const type = types[Math.floor(Math.random() * types.length)];
+        if (type !== 'tear') p.classList.add(type);
+        
+        // 随机大小
+        let sizeW, sizeH;
+        if (type === 'tear') {
+            sizeW = Math.random() * 8 + 4;
+            sizeH = sizeW * 1.5;
+        } else if (type === 'heart') {
+            sizeW = Math.random() * 12 + 8;
+            sizeH = sizeW * 0.9;
+        } else {
+            sizeW = Math.random() * 10 + 5;
+            sizeH = sizeW;
+        }
+        p.style.width = sizeW + 'px';
+        p.style.height = sizeH + 'px';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDuration = (Math.random() * 10 + 8) + 's';
+        p.style.animationDelay = Math.random() * 5 + 's';
+        p.style.opacity = Math.random() * 0.5 + 0.3;
+        container.appendChild(p);
+    }
+}
+
+
+function createSeedParticles() {
+    const container = document.getElementById('seedParticles');
+    if (!container) return;
+    container.innerHTML = '';
+    const count = 30;
+    const types = ['seed', 'sprout', 'leaf'];
+    for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'seed-particle';
+        const type = types[Math.floor(Math.random() * types.length)];
+        if (type !== 'seed') p.classList.add(type);
+        
+        let size = Math.random() * 10 + 5;
+        p.style.width = size + 'px';
+        p.style.height = type === 'sprout' ? size * 1.5 + 'px' : size + 'px';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDuration = (Math.random() * 12 + 10) + 's';
+        p.style.animationDelay = Math.random() * 5 + 's';
+        container.appendChild(p);
+    }
+}
+
+function createMagicParticles() {
+    const container = document.getElementById('magicParticles');
+    if (!container) return;
+    container.innerHTML = '';
+    const symbols = ['✦', '✧', '🌾']; // 简化为三种
+    const count = 25; // 减少数量
+    for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'magic-particle';
+        const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+        p.textContent = symbol;
+        const size = Math.random() * 1.0 + 0.6; // 字号范围 0.6-1.6rem
+        p.style.fontSize = size + 'rem';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDuration = (Math.random() * 10 + 8) + 's';
+        p.style.animationDelay = Math.random() * 5 + 's';
+        // 柔和的金色，降低饱和度
+        const hue = Math.floor(Math.random() * 20 + 45);
+        p.style.color = `hsl(${hue}, 80%, 70%)`; // 降低饱和度
+        p.style.opacity = 0.4; // 固定较低透明度
+        container.appendChild(p);
+    }
+}
+
+// 生成结局页的金色粒子
+function createFinalParticles() {
+    const container = document.getElementById('finalParticles');
+    if (!container) return;
+    container.innerHTML = ''; // 清空原有粒子
+    const numberOfParticles = 30;
+    const symbols = ['✦', '✧', '·', '🌟', '✨']; // 星星和光点
+
+    for (let i = 0; i < numberOfParticles; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('final-particle');
+
+        // 随机选择符号
+        const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+        particle.textContent = symbol;
+
+        // 随机大小（0.6rem ~ 1.5rem）
+        const size = Math.random() * 0.7 + 0.6; // 最小值0.6，最大值1.3
+        particle.style.fontSize = size + 'rem';
+
+        // 随机起始横向位置
+        particle.style.left = Math.random() * 100 + '%';
+
+        // 随机动画时长（6s ~ 14s）
+        const duration = Math.random() * 8 + 6;
+        particle.style.animationDuration = duration + 's';
+
+        // 随机动画延迟（0 ~ 5s）
+        particle.style.animationDelay = Math.random() * 5 + 's';
+
+        // 随机颜色（金色系：hsl 45-60）
+        const hue = Math.floor(Math.random() * 15 + 45);
+        particle.style.color = `hsl(${hue}, 100%, 70%)`;
+
+        container.appendChild(particle);
+    }
+}
 		
 
         // 页面切换
@@ -2935,6 +3770,23 @@ if (pageId === 'pagePlanet2') {
 
 if (pageId === 'pagePlanet3') {
     createGlitchParticles();
+}
+
+if (pageId === 'pagePlanet4') {
+    createMusicParticles();
+}
+
+if (pageId === 'pagePlanet5') {
+    createTearParticles();
+}
+if (pageId === 'pagePlanet6') {
+    createSeedParticles();
+}
+if (pageId === 'pageFinal') {
+    createFinalParticles();
+}
+if (pageId === 'pageFox') {
+    createMagicParticles();
 }
 
     // 音乐 & 滚动逻辑（保持不变）
@@ -3195,14 +4047,33 @@ if (musicPlaying) {
 
         // 飘麦穗效果
         function floatWheat() {
-            const wheat = document.createElement('div');
-            wheat.classList.add('floating-wheat');
-            wheat.innerHTML = '<i class="fas fa-wheat-alt"></i>';
-            wheat.style.left = Math.random() * window.innerWidth + 'px';
-            wheat.style.bottom = '20px';
-            document.body.appendChild(wheat);
-            setTimeout(() => wheat.remove(), 3000);
-        }
+    const wheat = document.createElement('div');
+    wheat.classList.add('floating-wheat');
+    wheat.innerHTML = '<i class="fas fa-wheat-alt"></i>';
+    // 随机起始水平位置
+    wheat.style.left = Math.random() * window.innerWidth + 'px';
+    wheat.style.bottom = '20px';
+    // 随机大小
+    const scale = Math.random() * 0.8 + 0.6; // 0.6-1.4
+    wheat.style.fontSize = (scale * 2) + 'rem';
+    // 随机旋转初始角度
+    const rotate = Math.random() * 60 - 30;
+    wheat.style.transform = `rotate(${rotate}deg)`;
+    // 随机颜色（保留金色系）
+    const colors = ['gold', '#ffd966', '#ffaa33', '#ffb347'];
+    wheat.style.color = colors[Math.floor(Math.random() * colors.length)];
+    // 添加多重阴影
+    wheat.style.textShadow = '0 0 5px currentColor, 0 0 15px currentColor';
+    // 动画使用现有 @keyframes floatUp，但为了更丰富，我们可以添加内联动画参数
+    // 随机动画时长和延迟
+    const duration = Math.random() * 2 + 2.5; // 2.5-4.5秒
+    wheat.style.animation = `floatUp ${duration}s ease-out forwards`;
+    // 增加随机水平飘移（通过关键帧或内联变量）
+    const driftX = (Math.random() - 0.5) * 100; // -50px 到 50px
+    wheat.style.setProperty('--driftX', driftX + 'px');
+    document.body.appendChild(wheat);
+    setTimeout(() => wheat.remove(), duration * 1000);
+}
 
         // 绑定彩蛋页点击事件
         document.addEventListener('DOMContentLoaded', function() {
