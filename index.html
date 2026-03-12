@@ -114,18 +114,34 @@
     position: relative;
     max-width: 700px;
     margin: 0 auto;
-    background: rgba(40, 30, 20, 0.6);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 40px;
-    /* ✅ 移除原 padding，改用 min-height + 内容偏移 */
+	background: rgba(40, 30, 20, 0.5);
+    background-image: 
+        radial-gradient(circle at 10% 15%, rgba(255, 220, 160, 0.2) 0%, transparent 35%),
+        radial-gradient(circle at 90% 25%, rgba(210, 180, 255, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 30% 75%, rgba(255, 200, 150, 0.18) 0%, transparent 40%),
+        radial-gradient(circle at 70% 60%, rgba(200, 230, 255, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 50% 40%, rgba(255, 220, 190, 0.1) 0%, transparent 60%),
+        radial-gradient(circle at 80% 80%, rgba(240, 210, 180, 0.1) 0%, transparent 60%);
+	
+	animation: glowWave 10s infinite alternate ease-in-out;
+	
 	/* ✅ 要求1：自身边框设为透明 */
-    border: 2px solid transparent;  /* 关键：保留边框占位但透明 */
+    border: none;  
+	
     
     /* ✅ 要求2 & 3：统一 padding + 防止重叠 */
     padding: 20px 20px;  /* 所有设备统一使用此值（已验证移动端兼容） */
 
-    box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 0 2px #5e3e2b, inset 0 0 30px #2a1e14;
+    box-shadow: 
+        0 20px 40px rgba(0,0,0,0.8),                /* 外投影 */
+        0 0 0 1px rgba(210, 170, 120, 0.6),        /* 内层细金属线 */
+        0 0 0 2px rgba(150, 110, 70, 0.4),          /* 中层深色 */
+        0 0 0 4px rgba(200, 160, 110, 0.2),         /* 外层浅色 */
+        inset 0 0 30px rgba(30, 20, 10, 0.8),       /* 内阴影加深边缘 */
+        inset 0 0 20px rgba(255, 215, 140, 0.2);     /* 内发光 */
     overflow: hidden;
 }
 
@@ -178,6 +194,19 @@
             drop-shadow(0 0 5px #ffd966);
     -webkit-mask-image: linear-gradient(to top, transparent 0%, black 20%, black 80%, transparent 100%);
     mask-image: linear-gradient(to top, transparent 0%, black 20%, black 80%, transparent 100%);
+}
+
+/* 光晕波动动画 */
+@keyframes glowWave {
+    0% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 2% 3%;
+    }
+    100% {
+        background-position: -2% -1%;
+    }
 }
 
 		
@@ -244,19 +273,34 @@ text-shadow: 0 0 15px #ffd966, 2px 2px 4px #3a2a1a;
 
         /* ===== 卡片样式 ===== */
         .scene-card {
-    background: rgba(30, 25, 20, 0.4);
-    backdrop-filter: blur(4px);
+    background: rgba(30, 25, 20, 0.3);
+	background-image: 
+        radial-gradient(circle at 15% 20%, rgba(255, 210, 150, 0.2) 0%, transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(200, 190, 240, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 40% 70%, rgba(230, 180, 130, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(170, 220, 240, 0.1) 0%, transparent 55%),
+        radial-gradient(circle at 50% 40%, rgba(240, 200, 160, 0.1) 0%, transparent 60%);
+    backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
     border-radius: 32px;
     padding: 25px;
     margin-bottom: 25px;
-    border: 1px solid #b28b5e;
-    box-shadow: inset 0 0 20px rgba(140, 100, 60, 0.2), 0 10px 20px rgba(0,0,0,0.5);
+    border:none;
+	
+    box-shadow: 
+        0 10px 20px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(190, 150, 100, 0.5),
+        0 0 0 2px rgba(130, 90, 60, 0.3),
+        inset 0 0 20px rgba(20, 15, 10, 0.8),
+        inset 0 0 15px rgba(255, 210, 150, 0.15);
     color: #f0e6d2;
     font-size: 1rem;
     line-height: 1.8;
 }
 
-
+.scene-card, .puzzle-area, .success-story,  {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
 
 /* 录音机样式 */
 .tape-recorder {
@@ -454,8 +498,12 @@ text-shadow: 0 0 15px #ffd966, 2px 2px 4px #3a2a1a;
 
         /* ===== 解谜区域 ===== */
         .puzzle-area {
-    background: rgba(40, 30, 20, 0.8);
-    backdrop-filter: blur(4px);
+    background: rgba(40, 30, 20, 0.65);
+	background-image: 
+        radial-gradient(circle at 20% 40%, rgba(255, 210, 130, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 80% 30%, rgba(255, 180, 100, 0.2) 0%, transparent 45%),
+        radial-gradient(circle at 50% 70%, rgba(220, 160, 110, 0.15) 0%, transparent 60%);
+    backdrop-filter: blur(8px);
     border-radius: 28px;
     padding: 25px;
     margin: 30px 0 50px;
@@ -641,12 +689,23 @@ font-weight: 600; /* 适当加粗 */
         /* ===== 成功故事区域 ===== */
         .success-story {
     background: rgba(30, 20, 15, 0.7);
-    backdrop-filter: blur(4px);
+	background-image: 
+        radial-gradient(circle at 15% 20%, rgba(255, 210, 150, 0.2) 0%, transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(200, 190, 240, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 40% 70%, rgba(230, 180, 130, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(170, 220, 240, 0.1) 0%, transparent 55%),
+        radial-gradient(circle at 50% 40%, rgba(240, 200, 160, 0.1) 0%, transparent 60%);
+    backdrop-filter: blur(8px);
     border-radius: 32px;
     padding: 30px 25px;
     margin: 30px 0;
-    border: 2px solid #e0b87b;
-    box-shadow: 0 0 40px #b28b5e, inset 0 0 20px #5e4b3c;
+    border: none;
+    box-shadow: 
+        0 10px 20px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(190, 150, 100, 0.5),
+        0 0 0 2px rgba(130, 90, 60, 0.3),
+        inset 0 0 20px rgba(20, 15, 10, 0.8),
+        inset 0 0 15px rgba(255, 210, 150, 0.15);
     color: #fff8e7;
 }
 
