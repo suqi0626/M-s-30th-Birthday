@@ -4544,6 +4544,11 @@ if (foxEgg) {
 				mirrorContent = '';
                 // 回到序幕
                 goToPage('pagePrologue');
+				// 隐藏彩蛋页入口（麦穗图标）
+const wheatEgg = document.getElementById('wheatEgg');
+if (wheatEgg) {
+    wheatEgg.classList.remove('show');
+}
             }
         }
     </script>
