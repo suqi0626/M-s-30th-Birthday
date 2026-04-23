@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>B-612鍙峰畤瀹欐极娓告寚鍗?/title>
+    <title>B-612号宇宙漫游指南</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Playfair+Display:wght@400;600&family=Lora:wght@400;600&family=Crimson+Text:ital@0;1&family=Noto+Serif+SC:wght@400;600&family=Caveat:wght@400;700&family=VT323&display=swap" rel="stylesheet">
     <style>
@@ -27,7 +27,7 @@
 
 		
 		
-        /* ===== 鍔ㄦ€佹槦绌鸿儗鏅?===== */
+        /* ===== 动态星空背景 ===== */
         #starfield {
             position: fixed;
             top: 0;
@@ -70,9 +70,9 @@
         box-shadow: 0 0 2px #fff;
     }
     50% {
-        opacity: 1;                      /* 鏈€浜偣瀹屽叏涓嶉€忔槑 */
-        transform: scale(2);              /* 鏀惧ぇ鍒颁袱鍊?*/
-        box-shadow: 0 0 25px #fff, 0 0 50px gold, 0 0 80px gold; /* 鏇村ぇ鍏夋檿 */
+        opacity: 1;                      /* 最亮点完全不透明 */
+        transform: scale(2);              /* 放大到两倍 */
+        box-shadow: 0 0 25px #fff, 0 0 50px gold, 0 0 80px gold; /* 更大光晕 */
     }
     100% {
         opacity: var(--min-opacity);
@@ -83,7 +83,7 @@
 
         
 
-        /* ===== 椤甸潰瀹瑰櫒 ===== */
+        /* ===== 页面容器 ===== */
         .page {
             position: absolute;
             top: 0;
@@ -95,8 +95,8 @@
             visibility: hidden;
             transition: opacity 0.8s ease, visibility 0.8s;
             overflow-y: auto;
-			-webkit-overflow-scrolling: touch; /* 馃憟 鍏抽敭锛氬惎鐢ㄥ脊鎬ф粴鍔?*/
-			overscroll-behavior-y: contain;   /* 馃憟 闃叉婊氬姩绌块€忓埌鐖剁骇 */
+			-webkit-overflow-scrolling: touch; /* 👈 关键：启用弹性滚动 */
+			overscroll-behavior-y: contain;   /* 👈 防止滚动穿透到父级 */
             background: rgba(10, 15, 26, 0.3);
             backdrop-filter: blur(2px);
         }
@@ -126,24 +126,24 @@
 	
 	animation: glowWave 10s infinite alternate ease-in-out;
 	
-	/* 鉁?瑕佹眰1锛氳嚜韬竟妗嗚涓洪€忔槑 */
+	/* ✅ 要求1：自身边框设为透明 */
     border: none;  
 	
     
-    /* 鉁?瑕佹眰2 & 3锛氱粺涓€ padding + 闃叉閲嶅彔 */
-    padding: 20px 20px;  /* 鎵€鏈夎澶囩粺涓€浣跨敤姝ゅ€硷紙宸查獙璇佺Щ鍔ㄧ鍏煎锛?*/
+    /* ✅ 要求2 & 3：统一 padding + 防止重叠 */
+    padding: 20px 20px;  /* 所有设备统一使用此值（已验证移动端兼容） */
 
     box-shadow: 
-        0 20px 40px rgba(0,0,0,0.8),                /* 澶栨姇褰?*/
-        0 0 0 1px rgba(210, 170, 120, 0.6),        /* 鍐呭眰缁嗛噾灞炵嚎 */
-        0 0 0 2px rgba(150, 110, 70, 0.4),          /* 涓眰娣辫壊 */
-        0 0 0 4px rgba(200, 160, 110, 0.2),         /* 澶栧眰娴呰壊 */
-        inset 0 0 30px rgba(30, 20, 10, 0.8),       /* 鍐呴槾褰卞姞娣辫竟缂?*/
-        inset 0 0 20px rgba(255, 215, 140, 0.2);     /* 鍐呭彂鍏?*/
+        0 20px 40px rgba(0,0,0,0.8),                /* 外投影 */
+        0 0 0 1px rgba(210, 170, 120, 0.6),        /* 内层细金属线 */
+        0 0 0 2px rgba(150, 110, 70, 0.4),          /* 中层深色 */
+        0 0 0 4px rgba(200, 160, 110, 0.2),         /* 外层浅色 */
+        inset 0 0 30px rgba(30, 20, 10, 0.8),       /* 内阴影加深边缘 */
+        inset 0 0 20px rgba(255, 215, 140, 0.2);     /* 内发光 */
     overflow: hidden;
 }
 
-/* 鍐呭鍖哄煙鐪熷疄 padding锛堥€氳繃 :first-child 涓?:last-child 鎺у埗锛?*/
+/* 内容区域真实 padding（通过 :first-child 与 :last-child 控制） */
 .container > *:first-child {
     margin-top: 50px;
 }
@@ -154,7 +154,7 @@
     padding: 0 20px;
 }
 
-/* 浼厓绱犺竟妗嗭細鐢?transform 浠ｆ浛 top/bottom 璐熷€?*/
+/* 伪元素边框：用 transform 代替 top/bottom 负值 */
 .container::before,
 .container::after {
     content: '';
@@ -172,10 +172,10 @@
 
 .container::before {
     top: 0;
-    background-image: url('./assets/images/shangbianxian.png');
+    background-image: url('http://m-birthday-music.test.upcdn.net/shangbianxian.png');
     transform: translateY(-1px);
 	opacity: 0.9;
-    filter: drop-shadow(0 -4px 6px rgba(0,0,0,0.6))  /* 鍚戜笂鎶曞奖锛堜笅杈规鐨勭珛浣撴劅锛?*/
+    filter: drop-shadow(0 -4px 6px rgba(0,0,0,0.6))  /* 向上投影（下边框的立体感） */
             drop-shadow(0 0 2px #b28b5e)
             drop-shadow(0 0 5px #ffd966);
     -webkit-mask-image: linear-gradient(to top, transparent 0%, black 20%, black 80%, transparent 100%);
@@ -184,17 +184,17 @@
 
 .container::after {
     bottom: 0;
-    background-image: url('./assets/images/xiabianxian.png');
+    background-image: url('http://m-birthday-music.test.upcdn.net/xiabianxian.png');
     transform: translateY(7px);
 	opacity: 0.9;
-    filter: drop-shadow(0 -4px 6px rgba(0,0,0,0.6))  /* 鍚戜笂鎶曞奖锛堜笅杈规鐨勭珛浣撴劅锛?*/
+    filter: drop-shadow(0 -4px 6px rgba(0,0,0,0.6))  /* 向上投影（下边框的立体感） */
             drop-shadow(0 0 2px #b28b5e)
             drop-shadow(0 0 5px #ffd966);
     -webkit-mask-image: linear-gradient(to top, transparent 0%, black 20%, black 80%, transparent 100%);
     mask-image: linear-gradient(to top, transparent 0%, black 20%, black 80%, transparent 100%);
 }
 
-/* 鍏夋檿娉㈠姩鍔ㄧ敾 */
+/* 光晕波动动画 */
 @keyframes glowWave {
     0% {
         background-position: 0% 0%;
@@ -209,7 +209,7 @@
 
 		
 		.page::after {
-    content: "鈥斺€斺€?鉁?鏄熺┖鐨勫敖澶?鉁?鈥斺€斺€?;
+    content: "——— ✦ 星空的尽头 ✦ ———";
     display: block;
     text-align: center;
     color: #b28b5e;
@@ -224,7 +224,7 @@
 		
 
 .container::after {
-    content: '鉁?;
+    content: '✧';
     position: absolute;
     bottom: 10px;
     right: 20px;
@@ -233,7 +233,7 @@
     opacity: 0.5;
 }
 
-        /* 鏍囬 */
+        /* 标题 */
         .chapter-title {
 		text-align: center !important;
     font-size: 2rem;
@@ -269,7 +269,7 @@ text-shadow: 0 0 15px #ffd966, 2px 2px 4px #3a2a1a;
             padding-bottom: 10px;
         }
 
-        /* ===== 鍗＄墖鏍峰紡 ===== */
+        /* ===== 卡片样式 ===== */
         .scene-card {
     background: rgba(30, 25, 20, 0.3);
 	background-image: 
@@ -300,7 +300,7 @@ text-shadow: 0 0 15px #ffd966, 2px 2px 4px #3a2a1a;
     text-shadow: 0 2px 4px rgba(0,0,0,0.6);
 }
 
-/* 褰曢煶鏈烘牱寮?*/
+/* 录音机样式 */
 .tape-recorder {
     background: linear-gradient(145deg, #3a3a3a, #1a1a1a);
     border: 3px solid #8b6b42;
@@ -313,7 +313,7 @@ text-shadow: 0 0 15px #ffd966, 2px 2px 4px #3a2a1a;
     position: relative;
 }
 .tape-recorder::before {
-    content: '馃敶';
+    content: '🔴';
     position: absolute;
     top: 5px;
     right: 10px;
@@ -321,7 +321,7 @@ text-shadow: 0 0 15px #ffd966, 2px 2px 4px #3a2a1a;
     animation: blink 1s infinite;
 }
 
-/* 渚跨 */
+/* 便签 */
 .sticky-note {
     background: #f7e9d7;
     border: 1px solid #b28b5e;
@@ -334,7 +334,7 @@ text-shadow: 0 0 15px #ffd966, 2px 2px 4px #3a2a1a;
     transform: rotate(-1deg);
 }
 
-/* 妗屾父鍗＄墝鏍峰紡锛堝彲鐢ㄤ簬鐖卞ソ鏄熺悆锛?*/
+/* 桌游卡牌样式（可用于爱好星球） */
 .card-note {
     background: #f0e6d2;
     border: 3px solid #b28b5e;
@@ -346,7 +346,7 @@ text-shadow: 0 0 15px #ffd966, 2px 2px 4px #3a2a1a;
     font-weight: bold;
 }
 
-/* 灏忕焊鏉?*/
+/* 小纸条 */
 .paper-slip {
     background: #fff1d6;
     border: 1px dashed #b28b5e;
@@ -360,7 +360,7 @@ text-shadow: 0 0 15px #ffd966, 2px 2px 4px #3a2a1a;
     font-family: 'Caveat', cursive;
 }
 
-/* 绗旇鏈〉闈?*/
+/* 笔记本页面 */
 .notebook-page {
     background: #faf0e6;
     border-left: 4px solid #b28b5e;
@@ -375,7 +375,7 @@ text-shadow: 0 0 15px #ffd966, 2px 2px 4px #3a2a1a;
     line-height: 25px;
 }
 
-/* 鐢佃剳鏄剧ず灞?*/
+/* 电脑显示屏 */
 .screen-display {
     background: #1e2a3a;
     border: 4px solid #8b6b42;
@@ -389,7 +389,7 @@ text-shadow: 0 0 15px #ffd966, 2px 2px 4px #3a2a1a;
     text-shadow: 0 0 5px #0f0;
 }
 
-        /* 鎻掔敾鍗犱綅鍖哄煙 */
+        /* 插画占位区域 */
         .illustration-area {
             display: flex;
             flex-wrap: wrap;
@@ -432,7 +432,7 @@ text-shadow: 0 0 15px #ffd966, 2px 2px 4px #3a2a1a;
             height: 180px;
         }
 		
-		/* 鍔ㄧ敾绫?*/
+		/* 动画类 */
         .spin-slow {
             animation: rotate 20s linear infinite;
         }
@@ -474,7 +474,7 @@ text-shadow: 0 0 15px #ffd966, 2px 2px 4px #3a2a1a;
 }
 .page-flip-out {
     animation: flipOut 0.6s ease forwards;
-    pointer-events: none; /* 闃叉鍔ㄧ敾鏈熼棿琚偣鍑?*/
+    pointer-events: none; /* 防止动画期间被点击 */
 }
 .page-flip-in {
     animation: flipIn 0.6s ease forwards;
@@ -494,7 +494,7 @@ text-shadow: 0 0 15px #ffd966, 2px 2px 4px #3a2a1a;
     100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
 }
 
-        /* ===== 瑙ｈ皽鍖哄煙 ===== */
+        /* ===== 解谜区域 ===== */
         .puzzle-area {
     background: rgba(40, 30, 20, 0.65);
 	background-image: 
@@ -526,7 +526,7 @@ text-shadow: 0 0 15px #ffd966, 2px 2px 4px #3a2a1a;
 
         .option-btn {
 		font-family: 'Cormorant Garamond', 'Noto Serif SC', serif;
-font-weight: 600; /* 閫傚綋鍔犵矖 */
+font-weight: 600; /* 适当加粗 */
     background: rgba(60, 45, 30, 0.9);
     border: 2px solid #b28b5e;
     border-radius: 60px;
@@ -569,19 +569,19 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 
 .ticket {
     position: relative;
-    background: #f7e9d7;  /* 鏃х焊鑹?*/
+    background: #f7e9d7;  /* 旧纸色 */
     padding: 25px 20px;
     margin: 20px 0;
     border: 2px dashed #8b6b42;
     border-radius: 20px 20px 20px 20px;
     box-shadow: 0 5px 0 #5e3e2b, 0 10px 20px rgba(0,0,0,0.3);
-    font-family: 'Courier New', '鍗庢枃妤蜂綋', monospace;
+    font-family: 'Courier New', '华文楷体', monospace;
     color: #3a2a1a;
     transform: rotate(-1deg);
     max-width: 100%;
 }
 
-/* 绌垮瓟杈圭紭 */
+/* 穿孔边缘 */
 .ticket-hole {
     position: absolute;
     top: -5px;
@@ -650,7 +650,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 
         .submit-btn {
 		font-family: 'Cormorant Garamond', 'Noto Serif SC', serif;
-font-weight: 600; /* 閫傚綋鍔犵矖 */
+font-weight: 600; /* 适当加粗 */
     background: linear-gradient(145deg, #b28b5e, #8b6b42);
     color: #1e160f;
     border: none;
@@ -684,7 +684,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     100% { box-shadow: 0 8px 0 #5e3e2b, 0 10px 20px rgba(0,0,0,0.4); }
 }
 
-        /* ===== 鎴愬姛鏁呬簨鍖哄煙 ===== */
+        /* ===== 成功故事区域 ===== */
         .success-story {
     background: rgba(30, 20, 15, 0.7);
 	background-image: 
@@ -709,7 +709,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 
         .continue-btn {
 		font-family: 'Cormorant Garamond', 'Noto Serif SC', serif;
-font-weight: 600; /* 閫傚綋鍔犵矖 */
+font-weight: 600; /* 适当加粗 */
     background: #b28b5e;
     color: #1e160f;
     border: none;
@@ -733,23 +733,23 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     box-shadow: 0 2px 0 #5e3e2b, 0 5px 15px #b28b5e;
 }
 		
-		/* 缁撳眬椤甸暅瀛?- 榄旀硶澧炲己鐗?*/
+		/* 结局页镜子 - 魔法增强版 */
 
 .mirror-frame {
     position: relative;
     width: min(100%, 500px);
-    height: 600px;          /* 鍙牴鎹竟妗嗗浘鐗囨瘮渚嬭皟鏁?*/
+    height: 600px;          /* 可根据边框图片比例调整 */
     margin: 5px auto 5px;
     display: grid;
     place-items: center;
     cursor: pointer;
-    /* 绉婚櫎鍘熸潵鐨?background-image 鍜?box-shadow锛岃儗鏅敱鍥剧墖鎻愪緵 */
+    /* 移除原来的 background-image 和 box-shadow，背景由图片提供 */
     background: none;
     border: none;
     box-shadow: none;
 }
 
-/* 杈规鍥剧墖浣滀负鍓嶆櫙 */
+/* 边框图片作为前景 */
 .mirror-frame::before {
     content: '';
     position: absolute;
@@ -770,9 +770,9 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: fill;        /* 璁╁浘鐗囨媺浼稿～婊″鍣紝濡傛灉涓嶆兂鎷変几鍙敼涓?contain 骞惰皟鏁村鍣ㄥ昂瀵?*/
-    pointer-events: none;    /* 浣垮浘鐗囦笉骞叉壈鐐瑰嚮浜嬩欢锛岀偣鍑讳粛鍙Е鍙戠埗瀹瑰櫒 */
-    z-index: 2;              /* 缃簬鏂囧瓧涓婃柟 */
+    object-fit: fill;        /* 让图片拉伸填满容器，如果不想拉伸可改为 contain 并调整容器尺寸 */
+    pointer-events: none;    /* 使图片不干扰点击事件，点击仍可触发父容器 */
+    z-index: 2;              /* 置于文字上方 */
 }
 
 
@@ -803,11 +803,11 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 	border-radius: 40px;
     text-shadow: 0 0 5px gold, 2px 2px 2px #000;
     transition: opacity 2s ease;
-	transform: translateX(-5%); /* 宸︾Щ5% */
+	transform: translateX(-5%); /* 左移5% */
 	top: -15px;
 }
 
-/* 鏂囧瓧閫愯娴幇鍔ㄧ敾 */
+/* 文字逐行浮现动画 */
 .mirror-text p {
     animation: fadeInUp 0.8s ease forwards;
     opacity: 0;
@@ -826,7 +826,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     bottom: 0;
     width: 100%;
     height: 50px;
-    background-image: url('./assets/images/xiabianxian.png');
+    background-image: url('http://m-birthday-music.test.upcdn.net/xiabianxian.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     pointer-events: none;
@@ -908,7 +908,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 
 .fox-illustration {
     width: auto;
-    height: 120px; /* 鏍规嵁鍗犱綅绗﹀昂瀵歌皟鏁达紝鍙敼鐢?max-width */
+    height: 120px; /* 根据占位符尺寸调整，可改用 max-width */
     max-width: 100%;
 }
 
@@ -921,7 +921,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     100% { transform: rotate(5deg); }
 }
 
-        /* ===== 鍥哄畾UI ===== */
+        /* ===== 固定UI ===== */
         
 		.stars-collected {
     position: fixed;
@@ -1043,33 +1043,33 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 }
 		
 		
-		/* 棣栭〉澶村浘鍖哄煙 */
+		/* 首页头图区域 */
 .header-illustration {
     position: relative;
     width: 100%;
-    max-width: 600px;      /* 涓庡鍣ㄥ搴﹀尮閰嶏紝鍙牴鎹渶瑕佽皟鏁?*/
-    margin: 0 auto 20px;   /* 灞呬腑骞剁暀鍑轰笅鏂归棿璺?*/
-    height: 180px;         /* 鍥哄畾楂樺害锛屾牴鎹疄闄呰儗鏅浘楂樺害璋冩暣 */
+    max-width: 600px;      /* 与容器宽度匹配，可根据需要调整 */
+    margin: 0 auto 20px;   /* 居中并留出下方间距 */
+    height: 180px;         /* 固定高度，根据实际背景图高度调整 */
     overflow: visible;
 }
 
-/* 鑳屾櫙鍥?*/
+/* 背景图 */
 .header-bg {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;     /* 閾烘弧鏁翠釜鍖哄煙锛屽彲鑳借鍓紱濡傞渶瀹屾暣鏄剧ず鏀逛负 contain */
-    border-radius: 20px;   /* 鍙€夊渾瑙?*/
+    object-fit: cover;     /* 铺满整个区域，可能裁剪；如需完整显示改为 contain */
+    border-radius: 20px;   /* 可选圆角 */
     box-shadow: 0 10px 20px rgba(0,0,0,0.5);
     z-index: 1;
 }
 
-/* 鎵€鏈夋诞鍔ㄥ皬鎻掑浘閫氱敤鏍峰紡 */
+/* 所有浮动小插图通用样式 */
 .floating-icon {
     position: absolute;
-    width: 60px;           /* 鍩虹澶у皬锛屽彲鍗曠嫭璋冩暣 */
+    width: 60px;           /* 基础大小，可单独调整 */
     height: auto;
     cursor: pointer;
     z-index: 2;
@@ -1081,33 +1081,33 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     transform: scale(1.1);
 }
 
-/* 棣栭〉澶村浘鍖哄煙 - 璋冩暣楂樺害涓庡厓绱犱綅缃?*/
+/* 首页头图区域 - 调整高度与元素位置 */
 .header-illustration {
     position: relative;
     width: 100%;
     width: 200px;
 
-    height: 160px;          /* 澧炲姞楂樺害锛岃鑳屾櫙鍥炬洿鏄庢樉锛堝彲鏍规嵁瀹為檯鍥剧墖寰皟锛?*/
+    height: 160px;          /* 增加高度，让背景图更明显（可根据实际图片微调） */
     overflow: visible;
 }
 
-/* 鑳屾櫙鍥?*/
+/* 背景图 */
 .header-bg {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;      /* 閾烘弧鏁翠釜鍖哄煙锛屽鏋滃浘鐗囪瑁佸壀鍙敼涓?contain 骞舵坊鍔犺儗鏅壊 */
+    object-fit: cover;      /* 铺满整个区域，如果图片被裁剪可改为 contain 并添加背景色 */
     border-radius: 20px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.5);
     z-index: 1;
 }
 
-/* 鎵€鏈夋诞鍔ㄥ皬鎻掑浘閫氱敤鏍峰紡 */
+/* 所有浮动小插图通用样式 */
 .floating-icon {
     position: absolute;
-    width: auto;            /* 鐢卞叿浣撳昂瀵告帶鍒?*/
+    width: auto;            /* 由具体尺寸控制 */
     height: auto;
     cursor: pointer;
     z-index: 2;
@@ -1119,16 +1119,16 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     transform: scale(1.1);
 }
 
-/* shouyexiaotu - 鏀剧疆鍦ㄦ涓棿 */
+/* shouyexiaotu - 放置在正中间 */
 .icon1 {
     top: 60%;
     left: 40%;
     transform: translate(-50%, -50%);
-    width: 40px;            /* 閫傚綋澶у皬锛屽彲璋冩暣 */
+    width: 40px;            /* 适当大小，可调整 */
     animation: float 3s ease-in-out infinite;
 }
 
-/* xingxing - 鏀剧疆鍦ㄦ渶涓婇潰灞呬腑 */
+/* xingxing - 放置在最上面居中 */
 .icon2 {
     top: 5px;
     left:60%;
@@ -1137,7 +1137,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: spin 6s linear infinite;
 }
 
-/* 鐙愮嫺 - 鏀剧疆鍦ㄦ渶鍙宠竟 */
+/* 狐狸 - 放置在最右边 */
 .icon3 {
     bottom: 10px;
     right: 10%;
@@ -1145,7 +1145,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: sway 2s ease-in-out infinite;
 }
 
-/* 纭繚鎵€鏈夐渶瑕佺殑鍔ㄧ敾瀛樺湪锛堝鏋滅己灏?spin 璇疯ˉ鍏咃級 */
+/* 确保所有需要的动画存在（如果缺少 spin 请补充） */
 @keyframes spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
@@ -1153,14 +1153,14 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 		
       
 
-        /* ===== 闅愯棌绫?===== */
+        /* ===== 隐藏类 ===== */
         .hidden {
             display: none !important;
         }
 		
-		/* 鐙愮嫺椤?*/
+		/* 狐狸页 */
         .fox-page-content {
-		background: rgba(45, 35, 25, 0.4) !important; /* 瑕嗙洊鍐呰仈鏍峰紡 */
+		background: rgba(45, 35, 25, 0.4) !important; /* 覆盖内联样式 */
     background-image: 
         radial-gradient(circle at 15% 20%, rgba(255, 220, 150, 0.25) 0%, transparent 40%),
         radial-gradient(circle at 85% 30%, rgba(255, 190, 100, 0.2) 0%, transparent 45%),
@@ -1190,22 +1190,22 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     100% { background-position: 3% 2%; }
 }
 
- /* ===== 鎵嬫満瀛楀彿浼樺寲 ===== */
+ /* ===== 手机字号优化 ===== */
 @media (max-width: 600px) {
     .dialogue, .fox-note, .fox-quote, .collect-notice, .engraved-fragment {
-        font-size: 0.95rem;  /* 鍩虹瀛楀彿缂╁皬 */
-        padding: 12px 18px;   /* 鍐呰竟璺濋€傚綋鍑忓皬 */
+        font-size: 0.95rem;  /* 基础字号缩小 */
+        padding: 12px 18px;   /* 内边距适当减小 */
     }
     .collect-star {
-        font-size: 1.5rem;    /* 鏄熸槦绗﹀彿缂╁皬 */
+        font-size: 1.5rem;    /* 星星符号缩小 */
     }
     .engraved-fragment::before,
     .engraved-fragment::after {
-        font-size: 1.2rem;    /* 瑁呴グ鏄熸槦缂╁皬 */
+        font-size: 1.2rem;    /* 装饰星星缩小 */
     }
 }
 
-/* ===== 鐙愮嫺鏅€氳瘽璇紙姝ｆ枃涓嫄鐙歌鐨勮瘽锛?===== */
+/* ===== 狐狸普通话语（正文中狐狸说的话） ===== */
 .fox-note {
     background: rgba(70, 50, 30, 0.85);
     border-left: 6px solid #d4a373;
@@ -1218,10 +1218,10 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     box-shadow: 0 8px 12px rgba(0,0,0,0.3), inset 0 0 10px #5e3e2b;
     position: relative;
     backdrop-filter: blur(2px);
-    font-size: 1rem;          /* 鍩虹瀛楀彿锛屾墜鏈虹敱濯掍綋鏌ヨ瑕嗙洊 */
+    font-size: 1rem;          /* 基础字号，手机由媒体查询覆盖 */
 }
 .fox-note::before {
-    content: '馃';
+    content: '🦊';
     position: absolute;
     left: -10px;
     top: -10px;
@@ -1230,7 +1230,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     opacity: 0.8;
 }
 
-/* ===== 褰╄泲椤电嫄鐙歌瘽璇紙鏇存鎵墜鍐欐劅锛?===== */
+/* ===== 彩蛋页狐狸话语（更歪扭手写感） ===== */
 .fox-quote {
     background: rgba(70, 45, 30, 0.85);
     border: 2px dashed #d4a373;
@@ -1239,7 +1239,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     margin: 20px 0;
     font-style: italic;
     color: #ffe4b5;
-    font-family: 'Caveat', 'Noto Serif SC', '鍗庢枃妤蜂綋', 'KaiTi', cursive;
+    font-family: 'Caveat', 'Noto Serif SC', '华文楷体', 'KaiTi', cursive;
     transform: rotate(-0.5deg);
     box-shadow: 0 8px 15px rgba(0,0,0,0.4), inset 0 0 15px #b28b5e;
     position: relative;
@@ -1247,7 +1247,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     font-size: 1rem;
 }
 .fox-quote::before {
-    content: '馃';
+    content: '🦊';
     position: absolute;
     left: -5px;
     top: -15px;
@@ -1256,7 +1256,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     opacity: 0.7;
 }
 
-/* ===== 瀵硅瘽妗嗭紙浠栬鐨勭嫭鐧斤級 ===== */
+/* ===== 对话框（他说的独白） ===== */
 .dialogue {
     background: rgba(40, 30, 20, 0.7);
     border: 2px solid #b28b5e;
@@ -1283,7 +1283,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 
 }
 
-/* ===== 鏄熸槦纰庣墖鍒诲瓧 ===== */
+/* ===== 星星碎片刻字 ===== */
 .engraved-fragment {
     background: rgba(30, 20, 15, 0.85);
     border: 2px solid;
@@ -1297,7 +1297,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     box-shadow: 0 10px 0 #2a1e14, 0 15px 30px rgba(0,0,0,0.7), 0 0 30px currentColor;
     transform: rotate(-0.5deg);
     backdrop-filter: blur(4px);
-    font-family: 'Caveat', 'Noto Serif SC', '鍗庢枃妤蜂綋', 'KaiTi', cursive;
+    font-family: 'Caveat', 'Noto Serif SC', '华文楷体', 'KaiTi', cursive;
     font-size: 1.1rem;
     line-height: 1.7;
     position: relative;
@@ -1305,7 +1305,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     transition: box-shadow 0.3s;
 }
 
-/* 榄旀硶鏄熷厜鑳屾櫙 */
+/* 魔法星光背景 */
 .engraved-fragment::before {
     content: '';
     position: absolute;
@@ -1318,11 +1318,11 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: magicSparkle 6s infinite linear;
     pointer-events: none;
     z-index: -1;
-	filter: blur(45px);    /* 鏂板锛氭ā绯婅竟缂橈紝娑堥櫎纭竟 */
-    opacity: 0.8;           /* 鍙€夛細璋冩暣閫忔槑搴︿娇鍏夋檿鏇存煍鍜?*/
+	filter: blur(45px);    /* 新增：模糊边缘，消除硬边 */
+    opacity: 0.8;           /* 可选：调整透明度使光晕更柔和 */
 }
 
-/* 闂儊灏忔槦鏄?*/
+/* 闪烁小星星 */
 .engraved-fragment::after {
     content: '';
     position: absolute;
@@ -1352,7 +1352,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     box-shadow: 0 10px 0 #2a1e14, 0 0 50px gold;
 }
 
-/* ===== 鏀堕泦鎻愮ず ===== */
+/* ===== 收集提示 ===== */
 .collect-notice {
     display: flex;
     align-items: center;
@@ -1382,8 +1382,8 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     background: radial-gradient(circle at 50% 50%, rgba(255,215,0,0.2), transparent 70%);
     animation: rotateGlow 8s infinite linear;
     z-index: -1;
-	filter: blur(45px);    /* 鏂板锛氭ā绯婅竟缂橈紝娑堥櫎纭竟 */
-    opacity: 0.8;           /* 鍙€夛細璋冩暣閫忔槑搴︿娇鍏夋檿鏇存煍鍜?*/
+	filter: blur(45px);    /* 新增：模糊边缘，消除硬边 */
+    opacity: 0.8;           /* 可选：调整透明度使光晕更柔和 */
 }
 
 @keyframes noticeFloat {
@@ -1409,7 +1409,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     to { opacity: 1; transform: scale(1.3); filter: drop-shadow(0 0 20px gold); }
 }
 
-/* 涓婚鑹?- 浣跨敤鐩存帴闄勫姞绫荤殑鏂瑰紡 */
+/* 主题色 - 使用直接附加类的方式 */
 .theme-gold.engraved-fragment::before,
 .theme-gold.collect-notice::before {
     background: radial-gradient(circle at 30% 30%, rgba(255, 215, 0, 0.4), transparent 70%),
@@ -1447,7 +1447,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 }
 
 
-        /* ===== 褰╄泲椤甸楹︾鍔ㄧ敾 ===== */
+        /* ===== 彩蛋页飘麦穗动画 ===== */
         .floating-wheat {
             position: fixed;
             pointer-events: none;
@@ -1465,7 +1465,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 
         .twenty-one {
 		font-family: 'Cormorant Garamond', 'Noto Serif SC', serif;
-font-weight: 600; /* 閫傚綋鍔犵矖 */
+font-weight: 600; /* 适当加粗 */
     text-align: center;
     margin: 40px 0 20px;
     font-size: 1.3rem;
@@ -1484,7 +1484,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     box-shadow: 0 0 30px #b28b5e;
 }
 
-        /* ===== 缁撳眬椤甸暅瀛愭牱寮?===== */
+        /* ===== 结局页镜子样式 ===== */
         
 
         .final-quote {
@@ -1497,7 +1497,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 
         .nav-btn {
 		font-family: 'Cormorant Garamond', 'Noto Serif SC', serif;
-font-weight: 600; /* 閫傚綋鍔犵矖 */
+font-weight: 600; /* 适当加粗 */
     background: rgba(25, 20, 15, 0.3);
     background-image: 
         radial-gradient(circle at 15% 20%, rgba(255, 210, 150, 0.2) 0%, transparent 40%),
@@ -1523,14 +1523,14 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     box-shadow: 0 0 30px #b28b5e;
 }
 
-        /* ===== 鍝嶅簲寮?===== */
+        /* ===== 响应式 ===== */
         @media (max-width: 480px) {
             .container { padding: 20px 18px; }
             .chapter-title { font-size: 1.8rem; }
             .fox-silhouette { width: 50px; height: 50px; }
         }
     
-	/* 棣栭〉鑳屾櫙鍥剧墖鍙犲姞灞?*/
+	/* 首页背景图片叠加层 */
 #pagePrologue {
     position: relative;
 }
@@ -1541,27 +1541,27 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('./assets/images/09f085774bf72d91.png');
+    background-image: url('http://m-birthday-music.test.upcdn.net/09f085774bf72d91.png');
     background-size: cover;      
-    background-position: 80% center;  /* 灞呬腑鏄剧ず */
-    opacity: 0.2;                 /* 閫忔槑搴︼紝鍙嚜琛岃皟鏁达紙0.1~0.5锛?*/
-    pointer-events: none;         /* 闃叉鍥剧墖閬尅鐐瑰嚮浜嬩欢 */
-    z-index: 1;                   /* 缃簬鑳屾櫙灞傦紝浣嗕綅浜庢槦绌轰箣涓?*/
+    background-position: 80% center;  /* 居中显示 */
+    opacity: 0.2;                 /* 透明度，可自行调整（0.1~0.5） */
+    pointer-events: none;         /* 防止图片遮挡点击事件 */
+    z-index: 1;                   /* 置于背景层，但位于星空之上 */
 }
-/* 纭繚棣栭〉鎵€鏈夊唴瀹瑰湪鍥剧墖涓婃柟 */
+/* 确保首页所有内容在图片上方 */
 #pagePrologue > * {
     position: relative;
     z-index: 2;
 }
 
-/* 绔ュ勾鏄熺悆鎻掔敾鍖哄鍣?*/
+/* 童年星球插画区容器 */
 .planet1-illustration {
     position: relative;
     width: 100%;
     max-width: 500px;
     height: 200px;
     margin: 20px auto 30px;
-    background-image: url('./assets/images/huashi.png');
+    background-image: url('http://m-birthday-music.test.upcdn.net/huashi.png');
     background-size: cover;
     background-position: center;
 
@@ -1569,7 +1569,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
 }
 
-/* 鎵€鏈夊浘鏍囬€氱敤鏍峰紡 */
+/* 所有图标通用样式 */
 .planet1-illustration .planet1-icon {
     position: absolute;
     filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
@@ -1577,34 +1577,34 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     pointer-events: auto;
 }
 
-/* 宸﹀浘鏍囷細缁樼敾宸ュ叿 */
+/* 左图标：绘画工具 */
 .planet1-illustration .icon-left {
     right: 5%;
     top: 65%;
     transform: translateY(-50%);
-    width: 75px;             /* 鍙牴鎹疄闄呭ぇ灏忚皟鏁?*/
+    width: 75px;             /* 可根据实际大小调整 */
     animation: float 3s ease-in-out infinite;
 }
 
-/* 涓浘鏍囷細鐢绘灦 */
+/* 中图标：画架 */
 .planet1-illustration .icon-center {
     left: 35%;
     top: 30%;
     transform: translate(-50%, -50%);
-    width: 90px;            /* 鐢绘灦澶у皬 */
+    width: 90px;            /* 画架大小 */
     animation: sway 2.5s ease-in-out infinite;
 }
 
-/* 鍙冲浘鏍囷細鎽勫儚鏈?*/
+/* 右图标：摄像机 */
 .planet1-illustration .icon-right {
     left: 5%;
     top: 65%;
     transform: translateY(-50%);
     width: 80px;
-    animation: blink 1.5s step-end infinite; /* 闂姩鏁堟灉 */
+    animation: blink 1.5s step-end infinite; /* 闪动效果 */
 }
 
-/* 鎮仠鏁堟灉 */
+/* 悬停效果 */
 .planet1-illustration .planet1-icon:hover {
     transform: scale(1.05) translateY(-50%) translateX(0);
     filter: drop-shadow(0 0 25px gold);
@@ -1612,21 +1612,21 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 }
 
 
-/* 闂姩鍔ㄧ敾锛堟槑鏆椾氦鏇匡紝妯℃嫙鎽勫儚鏈洪棯鍏夛級 */
+/* 闪动动画（明暗交替，模拟摄像机闪光） */
 @keyframes blink {
     0%, 100% { opacity: 1; filter: drop-shadow(0 0 10px gold); }
     50% { opacity: 0.6; filter: drop-shadow(0 0 20px #ffaa33); }
 }
 
-/* 鍙€夛細鎮仠鏃惰交寰斁澶э紝澧炲姞浜掑姩鎰燂紙濡傛灉闇€瑕佸彲鍘绘帀 pointer-events: none锛?*/
+/* 可选：悬停时轻微放大，增加互动感（如果需要可去掉 pointer-events: none） */
 .planet1-icon:hover {
-    transform: scale(1.05) translateY(-50%); /* 娉ㄦ剰鍚屾椂淇濇寔灞呬腑 */
+    transform: scale(1.05) translateY(-50%); /* 注意同时保持居中 */
     filter: drop-shadow(0 0 25px gold);
     transition: 0.2s;
 }
 
 
-/* 闂儊鍔ㄧ敾 */
+/* 闪烁动画 */
 @keyframes blink {
     0% { opacity: 1; transform: scale(1); }
     30% { opacity: 0.5; transform: scale(1.05); }
@@ -1635,7 +1635,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     100% { opacity: 1; transform: scale(1); }
 }
 
-/* 濡傛灉宸叉湁 float/sway 鍔ㄧ敾鍒欐棤闇€閲嶅锛屽惁鍒欒ˉ鍏?*/
+/* 如果已有 float/sway 动画则无需重复，否则补充 */
 @keyframes float {
     0% { transform: translateY(0px); }
     50% { transform: translateY(-8px); }
@@ -1648,7 +1648,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     100% { transform: rotate(-3deg); }
 }
 
-/* 鑳剁墖椋庢牸瀹瑰櫒 */
+/* 胶片风格容器 */
 .film-strip {
 	font-family: 'Playfair Display', 'Noto Serif SC', 'Georgia', serif;
     background: rgba(20, 15, 10, 0.8);
@@ -1661,10 +1661,10 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     line-height: 1.8;
     position: relative;
     box-shadow: 0 0 30px rgba(180, 140, 80, 0.5), inset 0 0 20px #2a1e14;
-    min-height: 150px; /* 淇濊瘉瀹瑰櫒鏈夎冻澶熼珮搴?*/
+    min-height: 150px; /* 保证容器有足够高度 */
 }
 
-/* 鑳剁墖瀛旀礊瑁呴グ */
+/* 胶片孔洞装饰 */
 .film-strip::before,
 .film-strip::after {
     content: '';
@@ -1690,7 +1690,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     right: 5px;
 }
 
-/* 鎵撳瓧鍏夋爣鏁堟灉锛堝彲閫夛級 */
+/* 打字光标效果（可选） */
 .typing-cursor::after {
     content: '|';
     animation: blink 1s infinite;
@@ -1704,7 +1704,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 }
 
 
-/* 閲戣壊绮掑瓙瀹瑰櫒 */
+/* 金色粒子容器 */
 .golden-particles {
     position: absolute;
     top: 0;
@@ -1716,7 +1716,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     overflow: hidden;
 }
 
-/* 鍗曚釜绮掑瓙 */
+/* 单个粒子 */
 .particle {
     position: absolute;
     width: 6px;
@@ -1741,15 +1741,15 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 
 .handwritten-title {
     width: 90 vw;
-    max-width: 300px;   /* 鏍规嵁闇€瑕佽皟鏁?*/
+    max-width: 300px;   /* 根据需要调整 */
     height: auto;
-	margin-left: 0; /* 纭繚娌℃湁宸﹀杈硅窛 */
-    /* 濡傛灉浠嶇劧鍋忓彸锛屽彲浠ュ皾璇曪細 */
+	margin-left: 0; /* 确保没有左外边距 */
+    /* 如果仍然偏右，可以尝试： */
     transform: translateX(-20%);
     margin: 0 auto 20px;
     display: block;
 	
-	/* 澧炲己妫曡鑹茶皟涓庡姣斿害锛屽灞傞槾褰辨洿鏄庢樉 */
+	/* 增强棕褐色调与对比度，多层阴影更明显 */
     filter: sepia(0.6) contrast(1.3) 
             drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.6))
             drop-shadow(8px 8px 12px rgba(80, 50, 20, 0.5))
@@ -1757,13 +1757,13 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     
 
     
-    /* 缂撴參娴姩鍔ㄧ敾淇濇寔涓嶅彉锛堜篃鍙浛鎹负鍏朵粬鍔ㄧ敾锛?*/
+    /* 缓慢浮动动画保持不变（也可替换为其他动画） */
     animation: titleFloat 4s ease-in-out infinite;
     
-    /* 涓轰簡鍏煎鎬э紝鍚屾椂淇濈暀涓€浜涗紶缁熺殑鎶曞奖 */
-    background-color: transparent; /* 纭繚閫忔槑鑳屾櫙涓嶅奖鍝?*/
+    /* 为了兼容性，同时保留一些传统的投影 */
+    background-color: transparent; /* 确保透明背景不影响 */
     
-    /* 缂撴參娴姩鍔ㄧ敾 */
+    /* 缓慢浮动动画 */
     animation: titleFloat 4s ease-in-out infinite;
 }
 
@@ -1774,7 +1774,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 }
 
 
-/* ===== 鏄熷浘鏀堕泦鍐?- 淇鐗?===== */
+/* ===== 星图收集册 - 修正版 ===== */
 .progress-modal {
     display: none;
     position: fixed;
@@ -1830,7 +1830,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 }
 
 .modal-header::after {
-    content: '鉁?;
+    content: '✦';
     position: absolute;
     bottom: -15px;
     left: 50%;
@@ -1878,7 +1878,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     border-radius: 30px 5px 30px 5px;
     padding: 20px 12px;
     text-align: center;
-    transition: box-shadow 0.3s ease, transform 0.3s ease; /* 浠呬繚鐣欏钩婊戣繃娓★紝鏃犲懠鍚?*/
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* 仅保留平滑过渡，无呼吸 */
     position: relative;
     overflow: hidden;
     backdrop-filter: blur(2px);
@@ -1887,7 +1887,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 
 .fragment-card.collected {
     filter: none;
-    /* 绉婚櫎 cardPulse 鍔ㄧ敾 */
+    /* 移除 cardPulse 动画 */
 }
 
 .fragment-card.uncollected {
@@ -1907,7 +1907,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     font-family: 'Playfair Display', serif;
 }
 
-/* 榄旀硶绮掑瓙鑳屾櫙 - 浣跨敤涓婚鑹诧紙閫氳繃 currentColor 缁ф壙杈规棰滆壊锛?*/
+/* 魔法粒子背景 - 使用主题色（通过 currentColor 继承边框颜色） */
 .fragment-card.collected::before {
     content: '';
     position: absolute;
@@ -1919,17 +1919,17 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: rotateGlow 8s linear infinite;
     z-index: 0;
     opacity: 0.4;
-    /* 棰滆壊榛樿閲戣壊锛屼絾鎴戜滑鍙互鍒╃敤 currentColor 鏀瑰彉鑹茶皟锛熻儗鏅笉鏀寔鐩存帴缁ф壙棰滆壊锛岄渶瑕佸€熷姪 mix-blend-mode 鎴?filter */
-    /* 鏇寸畝鍗曠殑鏂规硶锛氬湪姣忓紶鍗＄墖鐨?style 涓€氳繃鍐呰仈鏍峰紡璁剧疆 --theme-color锛岀劧鍚庡湪 background 涓娇鐢ㄨ鍙橀噺 */
+    /* 颜色默认金色，但我们可以利用 currentColor 改变色调？背景不支持直接继承颜色，需要借助 mix-blend-mode 或 filter */
+    /* 更简单的方法：在每张卡片的 style 中通过内联样式设置 --theme-color，然后在 background 中使用该变量 */
 }
 
-/* 涓轰簡璁╁厜鏅曢鑹查殢涓婚鍙樺寲锛屾垜浠敼鐢?CSS 鍙橀噺锛屽苟鍦ㄦ瘡寮犲崱鐗囦笂鍐呰仈璁剧疆 --theme-color */
+/* 为了让光晕颜色随主题变化，我们改用 CSS 变量，并在每张卡片上内联设置 --theme-color */
 .fragment-card.collected::before {
     background: radial-gradient(circle at 30% 30%, var(--theme-color, rgba(255,215,0,0.3)), transparent 50%);
 }
 
-/* 鍦?showProgress 鍑芥暟涓紝涓?collected 鍗＄墖璁剧疆 --theme-color 鍙橀噺 */
-/* 闇€瑕佷慨鏀?JS 鐢熸垚鍗＄墖鐨勯儴鍒?*/
+/* 在 showProgress 函数中，为 collected 卡片设置 --theme-color 变量 */
+/* 需要修改 JS 生成卡片的部分 */
 
 @keyframes rotateGlow {
     from { transform: rotate(0deg); }
@@ -2013,14 +2013,14 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     100% { text-shadow: 0 0 15px gold; }
 }
 
-/* 灏戝勾鏄熺悆澶村浘瀹瑰櫒 */
+/* 少年星球头图容器 */
 .planet2-illustration {
     position: relative;
     width: 100%;
     max-width: 500px;
     height: 200px;
     margin: 20px auto 30px;
-    background-image: url('./assets/images/yijiamigong1.png');
+    background-image: url('http://m-birthday-music.test.upcdn.net/yijiamigong1.png');
     background-size: cover;
     background-position: center;
 
@@ -2028,7 +2028,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
 }
 
-/* 宸﹀浘鏍囷細鑺辫‖琛?*/
+/* 左图标：花衬衫 */
 .planet2-left {
     position: absolute;
     left: 20%;
@@ -2040,7 +2040,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
 }
 
-/* 鍙冲浘鏍囷細闀滃瓙 */
+/* 右图标：镜子 */
 .planet2-right {
     position: absolute;
     right: 20%;
@@ -2052,7 +2052,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
 }
 
-/* 鎮仠鏁堟灉 */
+/* 悬停效果 */
 .planet2-left:hover,
 .planet2-right:hover {
     transform: translateY(-50%) scale(1.05);
@@ -2060,7 +2060,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     transition: 0.2s;
 }
 
-/* 鎵嬫満閫傞厤 */
+/* 手机适配 */
 @media (max-width: 480px) {
     .planet2-illustration {
         height: 150px;
@@ -2073,21 +2073,21 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     }
 }
 
-/* 闈掑勾鏄熺悆澶村浘瀹瑰櫒 */
+/* 青年星球头图容器 */
 .planet3-illustration {
     position: relative;
     width: 100%;
     max-width: 500px;
     height: 200px;
     margin: 20px auto 30px;
-    background-image: url('./assets/images/kongzhishi2.png');
+    background-image: url('http://m-birthday-music.test.upcdn.net/kongzhishi2.png');
     background-size: cover;
     background-position: center;
     box-shadow: 0 10px 20px rgba(0,0,0,0.5);
     filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
 }
 
-/* 鍥炬爣閫氱敤鏍峰紡 */
+/* 图标通用样式 */
 .planet3-icon {
     position: absolute;
     filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
@@ -2095,7 +2095,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     pointer-events: auto;
 }
 
-/* 涓棿锛氭瀛?*/
+/* 中间：椅子 */
 .planet3-illustration .icon-middle {
     left: 25%;
     top: 35%;
@@ -2104,7 +2104,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: sway 2.5s ease-in-out infinite;
 }
 
-/* 鍙宠竟锛氬彴鐏?*/
+/* 右边：台灯 */
 .planet3-illustration .icon-right {
     right: 20%;
     top: 45%;
@@ -2114,7 +2114,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 	animation: float 3s ease-in-out infinite;
 }
 
-/* 鏈€鍙宠竟锛氬綍闊虫満 */
+/* 最右边：录音机 */
 .planet3-illustration .icon-right2 {
     right: 5%;
     top: 80%;
@@ -2123,12 +2123,12 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: blink 1.5s step-end infinite;
 }
 
-/* 鎮仠鏁堟灉锛堜粎鏀瑰彉鍏夋檿锛屼笉褰卞搷浣嶇疆锛?*/
+/* 悬停效果（仅改变光晕，不影响位置） */
 .planet3-icon:hover {
     filter: drop-shadow(0 0 25px gold);
 }
 
-/* 鎵嬫満閫傞厤 */
+/* 手机适配 */
 @media (max-width: 480px) {
     .planet3-illustration {
         height: 150px;
@@ -2144,21 +2144,21 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     }
 }
 
-/* 鐖卞ソ鏄熺悆澶村浘瀹瑰櫒 */
+/* 爱好星球头图容器 */
 .planet4-illustration {
     position: relative;
     width: 100%;
     max-width: 500px;
     height: 250px;
     margin: 20px auto 30px;
-    background-image: url('./assets/images/mimijidi1.png');
+    background-image: url('http://m-birthday-music.test.upcdn.net/mimijidi1.png');
     background-size: cover;
     background-position: center;
     box-shadow: 0 10px 20px rgba(0,0,0,0.5);
     filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
 }
 
-/* 鍥炬爣閫氱敤鏍峰紡 */
+/* 图标通用样式 */
 .planet4-icon {
     position: absolute;
     filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
@@ -2166,16 +2166,16 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     pointer-events: auto;
 }
 
-/* 涓棿锛氭儏涔?*/
+/* 中间：情书 */
 .planet4-illustration .icon-middle {
     left: 20%;
     top: 30%;
     transform: translate(-50%, -50%);
-    width: 100px;            /* 鍙牴鎹疄闄呭ぇ灏忚皟鏁?*/
+    width: 100px;            /* 可根据实际大小调整 */
     animation: sway 2.5s ease-in-out infinite;
 }
 
-/* 鍙宠竟锛氳€虫満 */
+/* 右边：耳机 */
 .planet4-illustration .icon-right {
     right: 30%;
     top: 40%;
@@ -2184,7 +2184,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: float 3s ease-in-out infinite;
 }
 
-/* 鏈€鍙宠竟锛氬敱鐗囨満 */
+/* 最右边：唱片机 */
 .planet4-illustration .icon-right2 {
     right: 2%;
     top: 60%;
@@ -2193,27 +2193,27 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: float 3s ease-in-out infinite;
 }
 
-/* 鎮仠鏁堟灉锛堜粎鏀瑰彉鍏夋檿锛?*/
+/* 悬停效果（仅改变光晕） */
 .planet4-icon:hover {
     filter: drop-shadow(0 0 25px gold);
 }
 
 
-/* 鎯呮劅鏄熺悆澶村浘瀹瑰櫒 */
+/* 情感星球头图容器 */
 .planet5-illustration {
     position: relative;
     width: 100%;
     max-width: 500px;
     height: 200px;
     margin: 20px auto 30px;
-    background-image: url('./assets/images/qinggan.png');
+    background-image: url('http://m-birthday-music.test.upcdn.net/qinggan.png');
     background-size: cover;
     background-position: center;
     box-shadow: 0 10px 20px rgba(0,0,0,0.5);
     filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
 }
 
-/* 鍥炬爣閫氱敤鏍峰紡 */
+/* 图标通用样式 */
 .planet5-icon {
     position: absolute;
     filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
@@ -2221,7 +2221,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     pointer-events: auto;
 }
 
-/* 宸﹁竟锛氬涓嶈捣锛堥棯鐑侊級 */
+/* 左边：对不起（闪烁） */
 .planet5-illustration .icon-left {
     left: 5%;
     top: 70%;
@@ -2230,7 +2230,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: blink 2s step-end infinite;
 }
 
-/* 涓棿锛氭唱鐝犳爲锛堟憞鎽嗭級 */
+/* 中间：泪珠树（摇摆） */
 .planet5-illustration .icon-middle {
     left: 20%;
     top: 5%;
@@ -2239,7 +2239,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: sway 3s ease-in-out infinite;
 }
 
-/* 鍙宠竟锛氭€呭繂濡傛灉锛堟诞鍔級 */
+/* 右边：怅忆如果（浮动） */
 .planet5-illustration .icon-right {
     right: 5%;
     top: 45%;
@@ -2248,26 +2248,26 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: float 4s ease-in-out infinite;
 }
 
-/* 鎮仠鏁堟灉 */
+/* 悬停效果 */
 .planet5-icon:hover {
     filter: drop-shadow(0 0 25px gold);
 }
 
-/* 鏈潵鏄熺悆澶村浘瀹瑰櫒 */
+/* 未来星球头图容器 */
 .planet6-illustration {
     position: relative;
     width: 100%;
     max-width: 500px;
     height: 200px;
     margin: 20px auto 30px;
-    background-image: url('./assets/images/weilaixingqiu.png');
+    background-image: url('http://m-birthday-music.test.upcdn.net/weilaixingqiu.png');
     background-size: cover;
     background-position: center;
     box-shadow: 0 10px 20px rgba(0,0,0,0.5);
     filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
 }
 
-/* 鍥炬爣閫氱敤鏍峰紡 */
+/* 图标通用样式 */
 .planet6-icon {
     position: absolute;
     filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
@@ -2275,7 +2275,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     pointer-events: auto;
 }
 
-/* 宸﹁竟锛氱埍瀛︿範锛堣交寰棯鐑侊級 */
+/* 左边：爱学习（轻微闪烁） */
 .planet6-illustration .icon-left {
     left: 5%;
     top: 70%;
@@ -2284,16 +2284,16 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: gentleBlink 2s ease-in-out infinite;
 }
 
-/* 涓棿锛氳〃鎯呭寘鏍戯紙鎽囨憜锛?*/
+/* 中间：表情包树（摇摆） */
 .planet6-illustration .icon-middle {
     left: 20%;
     top: 5%;
     transform: translate(-50%, -50%);
-    width: 150px; /* 鏍戣緝澶э紝鍙皟鏁?*/
+    width: 150px; /* 树较大，可调整 */
     animation: sway 3s ease-in-out infinite;
 }
 
-/* 鍙宠竟锛歩Pad锛堟诞鍔級 */
+/* 右边：iPad（浮动） */
 .planet6-illustration .icon-right {
     right: 5%;
     top: 70%;
@@ -2302,27 +2302,27 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: gentleFloat 4s ease-in-out infinite;
 }
 
-/* 鎮仠鏁堟灉 */
+/* 悬停效果 */
 .planet6-icon:hover {
     filter: drop-shadow(0 0 25px gold);
 }
 
 
-/* 褰╄泲椤靛ご鍥惧鍣?*/
+/* 彩蛋页头图容器 */
 .planet7-illustration {
     position: relative;
     width: 100%;
     max-width: 500px;
     height: 200px;
     margin: 20px auto 30px;
-    background-image: url('./assets/images/caidanmaitian.png');
+    background-image: url('http://m-birthday-music.test.upcdn.net/caidanmaitian.png');
     background-size: cover;
     background-position: center;
     box-shadow: 0 10px 20px rgba(0,0,0,0.5);
     filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
 }
 
-/* 鍥炬爣閫氱敤鏍峰紡 */
+/* 图标通用样式 */
 .planet7-icon {
     position: absolute;
     filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
@@ -2330,16 +2330,16 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     pointer-events: auto;
 }
 
-/* 涓棿锛氱嫄鐙革紙杞诲井鎽囨憜锛?*/
+/* 中间：狐狸（轻微摇摆） */
 .planet7-illustration .icon-center {
     left: 40%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 100px;            /* 鍙牴鎹疄闄呭ぇ灏忚皟鏁?*/
+    width: 100px;            /* 可根据实际大小调整 */
     animation: sway 3s ease-in-out infinite;
 }
 
-/* 缇芥瘺锛堝乏涓婏級 */
+/* 羽毛（左上） */
 .planet7-illustration .icon-feather {
     left: 35%;
     top: 25%;
@@ -2347,7 +2347,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: floatFeather 4s ease-in-out infinite;
 }
 
-/* 鐭冲瓙锛堝彸涓婏級 */
+/* 石子（右上） */
 .planet7-illustration .icon-stone {
     right: 10%;
     top: 30%;
@@ -2355,7 +2355,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: bounce 5s ease-in-out infinite;
 }
 
-/* 閲庤姳锛堝乏涓嬶級 */
+/* 野花（左下） */
 .planet7-illustration .icon-flower {
     left: 15%;
     bottom: 20%;
@@ -2363,7 +2363,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: sway 4s ease-in-out infinite;
 }
 
-/* 鎮仠鏁堟灉 */
+/* 悬停效果 */
 .planet7-icon:hover {
     transform: scale(1.1);
     filter: drop-shadow(0 0 15px gold);
@@ -2377,9 +2377,9 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     left: 0;
     width: 100%;
     height: 100%;
-    border-radius: inherit; /* 缁ф壙瀹瑰櫒鐨勫渾瑙?*/
+    border-radius: inherit; /* 继承容器的圆角 */
     background: radial-gradient(circle at center, transparent 50%, rgba(10, 15, 26, 0.6) 100%);
-    pointer-events: none;    /* 纭繚涓嶅共鎵扮偣鍑?*/
+    pointer-events: none;    /* 确保不干扰点击 */
     z-index: 1;
 }
 
@@ -2390,9 +2390,9 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     left: 0;
     width: 100%;
     height: 100%;
-    border-radius: inherit; /* 缁ф壙瀹瑰櫒鐨勫渾瑙?*/
+    border-radius: inherit; /* 继承容器的圆角 */
     background: radial-gradient(circle at center, transparent 50%, rgba(10, 15, 26, 0.6) 100%);
-    pointer-events: none;    /* 纭繚涓嶅共鎵扮偣鍑?*/
+    pointer-events: none;    /* 确保不干扰点击 */
     z-index: 1;
 }
 
@@ -2403,9 +2403,9 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     left: 0;
     width: 100%;
     height: 100%;
-    border-radius: inherit; /* 缁ф壙瀹瑰櫒鐨勫渾瑙?*/
+    border-radius: inherit; /* 继承容器的圆角 */
     background: radial-gradient(circle at center, transparent 50%, rgba(10, 15, 26, 0.6) 100%);
-    pointer-events: none;    /* 纭繚涓嶅共鎵扮偣鍑?*/
+    pointer-events: none;    /* 确保不干扰点击 */
     z-index: 1;
 }
 
@@ -2416,13 +2416,13 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     left: 0;
     width: 100%;
     height: 100%;
-    border-radius: inherit; /* 缁ф壙瀹瑰櫒鐨勫渾瑙?*/
+    border-radius: inherit; /* 继承容器的圆角 */
     background: radial-gradient(circle at center, transparent 50%, rgba(10, 15, 26, 0.6) 100%);
-    pointer-events: none;    /* 纭繚涓嶅共鎵扮偣鍑?*/
+    pointer-events: none;    /* 确保不干扰点击 */
     z-index: 1;
 }
 
-/* 鎯呮劅鏄熺悆澶村浘瀹瑰櫒杈圭紭鏌斿拰 */
+/* 情感星球头图容器边缘柔和 */
 .planet5-illustration::after {
     content: '';
     position: absolute;
@@ -2430,13 +2430,13 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     left: 0;
     width: 100%;
     height: 100%;
-    border-radius: inherit; /* 缁ф壙瀹瑰櫒鐨勫渾瑙?*/
+    border-radius: inherit; /* 继承容器的圆角 */
     background: radial-gradient(circle at center, transparent 50%, rgba(10, 15, 26, 0.6) 100%);
-    pointer-events: none;    /* 纭繚涓嶅共鎵扮偣鍑?*/
+    pointer-events: none;    /* 确保不干扰点击 */
     z-index: 1;
 }
 
-/* 鏈潵鏄熺悆澶村浘瀹瑰櫒杈圭紭鏌斿拰 */
+/* 未来星球头图容器边缘柔和 */
 .planet6-illustration::after {
     content: '';
     position: absolute;
@@ -2450,7 +2450,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     z-index: 1;
 }
 
-/* 褰╄泲椤靛ご鍥惧鍣ㄨ竟缂樻煍鍜?*/
+/* 彩蛋页头图容器边缘柔和 */
 .planet7-illustration::after {
     content: '';
     position: absolute;
@@ -2464,21 +2464,21 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     z-index: 1;
 }
 
-/* 缁撳眬椤靛ご鍥惧鍣?*/
+/* 结局页头图容器 */
 .final-illustration {
     position: relative;
     width: 100%;
     max-width: 500px;
     height: 200px;
     margin: 20px auto 30px;
-    background-image: url('./assets/images/jiejumaitian.png');
+    background-image: url('http://m-birthday-music.test.upcdn.net/jiejumaitian.png');
     background-size: cover;
     background-position: center;
     box-shadow: 0 10px 20px rgba(0,0,0,0.5);
     filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
 }
 
-/* 鍥炬爣閫氱敤鏍峰紡 */
+/* 图标通用样式 */
 .final-icon {
     position: absolute;
     filter: drop-shadow(0 5px 15px rgba(180, 140, 80, 0.6)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
@@ -2486,7 +2486,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     pointer-events: auto;
 }
 
-/* 宸﹁竟锛氳儗鍖咃紙涓婁笅娴姩锛?*/
+/* 左边：背包（上下浮动） */
 .final-illustration .icon-left {
     left: 5%;
     top: 50%;
@@ -2495,7 +2495,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: float 3s ease-in-out infinite;
 }
 
-/* 涓棿锛氱煶鏉匡紙杞诲井鎽囨憜锛?*/
+/* 中间：石板（轻微摇摆） */
 .final-illustration .icon-middle {
     left: 30%;
     top: 50%;
@@ -2504,7 +2504,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     animation: sway 2.5s ease-in-out infinite;
 }
 
-/* 鍙宠竟锛氶暅瀛愶紙缂撴參鏃嬭浆 + 鍙戝厜锛?*/
+/* 右边：镜子（缓慢旋转 + 发光） */
 .final-illustration .icon-right {
     right: 5%;
     top: 50%;
@@ -2524,12 +2524,12 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     100% { filter: drop-shadow(0 5px 15px rgba(180,140,80,0.6)) drop-shadow(0 0 20px rgba(255,215,0,0.3)); }
 }
 
-/* 鎮仠鏁堟灉 */
+/* 悬停效果 */
 .final-icon:hover {
     filter: drop-shadow(0 0 25px gold);
 }
 
-/* 缁撳眬椤靛ご鍥惧鍣ㄨ竟缂樻煍鍜?*/
+/* 结局页头图容器边缘柔和 */
 .final-illustration::after {
     content: '';
     position: absolute;
@@ -2553,14 +2553,14 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     pointer-events: none;
     z-index: 5;
     overflow: hidden;
-    display: none; /* 榛樿闅愯棌锛岀敱椤甸潰婵€娲绘帶鍒?*/
+    display: none; /* 默认隐藏，由页面激活控制 */
 }
 
 #pagePlanet2.active .petal-particles {
     display: block;
 }
 
-/* 鍗曚釜鑺辩摚 */
+/* 单个花瓣 */
 .petal {
     position: absolute;
     width: 12px;
@@ -2584,7 +2584,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     }
 }
 
-/* 鏁呴殰绮掑瓙瀹瑰櫒 */
+/* 故障粒子容器 */
 .glitch-particles {
     position: fixed;
     top: 0;
@@ -2594,14 +2594,14 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     pointer-events: none;
     z-index: 5;
     overflow: hidden;
-    display: none; /* 榛樿闅愯棌锛岀敱椤甸潰婵€娲绘帶鍒?*/
+    display: none; /* 默认隐藏，由页面激活控制 */
 }
 
 #pagePlanet3.active .glitch-particles {
     display: block;
 }
 
-/* 鍗曚釜鏁呴殰绮掑瓙 */
+/* 单个故障粒子 */
 .glitch-particle {
     position: absolute;
     width: var(--size);
@@ -2610,17 +2610,17 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     opacity: 0.6;
     animation: glitchMove linear infinite;
     box-shadow: 0 0 8px currentColor;
-    border-radius: 2px; /* 杞诲井鍦嗚锛屽彲涓嶅姞 */
+    border-radius: 2px; /* 轻微圆角，可不加 */
 }
 
-/* 涓嶅悓褰㈢姸鐨勭矑瀛愰€氳繃鍗曠嫭鐨勭被瀹炵幇锛屼絾杩欓噷缁熶竴涓虹煩褰紝灏哄闅忔満鐢盝S璁剧疆 */
+/* 不同形状的粒子通过单独的类实现，但这里统一为矩形，尺寸随机由JS设置 */
 .glitch-particle.line {
     width: var(--width);
-    height: 2px; /* 绾挎潯 */
+    height: 2px; /* 线条 */
     background: cyan;
 }
 .glitch-particle.square {
-    /* 榛樿灏辨槸鏂瑰潡 */
+    /* 默认就是方块 */
 }
 .glitch-particle.glitch-blink {
     animation: glitchBlink 0.2s infinite alternate;
@@ -2654,7 +2654,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     100% { opacity: 1; filter: hue-rotate(30deg); }
 }
 
-/* 闊充箰绮掑瓙瀹瑰櫒 */
+/* 音乐粒子容器 */
 .music-particles {
     position: fixed;
     top: 0;
@@ -2664,22 +2664,22 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     pointer-events: none;
     z-index: 5;
     overflow: hidden;
-    display: none; /* 榛樿闅愯棌锛岀敱椤甸潰婵€娲绘帶鍒?*/
+    display: none; /* 默认隐藏，由页面激活控制 */
 }
 
 #pagePlanet4.active .music-particles {
     display: block;
 }
 
-/* 鍗曚釜绮掑瓙 */
+/* 单个粒子 */
 .music-particle {
     position: absolute;
-    color: #ffb347; /* 鍩虹鏆栨鑹?*/
+    color: #ffb347; /* 基础暖橙色 */
     font-size: 1.2rem;
     opacity: 0.4;
     animation: musicFloat linear infinite;
     filter: drop-shadow(0 0 5px #ffaa33);
-    font-family: 'Arial', 'Segoe UI Symbol', sans-serif; /* 纭繚绗﹀彿鏄剧ず */
+    font-family: 'Arial', 'Segoe UI Symbol', sans-serif; /* 确保符号显示 */
     white-space: nowrap;
 }
 
@@ -2697,7 +2697,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     }
 }
 
-/* ===== 绮掑瓙瀹瑰櫒閫氱敤鏍峰紡 ===== */
+/* ===== 粒子容器通用样式 ===== */
 .tear-particles,
 .seed-particles,
 .magic-particles {
@@ -2716,7 +2716,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 #pagePlanet6.active .seed-particles { display: block; }
 #pageFox.active .magic-particles { display: block; }
 
-/* 鎯呮劅鏄熺悆锛氬绉嶆儏鎰熺矑瀛?*/
+/* 情感星球：多种情感粒子 */
 .tear-particle {
     position: absolute;
     width: 6px;
@@ -2747,7 +2747,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
 }
 
-/* 鏈潵鏄熺悆锛氬绉嶆垚闀跨矑瀛?*/
+/* 未来星球：多种成长粒子 */
 .seed-particle {
     position: absolute;
     width: 8px;
@@ -2776,7 +2776,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     50% { transform: translateY(50vh) translateX(10px) scale(1.2); opacity: 1; }
     100% { transform: translateY(-20vh) translateX(-10px) scale(0.6); opacity: 0; }
 }
-/* ===== 褰╄泲椤碉細榄旀硶绮掑瓙锛堜赴瀵岄害鐢帮級 ===== */
+/* ===== 彩蛋页：魔法粒子（丰富麦田） ===== */
 .magic-particle {
     position: absolute;
     pointer-events: none;
@@ -2793,13 +2793,13 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
 }
 
-/* 澧炲己鍘熼楹︾鏁堟灉锛氭坊鍔犲绉嶇鍙峰拰棰滆壊 */
+/* 增强原飘麦穗效果：添加多种符号和颜色 */
 .magic-particle::before {
-    /* 鍗犱綅锛屽疄闄呯鍙峰湪JS涓缃?*/
+    /* 占位，实际符号在JS中设置 */
 }
 
 
-/* 缁撳眬椤电矑瀛愬鍣?*/
+/* 结局页粒子容器 */
 .final-particles {
     position: fixed;
     top: 0;
@@ -2809,14 +2809,14 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     pointer-events: none;
     z-index: 5;
     overflow: hidden;
-    display: none; /* 榛樿闅愯棌锛岀敱椤甸潰婵€娲绘帶鍒?*/
+    display: none; /* 默认隐藏，由页面激活控制 */
 }
 
 #pageFinal.active .final-particles {
     display: block;
 }
 
-/* 鍗曚釜绮掑瓙 */
+/* 单个粒子 */
 .final-particle {
     position: absolute;
     color: gold;
@@ -2842,7 +2842,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     }
 }
 
-/* 鑳屽寘瀹瑰櫒锛氱敤浜庡畾浣嶅厜鏉?*/
+/* 背包容器：用于定位光束 */
 .bag-wrapper {
     position: absolute;
     left: 5%;
@@ -2853,11 +2853,11 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     z-index: 10;
 }
 
-/* 鍏夋潫浼厓绱?*/
+/* 光束伪元素 */
 .bag-wrapper::after {
     content: '';
     position: absolute;
-    bottom: 100%;        /* 浠庡浘鐗囬《閮ㄥ紑濮?*/
+    bottom: 100%;        /* 从图片顶部开始 */
     left: 50%;
     transform: translateX(-50%);
     width: 8px;
@@ -2871,7 +2871,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     z-index: 5;
 }
 
-/* 鍏夋潫涓婂崌鍔ㄧ敾 */
+/* 光束上升动画 */
 @keyframes starBeam {
     0% {
         height: 10px;
@@ -2898,7 +2898,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
         transform: translateX(-50%) translateY(-80px);
     }
 }
-/* 褰╄泲椤垫嬀鍙栨彁绀?*/
+/* 彩蛋页拾取提示 */
 .collect-hint {
     text-align: center;
     font-family: 'Caveat', cursive;
@@ -2913,7 +2913,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     100% { opacity: 0.7; transform: scale(1); }
 }
 
-/* 鎷惧彇鐗╁搧閫氱煡 */
+/* 拾取物品通知 */
 .collect-item-message {
     position: fixed;
     top: 50%;
@@ -2924,7 +2924,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     border-radius: 60px;
     padding: 12px 30px;
     color: gold;
-    font-family: 'Caveat', '鍗庢枃妤蜂綋', 'KaiTi', '妤蜂綋', cursive;
+    font-family: 'Caveat', '华文楷体', 'KaiTi', '楷体', cursive;
     font-size: 0.8rem;
     text-align: center;
     box-shadow: 0 0 50px gold, inset 0 0 20px rgba(255,215,0,0.3);
@@ -2941,11 +2941,11 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     to { opacity: 0; }
 }
 
-/* 鍥鹃壌淇＄墿鏍囬 */
+/* 图鉴信物标题 */
 .items-header {
     text-align: center;
     color: gold;
-    font-family: 'Caveat', '鍗庢枃妤蜂綋', 'KaiTi', '妤蜂綋', cursive;
+    font-family: 'Caveat', '华文楷体', 'KaiTi', '楷体', cursive;
     font-size: 1.5rem;
     margin: 30px 0 15px;
     position: relative;
@@ -2953,17 +2953,17 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 }
 .items-header::before,
 .items-header::after {
-    content: '鉁?;
+    content: '✦';
     display: inline-block;
     margin: 0 10px;
     font-size: 1.2rem;
     opacity: 0.8;
 }
 
-/* 缁撳眬椤垫煡鐪嬫敹闆嗗唽鎻愮ず */
+/* 结局页查看收集册提示 */
 .view-collect-hint {
     text-align: center;
-    font-family: 'Caveat', '鍗庢枃妤蜂綋', 'KaiTi', '妤蜂綋', cursive;
+    font-family: 'Caveat', '华文楷体', 'KaiTi', '楷体', cursive;
     color: #ffd966;
     font-size: 0.95rem;
     margin: 5px 0 15px;
@@ -2976,7 +2976,7 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 }
 
 
-/* 鏄熷浘鏀堕泦鍐屽唴鐨勫僵铔嬫槦鏄?- 鎸夐挳鏍峰紡 */
+/* 星图收集册内的彩蛋星星 - 按钮样式 */
 .easter-egg-star {
     display: inline-block;
     padding: 8px 20px;
@@ -3011,9 +3011,9 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     border-radius: 10px 20px 10px 20px;
     padding: 20px;
     box-shadow: 0 20px 30px rgba(0,0,0,0.3), 0 0 0 4px #f7e9d7;
-    z-index: 10000;  /* 纭繚鍦ㄦ渶涓婂眰 */
+    z-index: 10000;  /* 确保在最上层 */
     text-align: center;
-    font-family: 'Caveat', '鍗庢枃妤蜂綋', cursive;
+    font-family: 'Caveat', '华文楷体', cursive;
     color: #3a2a1a;
     font-size: 1.2rem;
     line-height: 1.6;
@@ -3026,10 +3026,10 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
     opacity: 1;
     visibility: visible;
     transform: translate(-50%, -50%) scale(1);
-    pointer-events: auto;  /* 鍏佽鐐瑰嚮鍏抽棴鎸夐挳 */
+    pointer-events: auto;  /* 允许点击关闭按钮 */
 }
 
-/* 渚跨鍏抽棴鎸夐挳 - 鏄庣‘灞呭彸 */
+/* 便签关闭按钮 - 明确居右 */
 .easter-egg-note .close-note {
     position: absolute;
     top: 8px;
@@ -3052,683 +3052,683 @@ font-weight: 600; /* 閫傚綋鍔犵矖 */
 	</style>
 </head>
 <body>
-    <!-- 鍔ㄦ€佹槦绌?-->
+    <!-- 动态星空 -->
     <div id="starfield"></div>
 
-    <!-- 鏄熸槦璁℃暟 -->
+    <!-- 星星计数 -->
     <div class="stars-collected" id="starsCounter">
         <i class="fas fa-star"></i>
         <span id="starCount">0</span>/6
     </div>
 
-    <!-- 闊充箰鎺у埗 -->
+    <!-- 音乐控制 -->
     <div class="music-control" id="musicToggle">
         <i class="fas fa-music"></i>
     </div>
     <audio id="bgMusic" loop></audio>
 
-    <!-- 楹︾褰╄泲鍏ュ彛 (鍙充笅瑙? -->
+    <!-- 麦穗彩蛋入口 (右下角) -->
     <div class="wheat-egg" id="wheatEgg" onclick="goToFoxPage()">
         <i class="fas fa-wheat-alt"></i>
     </div>
 	
 	
 
-    <!-- ========== 搴忓箷 ========== -->
+    <!-- ========== 序幕 ========== -->
     <section class="page active" id="pagePrologue">
         <div class="container">
 		
-		<!-- 棣栭〉澶村浘鍖哄煙锛氭暣浣撹儗鏅?+ 娴姩灏忔彃鍥?-->
+		<!-- 首页头图区域：整体背景 + 浮动小插图 -->
 <div class="header-illustration">
-    <!-- 鏁翠綋鑳屾櫙鍥?-->
-    <img src="./assets/images/xiaobeijing.png" alt="澶村浘鑳屾櫙" class="header-bg">
-    <!-- 娴姩灏忔彃鍥?-->
-    <img src="./assets/images/shouyexiaotu.png" alt="灏忔彃鍥?" class="floating-icon icon1" id="shouyeIcon">
-    <img src="./assets/images/xingxing.png" alt="灏忔彃鍥?" class="floating-icon icon2" id="xingxingIcon">
-    <img src="./assets/images/huli.png" alt="鐙愮嫺" class="floating-icon icon3" id="foxIcon">
+    <!-- 整体背景图 -->
+    <img src="http://m-birthday-music.test.upcdn.net/xiaobeijing.png" alt="头图背景" class="header-bg">
+    <!-- 浮动小插图 -->
+    <img src="http://m-birthday-music.test.upcdn.net/shouyexiaotu.png" alt="小插图1" class="floating-icon icon1" id="shouyeIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/xingxing.png" alt="小插图2" class="floating-icon icon2" id="xingxingIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/huli.png" alt="狐狸" class="floating-icon icon3" id="foxIcon">
 </div>
 
        
             
-			<img src="./assets/images/tshouye.png" 
-     alt="B-612鍙峰畤瀹欐极娓告寚鍗? 
+			<img src="http://m-birthday-music.test.upcdn.net/tshouye.png" 
+     alt="B-612号宇宙漫游指南" 
      class="handwritten-title">
-            <p class="chapter-subtitle" style="text-align: center;">涓€浣嶅尶鍚嶆槦闄呭悜瀵间负浣犲畾鍒剁殑鑷垜鎺㈢储涔嬫梾</p>
+            <p class="chapter-subtitle" style="text-align: center;">一位匿名星际向导为你定制的自我探索之旅</p>
 
             <div class="scene-card">
-                <p>鍦ㄩ仴杩滅殑B-612灏忚鏄熶笂锛屼綇鐫€涓€涓皬鐜嬪瓙銆備粬姣忓ぉ鎵撴壂鐏北锛屾嫈闄ょ尨闈㈠寘鏍戯紝鐓ч【涓€鏈电帿鐟般€備絾鍚庢潵浠栫寮€浜嗭紝鍘绘嫓璁垮叾浠栨槦鐞冿紝閬囧埌浜嗗浗鐜嬨€佸晢浜恒€佺偣鐏汉锛岃繕鏈変竴鍙嫄鐙搞€?/p>
-                <p>鐙愮嫺鍛婅瘔浠栵細鈥滈噸瑕佺殑涓滆タ鐢ㄧ溂鐫涙槸鐪嬩笉瑙佺殑銆傗€?/p>
-                <p>浠婂ぉ锛屼綘鏀跺埌涓€寮犳病鏈夊瘎浠朵汉鐨勮埞绁紝瀹冨す鍦ㄤ綘甯哥湅鐨勯偅鏈瘲闆嗛噷銆傜エ闈笂鐢ㄦ姝壄鎵殑瀛椾綋鍐欑潃锛?/p>
+                <p>在遥远的B-612小行星上，住着一个小王子。他每天打扫火山，拔除猴面包树，照顾一朵玫瑰。但后来他离开了，去拜访其他星球，遇到了国王、商人、点灯人，还有一只狐狸。</p>
+                <p>狐狸告诉他：“重要的东西用眼睛是看不见的。”</p>
+                <p>今天，你收到一张没有寄件人的船票，它夹在你常看的那本诗集里。票面上用歪歪扭扭的字体写着：</p>
 				<div class="ticket">
     <div class="ticket-hole"></div>
     <div class="ticket-content">
-        <p class="ticket-destination">鈥滆鍓嶅線B-612鍙峰畤瀹欙紝鎷滆閭ｄ簺浣犱粠鏈杩囩殑鑷繁銆傗€?/p>
-        <div class="ticket-stub">B-612 路 鍗曠▼</div>
+        <p class="ticket-destination">“请前往B-612号宇宙，拜访那些你从未见过的自己。”</p>
+        <div class="ticket-stub">B-612 · 单程</div>
     </div>
     <div class="ticket-hole bottom"></div>
 </div>
-                <p>瀹冨皢甯︿綘椋炶繃鍏釜鏄熺悆锛屾瘡涓槦鐞冧笂閮芥湁涓€涓綘鈥斺€斾綘鏇剧粡鐨勬ā鏍枫€佷綘钘忚捣鏉ョ殑娓存湜銆佷綘涓嶆暍鎵胯鐨勬亹鎯с€佷綘鍋峰伔鍠滄鐨勬棆寰嬨€佷綘娌夐粯鏃剁殑鍙规伅銆佷綘鏈潵鎯虫垚涓虹殑浜恒€?/p>
-                <p>鍚戝涓嶄細鍑虹幇锛屼絾浼氱暀涓嬬嚎绱€傚綋浣犺蛋瀹岃繖娈垫梾绋嬶紝浣犲皢鏀跺埌涓€浠界ぜ鐗╋細鍏充簬浣犺嚜宸辩殑鐪熺浉銆?/p>
-                <p>娉ㄦ剰锛氬湪姣忎釜鏄熺悆涓婏紝浣犻渶瑕佸洖绛斾竴涓叧浜庝綘鑷繁鐨勯棶棰樸€傜瓟妗堝彧鏈変綘鐭ラ亾銆傚鏋滀綘璇氬疄锛屾槦鏄熶細涓轰綘鐐逛寒銆?/p>
+                <p>它将带你飞过六个星球，每个星球上都有一个你——你曾经的模样、你藏起来的渴望、你不敢承认的恐惧、你偷偷喜欢的旋律、你沉默时的叹息、你未来想成为的人。</p>
+                <p>向导不会出现，但会留下线索。当你走完这段旅程，你将收到一份礼物：关于你自己的真相。</p>
+                <p>注意：在每个星球上，你需要回答一个关于你自己的问题。答案只有你知道。如果你诚实，星星会为你点亮。</p>
             </div>
             <div style="position: relative; display: inline-block; width: 100%;">
-    <button class="submit-btn" onclick="goToPlanet(1)">鍚▼</button>
+    <button class="submit-btn" onclick="goToPlanet(1)">启程</button>
     <span class="rivet left"></span>
     <span class="rivet right"></span>
 </div>
-			<div class="headphone-tip">璇蜂僵鎴磋€虫満瑙傜湅</div>
+			<div class="headphone-tip">请佩戴耳机观看</div>
         </div>
     </section>
 
-    <!-- ========== 绔ュ勾鏄熺悆 ========== -->
+    <!-- ========== 童年星球 ========== -->
     <section class="page" id="pagePlanet1">
 
         <div class="container">
 		
  
-			<img src="./assets/images/ttongnian.png" 
-     alt="绔ュ勾鏄熺悆 路 鏈畬鎴愮殑鐢? 
+			<img src="http://m-birthday-music.test.upcdn.net/ttongnian.png" 
+     alt="童年星球 · 未完成的画" 
      class="handwritten-title">
 			
 			<div class="golden-particles" id="particles"></div>
-			<!-- 绔ュ勾鏄熺悆鎻掔敾鍖猴細楂樼骇娴姩鍥惧儚缁勫悎 -->
+			<!-- 童年星球插画区：高级浮动图像组合 -->
 <div class="planet1-illustration">
-    <img src="./assets/images/shexiangji1.png" alt="鎽勫儚鏈? class="planet1-icon icon-right" id="camIcon">
-    <img src="./assets/images/youhua1.png" alt="鐢绘灦" class="planet1-icon icon-center" id="huaIcon">
-    <img src="./assets/images/huihuagongju1.png" alt="缁樼敾宸ュ叿" class="planet1-icon icon-left" id="toolIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/shexiangji1.png" alt="摄像机" class="planet1-icon icon-right" id="camIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/youhua1.png" alt="画架" class="planet1-icon icon-center" id="huaIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/huihuagongju1.png" alt="绘画工具" class="planet1-icon icon-left" id="toolIcon">
 </div>
 			
             <div class="scene-card">
-                <p>浣犻檷钀藉湪涓€涓緢灏忕殑鏄熺悆涓娿€傚厜绾挎煍鍜屽緱鍍忕骞寸殑鍌嶆櫄锛屽甫鐫€娣℃贰鐨勯噾鑹诧紝娲掑湪姣忎竴瀵稿湡鍦颁笂銆傝繖閲屾湁涓€涓棫鐢绘灦锛岀敾鏋朵笂鏄竴骞呮湭瀹屾垚鐨勭敾鈥斺€斿彧鏈夐搮绗斿嬀鍕掔殑杞粨锛岄殣绾﹁兘鐪嬪嚭鏄竴涓汉鐨勮儗褰憋紝绔欏湪涓€鐗囬害鐢板墠锛岄害娴椋庡惞鍑烘俯鏌旂殑寮у害銆傜敾鏋舵梺杈规暎钀界潃鍑犵棰滄枡锛岄鑹查兘鏈変簺骞蹭簡锛屽儚琚仐蹇樼殑鏃跺厜銆備笉杩滃锛屼竴鍙拌€佸紡鑳剁墖鎽勫奖鏈洪潤闈欏湴鏋跺湪閭ｉ噷锛岄暅澶村鍑嗙敾鏋讹紝浠夸經鍦ㄧ瓑寰呮煇涓灛闂磋鎸変笅蹇棬銆傛憚褰辨満鏃佽竟鏈変竴涓湪璐ㄧ浉妗嗭紝閲岄潰鏄竴寮犲井寰硾榛勭殑鐓х墖锛屼絾鐓х墖涓婄殑浜哄奖妯＄硦涓嶆竻锛屽彧鑳界湅鍒颁竴鐗囧厜褰憋紝鍍忔槸鏌愪釜鏁呬簨鐨勫紑澶淬€?/p>
-                <p>浣犺蛋杩戠敾鏋讹紝鍙戠幇鐢荤焊杈圭紭鏈夊嚑琛屾墜鍐欑殑瀛楋紝绗旇抗绋氬锛屽儚鏄緢涔呬互鍓嶅啓涓嬬殑锛?/p>
+                <p>你降落在一个很小的星球上。光线柔和得像童年的傍晚，带着淡淡的金色，洒在每一寸土地上。这里有一个旧画架，画架上是一幅未完成的画——只有铅笔勾勒的轮廓，隐约能看出是一个人的背影，站在一片麦田前，麦浪被风吹出温柔的弧度。画架旁边散落着几管颜料，颜色都有些干了，像被遗忘的时光。不远处，一台老式胶片摄影机静静地架在那里，镜头对准画架，仿佛在等待某个瞬间被按下快门。摄影机旁边有一个木质相框，里面是一张微微泛黄的照片，但照片上的人影模糊不清，只能看到一片光影，像是某个故事的开头。</p>
+                <p>你走近画架，发现画纸边缘有几行手写的字，笔迹稚嫩，像是很久以前写下的：</p>
                 <div class="fox-note">
-                    鈥滃皬鏃跺€欙紝鎴戞€绘兂鎶撲綇閭ｄ簺浼氬姩鐨勪笢瑗库€斺€旈閲岀殑楹︽氮锛屽睆骞曢噷鐨勬晠浜嬶紝杩樻湁閭ｄ簺涓€闂€岃繃鐨勮〃鎯呫€傚悗鏉ユ垜鍙戠幇锛岀敤鐢荤瑪鍜岄暅澶达紝鑳芥妸瀹冧滑鐣欎笅鏉ャ€備絾鐣欎笅鏉ョ殑锛屽埌搴曟槸瀹冧滑锛岃繕鏄垜鐪奸噷鐨勫畠浠紵鎴戣瘯杩囩敾鐢伙紝涔熻瘯杩囨媿鐗囷紝姣忔鎸変笅蹇棬鎴栬惤涓嬫渶鍚庝竴绗旓紝蹇冮噷閮戒細鏈変竴绉嶅鎬殑婊¤冻鎰燂紝濂藉儚涓栫晫琚垜鍋疯蛋浜嗕竴灏忓潡銆傗€?
+                    “小时候，我总想抓住那些会动的东西——风里的麦浪，屏幕里的故事，还有那些一闪而过的表情。后来我发现，用画笔和镜头，能把它们留下来。但留下来的，到底是它们，还是我眼里的它们？我试过画画，也试过拍片，每次按下快门或落下最后一笔，心里都会有一种奇怪的满足感，好像世界被我偷走了一小块。”
                 </div>
-    <p>鐢绘灦搴曞骇鍒荤潃涓€琛屽皬瀛楋細<br>鈥滀粬鏇剧敤杩欎袱绉嶆柟寮忥紝璁茶堪杩囧埆浜虹殑鏁呬簨銆傚叾涓竴涓晠浜嬶紝浠栬嚦浠婁粛涓轰箣楠勫偛锛岀敋鑷充細鍦ㄦ繁澶滃伓灏旀兂璧凤紝鍢磋寰井涓婃壃銆傗€?/p>
-    <p>浣犱綆澶达紝鐪嬪埌璋冭壊鐩橀噷鍞竴娌″共鐨勪竴绠￠鏂欙紝涓婇潰璐寸潃涓€寮犵焊鏉★細</p>
-    <div class="paper-slip">鈥滈偅涓浠栭獎鍌茬殑鏁呬簨锛岃棌鍦ㄤ竴涓瘝閲屸€斺€斾粬鍦ㄨ繖涓晠浜嬮噷鎵紨鐨勮鑹叉槸浠€涔堬紵鈥?/div>
-    <p>璋冭壊鐩樻梺杈硅繕鏈変竴鏈硾榛勭殑绗旇鏈紝缈诲紑绗竴椤碉紝鍐欑潃锛?/p>
-    <div class="notebook-page">鈥滃鏋滄湁涓€澶╂垜蹇樹簡鑷繁鏄皝锛岃璁╂垜鎯宠捣閭ｄ釜闀滃ご锛岄偅涓睘浜庢垜鐨勭灛闂淬€傗€?/div>
+    <p>画架底座刻着一行小字：<br>“他曾用这两种方式，讲述过别人的故事。其中一个故事，他至今仍为之骄傲，甚至会在深夜偶尔想起，嘴角微微上扬。”</p>
+    <p>你低头，看到调色盘里唯一没干的一管颜料，上面贴着一张纸条：</p>
+    <div class="paper-slip">“那个让他骄傲的故事，藏在一个词里——他在这个故事里扮演的角色是什么？”</div>
+    <p>调色盘旁边还有一本泛黄的笔记本，翻开第一页，写着：</p>
+    <div class="notebook-page">“如果有一天我忘了自己是谁，请让我想起那个镜头，那个属于我的瞬间。”</div>
 </div>
 
             <div id="puzzle1" class="puzzle-area">
-                <div class="question">璇疯緭鍏ラ偅涓瘝锛?/div>
-                <input type="text" class="input-field" id="planet1Input" placeholder="渚嬪锛氬婕斻€佹憚褰卞笀...">
-                <button class="submit-btn" onclick="checkPlanet1()">鎻愪氦绛旀</button>
+                <div class="question">请输入那个词：</div>
+                <input type="text" class="input-field" id="planet1Input" placeholder="例如：导演、摄影师...">
+                <button class="submit-btn" onclick="checkPlanet1()">提交答案</button>
             </div>
 
             <div id="story1" class="success-story hidden">
-                <p>浣犺交杞昏緭鍏ヤ簡閭ｄ釜璇嶃€?/p>
-                <p>鐢绘灦涓婄殑鐢荤獊鐒舵硾璧峰井鍏夛紝鍍忚娉ㄥ叆浜嗙敓鍛姐€傞偅涓ā绯婄殑鑳屽奖娓愭笎娓呮櫚鈥斺€旀槸涓€涓皯骞寸殑韬奖锛岀┛鐫€绠€鍗曠殑T鎭わ紝姝ｇ珯鍦ㄤ竴涓畝闄嬬殑鐗囧満涓ぎ锛屾墜閲屾嬁鐫€鍦鸿鏉匡紝鑴镐笂甯︾潃涓撴敞鑰岄獎鍌茬殑绁炴儏銆傛梺杈圭殑鎽勫奖鏈鸿嚜鍔ㄥ紑濮嬭浆鍔紝鍙戝嚭杞诲井鐨勨€滃挃鍝掆€濆０锛屼豢浣涙鍦ㄨ褰曡繖涓灛闂淬€傜敾绾镐笂鐨勯害鐢板紑濮嬭交杞绘憞鏇筹紝閲戣壊鐨勯害娴豢浣涜兘闂诲埌闃冲厜鐨勫懗閬撱€?/p>
+                <p>你轻轻输入了那个词。</p>
+                <p>画架上的画突然泛起微光，像被注入了生命。那个模糊的背影渐渐清晰——是一个少年的身影，穿着简单的T恤，正站在一个简陋的片场中央，手里拿着场记板，脸上带着专注而骄傲的神情。旁边的摄影机自动开始转动，发出轻微的“咔哒”声，仿佛正在记录这个瞬间。画纸上的麦田开始轻轻摇曳，金色的麦浪仿佛能闻到阳光的味道。</p>
               <div class="illustration-area">
-    <img src="./assets/images/8c2f005688c79156d75c06571cbd35bf.png" 
-         alt="灏戝勾绔欏湪鐗囧満" 
+    <img src="http://m-birthday-music.test.upcdn.net/8c2f005688c79156d75c06571cbd35bf.png" 
+         alt="少年站在片场" 
          class="illustration-img" 
          style="width: 100%; max-width: 250px; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
 </div>
-			    <p>鎽勫奖鏈洪噷缂撶紦鍚愬嚭涓€娈佃兌鐗囷紝鑳剁墖涓婃诞鐜板嚭涓€琛岃鏂囧瓧锛?/p>
+			    <p>摄影机里缓缓吐出一段胶片，胶片上浮现出一行行文字：</p>
 				<div class="film-strip" id="typewriterText"></div>
                 
-                <p>鑳剁墖缁х画杞姩锛岀敾闈㈠垏鎹㈠埌閭ｄ釜灏戝勾鎷嶇墖鐨勫満鏅細浠栬共鍦ㄥ湴涓婅皟鏁寸伅鍏夛紝浠栬府璧疯剼灏栬皟鏁撮暅澶达紝浠栧拰婕斿憳璇存垙鏃惰鐪熺殑渚ц劯銆傛渶鍚庯紝鐢婚潰瀹氭牸鍦ㄩ偅涓皯骞村鐫€闀滃ご寰瑧鐨勭灛闂达紝閭ｇ瑧瀹规竻婢堣€岀湡瀹烇紝鍍忔槸涓栫晫杩樻湭鏇捐浠栫柌鎯€?/p>
-                <p>鐢绘灦涓嬫柟锛屽師鏈┖鐧界殑鍦版柟娴幇鍑轰竴琛屽皬瀛楋細<br>鈥滈偅涓皯骞磋繕鍦ㄣ€備粬鍙槸鍦ㄧ瓑涓€涓満浼氾紝閲嶆柊鎷胯捣鐢荤瑪鎴栨憚鍍忔満锛岃涓€涓叧浜庤嚜宸辩殑鏁呬簨銆傗€?/p>
-                <p>鎽勫奖鏈洪噷鐨勮兌鍗风紦缂撹浆鍑猴紝钀藉湪鍦颁笂锛屽彉鎴愪竴棰楀彂鍏夌殑鏄熸槦纰庣墖锛屼笂闈㈠埢鐫€锛?/p>
-				<div class="engraved-fragment theme-gold" style="border-color: #ffd700; color: #ffd700;">鈥滀粬鏇炬槸瀵兼紨锛屼篃鏄嚜宸辨晠浜嬬殑涓昏銆傗€?/div>
-                <p>浣犳崱璧疯繖棰楃鐗囷紝绗竴棰楁槦鏄熺偣浜簡銆傚厜鑺掍粠纰庣墖涓孩鍑猴紝鐓т寒浜嗘暣涓槦鐞冿紝涔熺収浜簡鐢绘灦涓婇偅涓皯骞寸殑鑳屽奖銆?/p>
+                <p>胶片继续转动，画面切换到那个少年拍片的场景：他蹲在地上调整灯光，他踮起脚尖调整镜头，他和演员说戏时认真的侧脸。最后，画面定格在那个少年对着镜头微笑的瞬间，那笑容清澈而真实，像是世界还未曾让他疲惫。</p>
+                <p>画架下方，原本空白的地方浮现出一行小字：<br>“那个少年还在。他只是在等一个机会，重新拿起画笔或摄像机，讲一个关于自己的故事。”</p>
+                <p>摄影机里的胶卷缓缓转出，落在地上，变成一颗发光的星星碎片，上面刻着：</p>
+				<div class="engraved-fragment theme-gold" style="border-color: #ffd700; color: #ffd700;">“他曾是导演，也是自己故事的主角。”</div>
+                <p>你捡起这颗碎片，第一颗星星点亮了。光芒从碎片中溢出，照亮了整个星球，也照亮了画架上那个少年的背影。</p>
                 <div class="collect-notice theme-gold" style="border-color: #ffd700;">
-    <span class="collect-star" style="color: #ffd700;">鈽?/span>
-    <span>銆愭敹闆嗗埌銆戜竴棰楁槦鏄熺鐗?鈥滅骞寸殑鍏夆€?/span>
-    <span class="collect-star" style="color: #ffd700;">鈽?/span>
+    <span class="collect-star" style="color: #ffd700;">★</span>
+    <span>【收集到】一颗星星碎片 “童年的光”</span>
+    <span class="collect-star" style="color: #ffd700;">★</span>
 </div>
-                <p>绗竴棰楁槦宸茬偣浜€傜户缁埅琛岋紝瀵绘壘涓嬩竴涓嚜宸便€?/p>
-                <button class="continue-btn" onclick="goToPlanet(2)">鍓嶅線涓嬩竴绔?/button>
+                <p>第一颗星已点亮。继续航行，寻找下一个自己。</p>
+                <button class="continue-btn" onclick="goToPlanet(2)">前往下一站</button>
             </div>
         </div>
     </section>
 
-    <!-- ========== 灏戝勾鏄熺悆 ========== -->
+    <!-- ========== 少年星球 ========== -->
     <section class="page" id="pagePlanet2">
         <div class="container">
 			
-			<img src="./assets/images/tshaonian.png" 
-     alt="灏戝勾鏄熺悆 路 琛ｆ煖閲岀殑鑺辫‖琛? 
+			<img src="http://m-birthday-music.test.upcdn.net/tshaonian.png" 
+     alt="少年星球 · 衣柜里的花衬衫" 
      class="handwritten-title">
 	 
 	 <div class="petal-particles" id="petals"></div>
 			
-			<!-- 灏戝勾鏄熺悆澶村浘鍖哄煙锛氳儗鏅糠瀹?+ 鑺辫‖琛笌闀滃瓙 -->
+			<!-- 少年星球头图区域：背景迷宫 + 花衬衫与镜子 -->
 <div class="planet2-illustration">
-    <img src="./assets/images/huachenshan.png" alt="鑺辫‖琛? class="planet2-left" id="shirtIcon">
-    <img src="./assets/images/jingzi.png" alt="闀滃瓙" class="planet2-right" id="mirrorIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/huachenshan.png" alt="花衬衫" class="planet2-left" id="shirtIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/jingzi.png" alt="镜子" class="planet2-right" id="mirrorIcon">
 </div>
 			
             <div class="scene-card">
-                <p>浣犻檷钀藉湪绗簩涓槦鐞冦€傝繖閲岄潤寰楄兘鍚鑷繁鐨勫懠鍚革紝鍥涘懆鏄竴鎺掓帓鏈涗笉鍒板敖澶寸殑琛ｆ灦锛屽儚涓€搴у法澶х殑銆佹矇榛樼殑杩峰銆傚厜绾夸粠澶撮《娲掍笅锛屾煍鍜岃€屽潎鍖€锛岀収浜簡姣忎竴浠舵偓鎸傜潃鐨勮。鏈嶁€斺€旈粦鑹睺鎭ゃ€佺櫧鑹瞤olo琛€佹繁鐏拌壊澶栧銆佽棌闈掕壊鍗。鈥︹€﹀畠浠暣榻愬緱杩戜箮涓ヨ們锛屼豢浣涘湪绛夊緟涓€鍦烘案涓嶄妇琛岀殑妫€闃呫€備綘绌胯繃杩欐潯鐢遍粦鐧戒袱鑹叉瀯鎴愮殑璧板粖锛屾寚灏栧垝杩囬偅浜涙煍杞殑甯冩枡锛屽績閲屽崌璧蜂竴绉嶅鎬殑鍘嬫姂鎰燂細杩欓噷浼间箮缂哄皯浜嗕粈涔堬紝涓€绉嶆湰璇ュ瓨鍦ㄧ殑鑹插僵銆?/p>
-                <p>璧颁簡寰堜箙锛屼綘缁堜簬鍦ㄨ糠瀹殑鏈€娣卞鍙戠幇浜嗕竴澶勫紓鏍风殑鍏変寒銆傞偅鏄竴涓嫭绔嬬殑琛ｆ灦锛屽闆堕浂鍦扮珯鍦ㄤ竴闈㈠叏韬暅鍓嶃€傝。鏋朵笂鎸傜潃涓€浠惰姳琛～鈥斺€旀祬钃濈殑搴曡壊锛屽嵃鐫€娣辩孩鑹茬殑鐑甫鑺卞崏锛岀豢寰楀彂浜殑鍙剁墖缂犵粫鍏朵腑锛屽儚鎶婁竴鏁翠釜澶忓ぉ閮界┛鍦ㄤ簡韬笂銆傝‖琛濂楀湪閫忔槑鐨勯槻灏樼僵閲岋紝鏁存磥濡傛柊锛屽嵈甯︾潃涓€绉嶈鐝嶈棌澶氬勾鐨勫瘋瀵ャ€?/p>
-                <p>浣犺蛋杩戯紝鐪嬭琛～鏃佽竟鐨勫皬鏋跺瓙涓婃憜鐫€涓€寮犵焊鏉★紝绗旇抗鏈変簺娼﹁崏锛?/p>
+                <p>你降落在第二个星球。这里静得能听见自己的呼吸，四周是一排排望不到尽头的衣架，像一座巨大的、沉默的迷宫。光线从头顶洒下，柔和而均匀，照亮了每一件悬挂着的衣服——黑色T恤、白色polo衫、深灰色外套、藏青色卫衣……它们整齐得近乎严肃，仿佛在等待一场永不举行的检阅。你穿过这条由黑白两色构成的走廊，指尖划过那些柔软的布料，心里升起一种奇怪的压抑感：这里似乎缺少了什么，一种本该存在的色彩。</p>
+                <p>走了很久，你终于在迷宫的最深处发现了一处异样的光亮。那是一个独立的衣架，孤零零地站在一面全身镜前。衣架上挂着一件花衬衫——浅蓝的底色，印着深红色的热带花卉，绿得发亮的叶片缠绕其中，像把一整个夏天都穿在了身上。衬衫被套在透明的防尘罩里，整洁如新，却带着一种被珍藏多年的寂寥。</p>
+                <p>你走近，看见衬衫旁边的小架子上摆着一张纸条，笔迹有些潦草：</p>
                 <div class="fox-note">
-                    鈥滀粬绗竴娆′拱杩欎欢琛～鏄湪涓€涓懆鏈殑涓嬪崍锛岄槼鍏夊緢濂斤紝浠栬矾杩囦竴瀹跺皬搴楋紝姗辩獥閲岃繖浠惰‖琛瀵圭潃浠栫瑧銆備粬璇曠┛鏃讹紝闀滃瓙閲岀殑鑷繁濂藉儚鍙樹簡涓€涓汉鈥斺€旀病閭ｄ箞绱紝娌￠偅涔堢揣缁凤紝杩炵溂绁為兘鏌旇蒋浜嗕簺銆傞偅澶╀粬绌跨潃瀹冨幓浜嗗叕鍥紝鐪嬩簡鍦虹數褰憋紝涔颁簡鏉煚妾尪銆傞鍚硅繃鏉ユ椂锛屼粬瑙夊緱杩欐墠鏄嚜宸辫鏈夌殑鏍峰瓙銆傚彲鍚庢潵锛屽懆鏈秺鏉ヨ秺灏戯紝鐢氳嚦娑堝け浜嗗ソ闀夸竴娈垫椂闂淬€傝‖琛鏀惰繘琛ｆ煖娣卞锛屾垚浜嗗伓灏旀嬁鍑烘潵鐪嬩竴鐪肩殑鈥樿繃鍘烩€欍€備粬涓嶇煡閬撶殑鏄紝姣忔浠栫湅瀹冿紝瀹冮兘鍦ㄧ瓑涓€涓噸鏂扮┛涓婄殑鏈轰細銆傗€?
+                    “他第一次买这件衬衫是在一个周末的下午，阳光很好，他路过一家小店，橱窗里这件衬衫正对着他笑。他试穿时，镜子里的自己好像变了一个人——没那么累，没那么紧绷，连眼神都柔软了些。那天他穿着它去了公园，看了场电影，买了杯柠檬茶。风吹过来时，他觉得这才是自己该有的样子。可后来，周末越来越少，甚至消失了好长一段时间。衬衫被收进衣柜深处，成了偶尔拿出来看一眼的‘过去’。他不知道的是，每次他看它，它都在等一个重新穿上的机会。”
                 </div>
-                <p>浣犱綆澶达紝鍙戠幇闀滃瓙涓嬫柟鏈変竴鎺掓寜閽紝姣忎釜鎸夐挳涓婂啓鐫€涓€涓瘝銆傞暅瀛愯竟缂樺埢鐫€涓€琛屽瓧锛?br>鈥滃綋浠栫┛涓婅繖浠惰‖琛椂锛屼粬鏈€鎯冲仛鐨勬槸______銆傗€?/p>
+                <p>你低头，发现镜子下方有一排按钮，每个按钮上写着一个词。镜子边缘刻着一行字：<br>“当他穿上这件衬衫时，他最想做的是______。”</p>
             </div>
 
             <div id="puzzle2" class="puzzle-area">
-                <div class="question">璇烽€夋嫨锛?/div>
+                <div class="question">请选择：</div>
                 <div class="options">
-                    <div class="option-btn" onclick="selectOption(this, 'A')">A. 鍙涢€?/div>
-                    <div class="option-btn" onclick="selectOption(this, 'B')">B. 鐪熷疄</div>
-                    <div class="option-btn" onclick="selectOption(this, 'C')">C. 蹇箰</div>
-                    <div class="option-btn" onclick="selectOption(this, 'D')">D. 鏀炬澗</div>
+                    <div class="option-btn" onclick="selectOption(this, 'A')">A. 叛逆</div>
+                    <div class="option-btn" onclick="selectOption(this, 'B')">B. 真实</div>
+                    <div class="option-btn" onclick="selectOption(this, 'C')">C. 快乐</div>
+                    <div class="option-btn" onclick="selectOption(this, 'D')">D. 放松</div>
                 </div>
-                <button class="submit-btn" onclick="checkPlanet2()" id="planet2Submit" disabled>鎻愪氦绛旀</button>
+                <button class="submit-btn" onclick="checkPlanet2()" id="planet2Submit" disabled>提交答案</button>
             </div>
 
             <div id="story2" class="success-story hidden">
-                <p>褰撲綘鎸変笅鈥滅湡瀹炩€濈殑鎸夐挳锛岄暅瀛愮獊鐒跺彉寰楁槑浜捣鏉ワ紝鍍忚鎿﹀幓浜嗗骞寸殑鐏板皹銆傞暅闈腑娓愭笎娴幇鍑轰竴涓韩褰扁€斺€旀槸浠栵紝绌跨潃閭ｄ欢鑺辫‖琛紝绔欏湪鏌愪釜鍗堝悗鐨勫叕鍥噷锛岄槼鍏夐€忚繃鏍戝彾娲掑湪浠栬偐涓婏紝浠栨墜閲岀鐫€涓€鏉煚妾尪锛屽槾瑙掑甫鐫€鑻ユ湁鑻ユ棤鐨勭瑧鎰忋€傞偅绗戝鍜屽钩鏃朵笉澶竴鏍凤紝娌℃湁鐤叉儷锛屾病鏈変吉瑁咃紝鍍忎竴涓垰浠庢极闀跨殑鍐湢涓啋鏉ョ殑浜恒€?/p>
+                <p>当你按下“真实”的按钮，镜子突然变得明亮起来，像被擦去了多年的灰尘。镜面中渐渐浮现出一个身影——是他，穿着那件花衬衫，站在某个午后的公园里，阳光透过树叶洒在他肩上，他手里端着一杯柠檬茶，嘴角带着若有若无的笑意。那笑容和平时不太一样，没有疲惫，没有伪装，像一个刚从漫长的冬眠中醒来的人。</p>
                 <div class="illustration-area">
-                    <img src="./assets/images/zhuoyouzhan.png" alt="浠栫┛鑺辫‖琛? class="illustration-img" style="width: 100%; max-width: 250px; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
+                    <img src="http://m-birthday-music.test.upcdn.net/zhuoyouzhan.png" alt="他穿花衬衫" class="illustration-img" style="width: 100%; max-width: 250px; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
                 </div>
-				<p>闀滃瓙閲屼紶鏉ュ０闊筹紝寰堣交锛屽儚浠庡緢杩滅殑鍦版柟椋樻潵锛?/p>
-                <div class="dialogue">鈥滄槸鐨勨€︹€︾湡瀹炪€傜┛涓婂畠鏃讹紝鎴戝彲浠ヤ笉鏄偅涓案杩滆鎾戜綇涓€鍒囩殑浜恒€傛垜鍙互鍙戝憜锛屽彲浠ユ參鍚炲悶鍦拌蛋璺紝鍙互鎯充竴浜涙病鐢ㄧ殑浜嬨€傝‖琛笂鐨勮姳涓嶄細闂垜鈥樻渶杩戞€庝箞鏍封€欙紝瀹冧滑鍙槸寮€鐫€锛屽紑鎴愭垜鎯虫垚涓虹殑鏍峰瓙銆傚彲鍚庢潵锛屽懆鏈秷澶变簡锛屾垜涔熷繕浜嗚繖浠惰‖琛繕鍦ㄧ瓑鎴戙€傜洿鍒扮幇鍦ㄢ€︹€︿綘甯垜鎵惧洖鏉ヤ簡銆傗€?/div>
-                <p>闀滃瓙閲岀殑浠栬浆杩囪韩锛屾湞浣犵偣浜嗙偣澶淬€傜劧鍚庯紝鏁翠釜琛ｆ煖寮€濮嬪彂鐢熷彉鍖栤€斺€旈偅浜涢粦鐧借。鏈嶄竴浠朵欢鏌撲笂娣℃贰鐨勯噾鑹诧紝鍍忚闃冲厜鏅掗€忕殑浜戙€傜┖姘旈噷寮ユ极璧锋煚妾尪鐨勬竻棣欙紝杩滃浼间箮鏈夐鍚硅繃锛屽甫鏉ヨ嫢鏈夎嫢鏃犵殑鏃嬪緥锛屾槸閭ｉ浠栧枩娆簡寰堜箙鐨勬瓕銆?/p>
-                <p>鑺辫‖琛殑琛ｉ涓婏紝涓嶇煡浠€涔堟椂鍊欏浜嗕竴棰楀彂鍏夌殑鏄熸槦纰庣墖銆備綘杞昏交鍙栦笅瀹冿紝涓婇潰鍒荤潃涓€琛屽皬瀛楋細</p>
-				<div class="engraved-fragment theme-green" style="border-color: #98ff98; color: #98ff98;">鈥滅湡瀹炵殑浠栦粠鏈蛋杩滐紝鍙槸鍦ㄧ瓑涓€涓笉闇€瑕佷吉瑁呯殑鍛ㄦ湯銆傗€?/div>
-                <p>浣犳妸杩欓纰庣墖鎻″湪鎵嬮噷锛屽畠娓╂殩鑰岃交鐩堬紝鍍忔敟鐫€涓€鐗囪椋庡惞钀界殑闃冲厜銆傜浜岄鏄熸槦鐐逛寒浜嗭紝鏁翠釜鏄熺悆琚煋鎴愭贰娣＄殑鏆栬壊璋冿紝琛ｆ煖閲屾墍鏈夌殑琛ｆ湇閮借交杞绘檭鍔紝浠夸經鍦ㄥ悜浠栨尌鎵嬪憡鍒€?/p>
+				<p>镜子里传来声音，很轻，像从很远的地方飘来：</p>
+                <div class="dialogue">“是的……真实。穿上它时，我可以不是那个永远要撑住一切的人。我可以发呆，可以慢吞吞地走路，可以想一些没用的事。衬衫上的花不会问我‘最近怎么样’，它们只是开着，开成我想成为的样子。可后来，周末消失了，我也忘了这件衬衫还在等我。直到现在……你帮我找回来了。”</div>
+                <p>镜子里的他转过身，朝你点了点头。然后，整个衣柜开始发生变化——那些黑白衣服一件件染上淡淡的金色，像被阳光晒透的云。空气里弥漫起柠檬茶的清香，远处似乎有风吹过，带来若有若无的旋律，是那首他喜欢了很久的歌。</p>
+                <p>花衬衫的衣领上，不知什么时候多了一颗发光的星星碎片。你轻轻取下它，上面刻着一行小字：</p>
+				<div class="engraved-fragment theme-green" style="border-color: #98ff98; color: #98ff98;">“真实的他从未走远，只是在等一个不需要伪装的周末。”</div>
+                <p>你把这颗碎片握在手里，它温暖而轻盈，像攥着一片被风吹落的阳光。第二颗星星点亮了，整个星球被染成淡淡的暖色调，衣柜里所有的衣服都轻轻晃动，仿佛在向他挥手告别。</p>
                 <div class="collect-notice theme-green" style="border-color: #98ff98;">
-    <span class="collect-star" style="color: #98ff98;">鈽?/span>
-    <span>銆愭敹闆嗗埌銆戜竴棰楁槦鏄熺鐗?鈥滃皯骞寸殑鐪熷疄鈥?/span>
-    <span class="collect-star" style="color: #98ff98;">鈽?/span>
+    <span class="collect-star" style="color: #98ff98;">★</span>
+    <span>【收集到】一颗星星碎片 “少年的真实”</span>
+    <span class="collect-star" style="color: #98ff98;">★</span>
 </div>
-                <p>绗簩棰楁槦宸茬偣浜€傜户缁埅琛岋紝浣犱細閬囪鏇村鑷繁銆?/p>
-                <button class="continue-btn" onclick="goToPlanet(3)">鍓嶅線涓嬩竴绔?/button>
+                <p>第二颗星已点亮。继续航行，你会遇见更多自己。</p>
+                <button class="continue-btn" onclick="goToPlanet(3)">前往下一站</button>
             </div>
         </div>
     </section>
 
-    <!-- ========== 闈掑勾鏄熺悆 ========== -->
+    <!-- ========== 青年星球 ========== -->
     <section class="page" id="pagePlanet3">
         <div class="container">
 			
-			<img src="./assets/images/tqingnian.png" 
-     alt="闈掑勾鏄熺悆 路 铦欒潬渚犵殑鍙规伅" 
+			<img src="http://m-birthday-music.test.upcdn.net/tqingnian.png" 
+     alt="青年星球 · 蝙蝠侠的叹息" 
      class="handwritten-title">
 	 
 	 <div class="glitch-particles" id="glitchParticles"></div>
 			
-			<!-- 闈掑勾鏄熺悆澶村浘鍖哄煙锛氭帶鍒跺鑳屾櫙 + 妞呭瓙銆佸彴鐏€佸綍闊虫満 -->
+			<!-- 青年星球头图区域：控制室背景 + 椅子、台灯、录音机 -->
 <div class="planet3-illustration">
-    <img src="./assets/images/yizi.png" alt="妞呭瓙" class="planet3-icon icon-middle" id="chairIcon">
-    <img src="./assets/images/taideng.png" alt="鍙扮伅" class="planet3-icon icon-right" id="lampIcon">
-    <img src="./assets/images/luyinji.png" alt="褰曢煶鏈? class="planet3-icon icon-right2" id="recorderIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/yizi.png" alt="椅子" class="planet3-icon icon-middle" id="chairIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/taideng.png" alt="台灯" class="planet3-icon icon-right" id="lampIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/luyinji.png" alt="录音机" class="planet3-icon icon-right2" id="recorderIcon">
 </div>
 			
             <div class="scene-card">
-                <p>浣犻檷钀藉湪绗笁涓槦鐞冦€傝繖閲屽拰鍓嶉潰涓や釜瀹屽叏涓嶅悓鈥斺€斿埌澶勬槸闂儊鐨勫睆骞曘€佸棥鍡′綔鍝嶇殑鏈嶅姟鍣ㄣ€佹璧峰郊浼忕殑娑堟伅鎻愮ず闊筹紝鍍忎竴涓案涓嶄紤鎭殑鎺у埗涓績銆傚湴闈笂鏁ｈ惤鐫€鍚勭鏂囦欢锛屾湁浜涙爣鐫€鈥滃凡瀹屾垚鈥濓紝鏈変簺鏍囩潃鈥滃緟澶勭悊鈥濓紝杩樻湁涓€鍫嗘爣鐫€鈥滄案杩滃仛涓嶅畬鈥濄€備綘鎶ご锛岀湅瑙佹棤鏁版牴鏁版嵁绾夸粠绌轰腑鍨備笅锛岃繛鎺ョ潃姣忎竴鍙板睆骞曪紝鍍忚繖涓槦鐞冪殑琛€鑴夈€?/p>
-                <p>鍦ㄦ槦鐞冪殑涓ぎ锛屾湁涓€鎶婂闆堕浂鐨勬瀛愶紝榛戣壊鐨勭毊璐ㄦ壎鎵嬫锛屽凡缁忔湁浜涚（鎹熴€傛瀛愪笂鏀剧潃涓€涓潤铦犱緺闈㈠叿鈥斺€斾笉鏄偅绉嶇簿鑷寸殑鍛ㄨ竟锛岃€屾槸涓€涓櫘閫氱殑銆佹埓杩囧緢澶氭鐨勯潰鍏凤紝杈圭紭鏈変簺瑜壊锛屽唴渚у嵈寮傚父骞插噣锛屽儚鏄鍙嶅鎿︽嫮杩囥€?/p>
-                <p>浣犺蛋杩戯紝鍙戠幇妞呭瓙鏃佽竟绔嬬潃涓€鐩忓皬鍙扮伅锛岀伅鍏夋槒榛勶紝鐓х潃闈㈠叿涓嬪帇鐫€鐨勪竴灏佷俊銆備俊绾哥毐鐨辩殑锛屽儚琚敟杩囧緢澶氭锛屽張灞曞钩浜嗐€備笂闈㈠啓鐫€锛?/p>
+                <p>你降落在第三个星球。这里和前面两个完全不同——到处是闪烁的屏幕、嗡嗡作响的服务器、此起彼伏的消息提示音，像一个永不休息的控制中心。地面上散落着各种文件，有些标着“已完成”，有些标着“待处理”，还有一堆标着“永远做不完”。你抬头，看见无数根数据线从空中垂下，连接着每一台屏幕，像这个星球的血脉。</p>
+                <p>在星球的中央，有一把孤零零的椅子，黑色的皮质扶手椅，已经有些磨损。椅子上放着一个蝙蝠侠面具——不是那种精致的周边，而是一个普通的、戴过很多次的面具，边缘有些褪色，内侧却异常干净，像是被反复擦拭过。</p>
+                <p>你走近，发现椅子旁边立着一盏小台灯，灯光昏黄，照着面具下压着的一封信。信纸皱皱的，像被攥过很多次，又展平了。上面写着：</p>
                 <div class="fox-note">
-                    鈥滀粬鍠滄铦欒潬渚犱笉鏄洜涓洪偅韬垬琛ｏ紝涔熶笉鏄洜涓洪偅浜涢叿鐐殑瑁呭銆備粬鍠滄鐨勬槸閭ｄ釜閬撶悊鈥斺€斿竷椴佹柉路闊︽仼鍦ㄧ櫧澶╂槸涓粈涔堥兘鏈夌殑瀵岃豹锛屾櫄涓婂嵈瑕佺┛涓婄洈鐢诧紝鍙樻垚鍒汉鐪间腑鐨勨€樻棤鎵€涓嶈兘鈥欍€備粬璇翠粬鎳傞偅绉嶆劅瑙夈€傚湪鍚屼簨闈㈠墠锛屼粬瑕佽В鍐虫墍鏈夐棶棰橈紝瑕佹墰浣忔墍鏈夊帇鍔涳紝瑕佸亣瑁呬竴鍒囬兘灏藉湪鎺屾彙銆備絾鍙湁浠栬嚜宸辩煡閬擄紝姣忔鍏充笂闂紝姣忔鍥炲埌瀹讹紝姣忔涓€涓汉鍧愬湪杞﹂噷锛屼粬閮藉湪闂嚜宸憋細鎴戠湡鐨勮鍚楋紵鎴戠湡鐨勯厤鍚楋紵杩樻槸璇达紝鎴戝彧鏄湪鍋囪閭ｄ釜鈥樹竾鑳界殑浜衡€欙紝鐩村埌鎵€鏈変汉閮界浉淇′簡锛屽彧鍓╀笅鎴戣嚜宸辫繕鍦ㄦ€€鐤戯紵鈥?
+                    “他喜欢蝙蝠侠不是因为那身战衣，也不是因为那些酷炫的装备。他喜欢的是那个道理——布鲁斯·韦恩在白天是个什么都有的富豪，晚上却要穿上盔甲，变成别人眼中的‘无所不能’。他说他懂那种感觉。在同事面前，他要解决所有问题，要扛住所有压力，要假装一切都尽在掌握。但只有他自己知道，每次关上门，每次回到家，每次一个人坐在车里，他都在问自己：我真的行吗？我真的配吗？还是说，我只是在假装那个‘万能的人’，直到所有人都相信了，只剩下我自己还在怀疑？”
                 </div>
-                <p>浣犳嬁璧烽潰鍏凤紝鍙戠幇闈㈠叿鍐呬晶瀵嗗瘑楹婚夯鍒荤潃鏃ユ湡銆傛湁浜涚敤绗斿啓鐨勶紝鏈変簺鍍忔槸鐢ㄦ寚鐢插垝鍑烘潵鐨勩€傛瘡涓棩鏈熷悗闈㈤兘鏈変竴涓瀬灏忕殑绗﹀彿鈥斺€旀湁鏃舵槸涓€涓偣锛屾湁鏃舵槸涓€閬撴祬娴呯殑鍒掔棔銆傛渶涓婇潰鐨勪竴涓棩鏈熸梺锛屽垝鐥曠壒鍒繁锛屽嚑涔庣┛閫忎簡闈㈠叿銆?/p>
-                <p>鍙扮伅鏃佹湁涓€鍙拌€佹棫鐨勫綍闊虫満锛屼笂闈㈡湁涓孩鑹茬殑鎸夐挳銆傛寜閽梺璐寸潃涓€寮犵焊鏉★細</p>
-				<div class="paper-slip">鈥滄寜涓嬪幓锛屼綘浼氬惉瑙佷粬浠庢湭瀵逛汉璇磋繃鐨勮瘽銆傗€?/div>
-				<p>浣犳寜涓嬫寜閽紝褰曢煶鏈洪噷浼犳潵涓€澹伴暱闀跨殑鍙规伅銆傞偅鍙规伅鎸佺画浜嗗緢涔咃紝鍍忔妸鎵€鏈夋病鍑哄彛鐨勮瘽閮借鍦ㄩ噷闈€傚徆鎭箣鍚庯紝鏄竴闃垫矇榛橈紝鐒跺悗鏄竴涓瀬杞荤殑澹伴煶锛?/p>
-				<div class="tape-recorder">鈥滃鏋滄湁涓€澶╂垜涓嶅啀鏄潤铦犱緺鈥︹€︽垜鎯虫垚涓衡€︹€︹€?/div>
-				<p>澹伴煶鎴涚劧鑰屾锛屽儚璇磋瘽鐨勪汉琚粈涔堟墦鏂簡銆?/p>
-                <p>绾告潯涓嬮潰锛屾槸涓€閬撻€夋嫨棰樸€傚彴鐏殑搴曞骇涓婂埢鐫€涓€琛屽瓧锛?br>鈥滃綋浠栨憳涓嬮潰鍏凤紝浠栨渶娓存湜鎴愪负鐨勬槸______銆傗€?/p>
+                <p>你拿起面具，发现面具内侧密密麻麻刻着日期。有些用笔写的，有些像是用指甲划出来的。每个日期后面都有一个极小的符号——有时是一个点，有时是一道浅浅的划痕。最上面的一个日期旁，划痕特别深，几乎穿透了面具。</p>
+                <p>台灯旁有一台老旧的录音机，上面有个红色的按钮。按钮旁贴着一张纸条：</p>
+				<div class="paper-slip">“按下去，你会听见他从未对人说过的话。”</div>
+				<p>你按下按钮，录音机里传来一声长长的叹息。那叹息持续了很久，像把所有没出口的话都装在里面。叹息之后，是一阵沉默，然后是一个极轻的声音：</p>
+				<div class="tape-recorder">“如果有一天我不再是蝙蝠侠……我想成为……”</div>
+				<p>声音戛然而止，像说话的人被什么打断了。</p>
+                <p>纸条下面，是一道选择题。台灯的底座上刻着一行字：<br>“当他摘下面具，他最渴望成为的是______。”</p>
             </div>
 
             <div id="puzzle3" class="puzzle-area">
-                <div class="question">璇烽€夋嫨锛?/div>
+                <div class="question">请选择：</div>
                 <div class="options">
-                    <div class="option-btn" onclick="selectOption(this, 'A')">A. 鏃犳墍涓嶈兘鐨勪汉</div>
-                    <div class="option-btn" onclick="selectOption(this, 'B')">B. 琚渶瑕佺殑浜?/div>
-                    <div class="option-btn" onclick="selectOption(this, 'C')">C. 鍊煎緱琚俊璧栫殑浜?/div>
-                    <div class="option-btn" onclick="selectOption(this, 'D')">D. 鍙互鑴嗗急鐨勪汉</div>
+                    <div class="option-btn" onclick="selectOption(this, 'A')">A. 无所不能的人</div>
+                    <div class="option-btn" onclick="selectOption(this, 'B')">B. 被需要的人</div>
+                    <div class="option-btn" onclick="selectOption(this, 'C')">C. 值得被信赖的人</div>
+                    <div class="option-btn" onclick="selectOption(this, 'D')">D. 可以脆弱的人</div>
                 </div>
-                <button class="submit-btn" onclick="checkPlanet3()" id="planet3Submit" disabled>鎻愪氦绛旀</button>
+                <button class="submit-btn" onclick="checkPlanet3()" id="planet3Submit" disabled>提交答案</button>
             </div>
 
             <div id="story3" class="success-story hidden">
-                <p>浣犻€夋嫨浜嗏€滃€煎緱琚俊璧栫殑浜衡€濄€?/p>
-                <p>璇濋煶鍒氳惤锛屾暣涓槦鐞冪獊鐒跺畨闈欎笅鏉ャ€傞偅浜涢棯鐑佺殑灞忓箷鍚屾椂鐔勭伃锛屽棥鍡＄殑鏈嶅姟鍣ㄥ仠姝簡杩愯浆锛屾秷鎭彁绀洪煶娑堝け浜嗏€斺€斾笘鐣岄櫡鍏ヤ竴绉嶅寮傜殑瀹侀潤銆?/p>
-                <p>妞呭瓙涓婄殑铦欒潬渚犻潰鍏峰紑濮嬪彂鍏夛紝鍏夌嚎浠庡唴渚ч€忓嚭锛屽儚鏈変粈涔堜笢瑗挎鍦ㄨ嫃閱掋€傞潰鍏风紦缂撳崌璧凤紝鎮诞鍦ㄧ┖涓紝鐒跺悗鍍忚瀺鍖栦簡涓€鏍凤紝鍙樻垚鏃犳暟缁嗗皬鐨勫厜鐐广€傚厜鐐规眹鑱氭垚涓€涓ā绯婄殑浜哄舰锛屾笎娓愭竻鏅扳€斺€旈偅鏄粬锛岀┛鐫€鏅€氱殑琛ｆ湇锛屾病鏈夐潰鍏凤紝娌℃湁鎶锛岃劯涓婂甫鐫€涓€绉嶅鏉傜殑琛ㄦ儏锛屽儚鐤叉儷锛屽張鍍忛噴鐒躲€?/p>
-                <p>閭ｄ釜浜哄奖鏈濅綘璧拌繎涓€姝ワ紝澹伴煶浠庡洓闈㈠叓鏂逛紶鏉ワ紝娓╁拰鑰屼綆娌夛細</p>
-                <div class="dialogue">鈥滀綘鐭ラ亾鍚楋紝铦欒潬渚犳渶瀹虫€曠殑涓嶆槸澶辫触锛屼笉鏄浜★紝鑰屾槸鏈変竴澶╋紝鍝ヨ碍鐨勪汉鍙戠幇浠栧叾瀹炰篃浼氭€曪紝涔熶細绱紝涔熶細涓嶇煡閬撴€庝箞鍔炪€傛墍浠ヤ粬鎷煎懡璁粌锛屾嫾鍛藉噯澶囷紝鎷煎懡璁╄嚜宸辩湅璧锋潵鈥樺€煎緱淇¤禆鈥欍€備粬瑕佺殑浠庢潵涓嶆槸琚磭鎷滐紝鑰屾槸鈥斺€斿綋鍗辨満鏉ヤ复鏃讹紝鎵€鏈変汉鑳藉畨蹇冨湴璇达細鈥樹粬鍦紝灏辨病浜嬩簡銆傗€欌€?/div>
-                <p>浠栦綆涓嬪ご锛岀湅鐫€鑷繁鐨勬墜锛岃嫤绗戜簡涓€涓嬨€?/p>
-                <div class="dialogue">鈥滃彲鎴戜篃鐭ラ亾锛岄偅涓€樺€煎緱淇¤禆鈥欑殑鏍囧噯锛屼粠鏉ヤ笉鏄埆浜哄畾鐨勩€傛槸鎴戣嚜宸卞畾鐨勩€傛垜鎬昏寰楋紝鍙鎴戝啀鍔姏涓€鐐癸紝鍐嶅畬缇庝竴鐐癸紝鍐嶆棤鎵€涓嶈兘涓€鐐癸紝灏辫兘閰嶅緱涓婃墍鏈変汉鐨勬湡寰呫€傛垜涓嶆槸鎯宠秴杩囪皝锛屾槸鎬曡嚜宸辨帀闃燂紝鎬曞摢澶╂湁浜洪棶鎴戔€樹綘浼氬悧鈥欑殑鏃跺€欙紝鎴戝彧鑳芥憞澶淬€傗€?/div>
-                <p>浠栨姮璧峰ご锛岀湅鐫€浣狅紝鐪肩閲屾湁涓€绉嶅鎬殑鍏夈€?/p>
-                <div class="dialogue">鈥滀絾浣犵煡閬撳悧锛屽垰鎵嶄綘閫夌殑閭ｄ釜璇嶁€︹€﹁鎴戞兂璧蜂竴浠朵簨銆傗€?/div>
-                <p>浠栬韩鍚庢诞鐜板嚭涓€涓敾闈細鏌愪釜娣卞锛屼粬闈犲湪涓€涓汉鐨勮偐鑶€涓婏紝鐪兼唱鏃犲０鍦版祦涓嬫潵銆傞偅涓汉娌℃湁璇磋瘽锛屽彧鏄交杞绘媿鐫€浠栫殑鑳屻€傜敾闈㈤噷鐨勪粬璇翠簡涓€鍙ヤ粈涔堬紝浣嗗０闊冲緢杞伙紝鍚笉娓呫€?/p>
+                <p>你选择了“值得被信赖的人”。</p>
+                <p>话音刚落，整个星球突然安静下来。那些闪烁的屏幕同时熄灭，嗡嗡的服务器停止了运转，消息提示音消失了——世界陷入一种奇异的宁静。</p>
+                <p>椅子上的蝙蝠侠面具开始发光，光线从内侧透出，像有什么东西正在苏醒。面具缓缓升起，悬浮在空中，然后像融化了一样，变成无数细小的光点。光点汇聚成一个模糊的人形，渐渐清晰——那是他，穿着普通的衣服，没有面具，没有披风，脸上带着一种复杂的表情，像疲惫，又像释然。</p>
+                <p>那个人影朝你走近一步，声音从四面八方传来，温和而低沉：</p>
+                <div class="dialogue">“你知道吗，蝙蝠侠最害怕的不是失败，不是死亡，而是有一天，哥谭的人发现他其实也会怕，也会累，也会不知道怎么办。所以他拼命训练，拼命准备，拼命让自己看起来‘值得信赖’。他要的从来不是被崇拜，而是——当危机来临时，所有人能安心地说：‘他在，就没事了。’”</div>
+                <p>他低下头，看着自己的手，苦笑了一下。</p>
+                <div class="dialogue">“可我也知道，那个‘值得信赖’的标准，从来不是别人定的。是我自己定的。我总觉得，只要我再努力一点，再完美一点，再无所不能一点，就能配得上所有人的期待。我不是想超过谁，是怕自己掉队，怕哪天有人问我‘你会吗’的时候，我只能摇头。”</div>
+                <p>他抬起头，看着你，眼神里有一种奇怪的光。</p>
+                <div class="dialogue">“但你知道吗，刚才你选的那个词……让我想起一件事。”</div>
+                <p>他身后浮现出一个画面：某个深夜，他靠在一个人的肩膀上，眼泪无声地流下来。那个人没有说话，只是轻轻拍着他的背。画面里的他说了一句什么，但声音很轻，听不清。</p>
 				<div class="illustration-area">
-                    <img src="./assets/images/kaojian.png" alt="浠栭潬鍦ㄦ煇浜鸿偐涓婂摥鐨勭敾闈? class="illustration-img" style="width: 100%; max-width: 250px; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
+                    <img src="http://m-birthday-music.test.upcdn.net/kaojian.png" alt="他靠在某人肩上哭的画面" class="illustration-img" style="width: 100%; max-width: 250px; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
                 </div>
-                <div class="dialogue">鈥滈偅涓€鍒伙紝鎴戣寰楄嚜宸变笉鏄潤铦犱緺銆備絾閭ｄ釜浜虹湅鎴戠殑鐪肩锛屽ソ鍍忊€︹€︽垜渚濈劧鏄€煎緱淇¤禆鐨勩€備笉鏄洜涓烘垜鑳借В鍐虫墍鏈夐棶棰橈紝鍙槸鍥犱负鈥︹€︽垜鏄垜銆傗€?/div>
-                <p>鐢婚潰娑堟暎锛屼粬鐨勮韩褰变篃寮€濮嬪彉娣°€?/p>
-                <div class="dialogue">鈥滆阿璋綘甯垜鎵惧洖杩欎釜绛旀銆傚畠姣旇潤铦犱緺閲嶈寰楀銆傗€?/div>
-                <p>鏈€鍚庣殑鍏夌偣鍑濊仛鎴愪竴棰楀彂鍏夌殑鏄熸槦纰庣墖锛岀紦缂撹惤杩涗綘鎵嬪績銆備笂闈㈠埢鐫€涓€琛屽皬瀛楋細</p>
-				<div class="engraved-fragment theme-blue" style="border-color: #4a90e2; color: #4a90e2;">鈥滅湡姝ｇ殑鍊煎緱锛屼笉鏄粠涓嶅け璐ワ紝鏄湁浜虹湅瑙佷綘鐨勮剢寮憋紝渚濈劧閫夋嫨鐩镐俊銆傗€?/div>
-                <p>绗笁棰楁槦鏄熺偣浜簡銆傚懆鍥撮偅浜涘睆骞曢噸鏂颁寒璧凤紝浣嗚繖娆′笉鍐嶆槸宸ヤ綔娑堟伅鈥斺€旀瘡涓€涓睆骞曚笂閮藉彉鎴愪簡涓€鐗囨槦绌猴紝鏄熸槦瀹夐潤鍦伴棯鐑佺潃锛屽儚鍦ㄦ浛浠栧畧鎶よ繖涓瀵嗐€?/p>
+                <div class="dialogue">“那一刻，我觉得自己不是蝙蝠侠。但那个人看我的眼神，好像……我依然是值得信赖的。不是因为我能解决所有问题，只是因为……我是我。”</div>
+                <p>画面消散，他的身影也开始变淡。</p>
+                <div class="dialogue">“谢谢你帮我找回这个答案。它比蝙蝠侠重要得多。”</div>
+                <p>最后的光点凝聚成一颗发光的星星碎片，缓缓落进你手心。上面刻着一行小字：</p>
+				<div class="engraved-fragment theme-blue" style="border-color: #4a90e2; color: #4a90e2;">“真正的值得，不是从不失败，是有人看见你的脆弱，依然选择相信。”</div>
+                <p>第三颗星星点亮了。周围那些屏幕重新亮起，但这次不再是工作消息——每一个屏幕上都变成了一片星空，星星安静地闪烁着，像在替他守护这个秘密。</p>
                 <div class="collect-notice theme-blue" style="border-color: #4a90e2;">
-    <span class="collect-star" style="color: #4a90e2;">鈽?/span>
-    <span>銆愭敹闆嗗埌銆戜竴棰楁槦鏄熺鐗?鈥滄繁澶滅殑绛旀鈥?/span>
-    <span class="collect-star" style="color: #4a90e2;">鈽?/span>
+    <span class="collect-star" style="color: #4a90e2;">★</span>
+    <span>【收集到】一颗星星碎片 “深夜的答案”</span>
+    <span class="collect-star" style="color: #4a90e2;">★</span>
 </div>
-                <p>绗笁棰楁槦宸茬偣浜€傛湁浜涚瓟妗堬紝钘忓湪浠栬嚜宸遍兘涓嶆暍鐪嬬殑鍦版柟銆?/p>
-                <button class="continue-btn" onclick="goToPlanet(4)">鍓嶅線涓嬩竴绔?/button>
+                <p>第三颗星已点亮。有些答案，藏在他自己都不敢看的地方。</p>
+                <button class="continue-btn" onclick="goToPlanet(4)">前往下一站</button>
             </div>
         </div>
     </section>
 
-    <!-- ========== 鐖卞ソ鏄熺悆 ========== -->
+    <!-- ========== 爱好星球 ========== -->
     <section class="page" id="pagePlanet4">
         <div class="container">
 			
-			<img src="./assets/images/taihao.png" 
-     alt="鐖卞ソ鏄熺悆 路 妗屾父涓庢棆寰? 
+			<img src="http://m-birthday-music.test.upcdn.net/taihao.png" 
+     alt="爱好星球 · 桌游与旋律" 
      class="handwritten-title">
 	 
 	 <div class="music-particles" id="musicParticles"></div>
 			
-			 <!-- 鐖卞ソ鏄熺悆澶村浘鍖哄煙锛氱瀵嗗熀鍦拌儗鏅?+ 鎯呬功銆佽€虫満銆佸敱鐗囨満 -->
+			 <!-- 爱好星球头图区域：秘密基地背景 + 情书、耳机、唱片机 -->
 <div class="planet4-illustration">
-    <img src="./assets/images/qingshu.png" alt="鎯呬功" class="planet4-icon icon-middle" id="loveLetterIcon">
-    <img src="./assets/images/erji.png" alt="鑰虫満" class="planet4-icon icon-right" id="headphoneIcon">
-    <img src="./assets/images/changpianji.png" alt="鍞辩墖鏈? class="planet4-icon icon-right2" id="recordPlayerIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/qingshu.png" alt="情书" class="planet4-icon icon-middle" id="loveLetterIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/erji.png" alt="耳机" class="planet4-icon icon-right" id="headphoneIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/changpianji.png" alt="唱片机" class="planet4-icon icon-right2" id="recordPlayerIcon">
 </div>
             <div class="scene-card">
-                <p>浣犻檷钀藉湪绗洓涓槦鐞冦€傝繖閲屽儚涓€涓绮惧績甯冪疆鐨勭瀵嗗熀鍦扳€斺€旇剼涓嬫槸鏌旇蒋鐨勫湴姣紝澶撮《鎸傜潃鏆栭粍鑹茬殑鏄熸槦鐏紝鍥涘懆鏁ｈ惤鐫€澶уぇ灏忓皬鐨勬娓哥洅瀛愶紝鍫嗘垚涓€搴у骇灏忓北銆備綘鐪嬭銆婂媰鑹鍩庡牎銆嬬殑鐩掑瓙鍗婂紑鐫€锛岄湶鍑洪噷闈㈢簿鑷寸殑鐗堝浘锛涖€婃殤鍋囨棩璁般€嬭鎽嗗湪鏈€鏄剧溂鐨勪綅缃紝灏侀潰涓婄殑鍗￠€氫汉鐗╁啿浣犵湪鐪肩潧锛涜繕鏈夈€婄拃鐠ㄥ疂鐭炽€嬨€奡COUT銆嬨€婂懡鎮竴绾裤€嬧€︹€︽瘡涓€鐩掗兘鏁存暣榻愰綈锛屽儚鏀惰棌瀹舵渶鐝嶈吹鐨勮棌鍝併€?/p>
-                <p>浣犳部鐫€妗屾父鍫嗘垚鐨勫皬璺線閲岃蛋锛屽彂鐜颁竴搴х敱鐩掑瓙鍨掓垚鐨勫煄鍫°€傚煄鍫℃渶楂樺鏀剧潃涓€寮犲師鏈ㄨ壊鐨勫渾妗岋紝妗屼笂鎽嗙潃涓€鐩掔壒鍒殑妗屾父鈥斺€斿畠琚崟鐙斁鍦ㄤ竴涓幓鐠冪僵閲岋紝鍍忓崥鐗╅鐨勫睍鍝併€備綘鍑戣繎鐪嬶紝鏄偅鐩掑彨鈥滄儏涔︹€濈殑妗屾父锛岀洅瀛愮殑杈硅宸茬粡鏈変簺纾ㄦ崯锛屾樉鐒惰鐜╄繃寰堝娆°€傜幓鐠冪僵涓婅创鐫€涓€寮犵焊鏉★細</p>
+                <p>你降落在第四个星球。这里像一个被精心布置的秘密基地——脚下是柔软的地毯，头顶挂着暖黄色的星星灯，四周散落着大大小小的桌游盒子，堆成一座座小山。你看见《勃艮第城堡》的盒子半开着，露出里面精致的版图；《暑假日记》被摆在最显眼的位置，封面上的卡通人物冲你眨眼睛；还有《璀璨宝石》《SCOUT》《命悬一线》……每一盒都整整齐齐，像收藏家最珍贵的藏品。</p>
+                <p>你沿着桌游堆成的小路往里走，发现一座由盒子垒成的城堡。城堡最高处放着一张原木色的圆桌，桌上摆着一盒特别的桌游——它被单独放在一个玻璃罩里，像博物馆的展品。你凑近看，是那盒叫“情书”的桌游，盒子的边角已经有些磨损，显然被玩过很多次。玻璃罩上贴着一张纸条：</p>
                 <div class="fox-note">
-                    鈥滀粬鐜╄繃寰堝娓告垙锛岃耽杩囦篃杈撹繃銆傛湁浜涙父鎴忎粬鍠滄鏄洜涓虹瓥鐣ワ紝鏈変簺鏄洜涓鸿繍姘旓紝鏈変簺鏄洜涓哄彲浠ュ拰浜轰竴璧风瑧銆備絾杩欎竴鐩掞紝浠栧枩娆㈡槸鍥犱负鈥斺€旀瘡涓€娆℃墦寮€瀹冿紝閮戒細鎯宠捣涓€涓灛闂淬€傞偅涓灛闂村拰杈撹耽鏃犲叧锛屽彧鍜屽潗鍦ㄥ闈㈢殑浜烘湁鍏炽€傗€?
+                    “他玩过很多游戏，赢过也输过。有些游戏他喜欢是因为策略，有些是因为运气，有些是因为可以和人一起笑。但这一盒，他喜欢是因为——每一次打开它，都会想起一个瞬间。那个瞬间和输赢无关，只和坐在对面的人有关。”
                 </div>
-                <p>浣犵粫杩囨娓稿煄鍫★紝鍙戠幇鍚庨潰钘忕潃涓€鍙拌€佸紡鍞辩墖鏈恒€傚敱閽堣交杞绘惌鍦ㄥ敱鐗囦笂锛屽嵈娌℃湁澹伴煶銆傚敱鐗囨満鏃佹憺鐫€涓€鍙犻粦鑳跺敱鐗囷紝鏈€涓婇潰涓€寮犳槸銆婄埍涔愪箣鍩庛€嬬殑鍘熷０甯︼紝涓嬮潰鏄€婁綘鐨勫悕瀛椼€傘€嬶紝鍐嶄笅闈㈡槸閮《鐨勩€婇琛屽櫒鐨勬墽琛屽懆鏈熴€嬨€侀檲绮掔殑銆婂涔熴€嬨€佹梾琛屽洟鐨勩€婃案杩滈兘浼氬湪銆嬧€︹€︽瘡涓€寮犻兘甯︾潃缁嗙粏鐨勫垝鐥曪紝鏄剧劧琚惉杩囧緢澶氶亶銆傚敱鐗囨満鐨勬梺杈癸紝鏈変竴涓皬灏忕殑鑰虫満鏀灦锛屼笂闈㈡寕鐫€涓€鍓ご鎴村紡鑰虫満銆傝€虫満涓婅创鐫€涓€寮犱究绛撅細</p>
-				<div class="fox-note">鈥滀粬涔犳儻涓€涓汉鍚瓕锛屽湪閫氬嫟鐨勮矾涓婏紝鍦ㄥ姞瀹岀彮鍥炲鐨勬繁澶滐紝鍦ㄧ潯涓嶇潃鐨勬椂鍊欍€傛湁浜涙棆寰嬮櫔浠栬蛋杩囧緢闀跨殑璺紝鏈変簺姝岃瘝浠栨倓鎮勬妱涓嬫潵锛屾湁浜涙瓕浠栦粠涓嶅浜烘彁璧封€斺€斿洜涓哄畠浠お鍍忎粬锛屽儚寰楄浠栨湁鐐逛笉濂芥剰鎬濄€傗€?/div>
-                <p>浣犳埓涓婅€虫満锛岀粓浜庡惉鍒颁簡澹伴煶銆傛槸涓€娈垫贩鍓€斺€旈檲绮掔殑銆婃€儏姝屻€嬪墠濂忥紝鏈存爲鐨勩€奛ew boy銆嬪壇姝岋紝瀹嬪啲閲庣殑銆婅帀鑾夊畨銆嬮噷鐨勯偅鍙ュ悏浠栵紝姣涗笉鏄撶殑銆婃秷鎰併€嬮噷閭ｅ嚑澹拌交鍙癸紝闃胯倖鐨勩€婁笘鐣屼笂鐨勫彟涓€涓垜銆嬮噷淇忕毊鐨勯紦鐐光€︹€﹀畠浠氦缁囧湪涓€璧凤紝鍍忎竴涓浜烘瓕鍗曞湪杞诲０璇夎浠栫殑杩欎簺骞淬€?/p>
-                <p>鑰虫満閲岀殑闊充箰娓愭笎娣″幓锛屾崲鎴愪竴涓啛鎮夌殑澹伴煶锛堟槸浠栬嚜宸辩殑澹伴煶锛屼絾鍚捣鏉ュ儚骞磋交鍑犲瞾锛夛細</p>
+                <p>你绕过桌游城堡，发现后面藏着一台老式唱片机。唱针轻轻搭在唱片上，却没有声音。唱片机旁摞着一叠黑胶唱片，最上面一张是《爱乐之城》的原声带，下面是《你的名字。》，再下面是郭顶的《飞行器的执行周期》、陈粒的《如也》、旅行团的《永远都会在》……每一张都带着细细的划痕，显然被听过很多遍。唱片机的旁边，有一个小小的耳机支架，上面挂着一副头戴式耳机。耳机上贴着一张便签：</p>
+				<div class="fox-note">“他习惯一个人听歌，在通勤的路上，在加完班回家的深夜，在睡不着的时候。有些旋律陪他走过很长的路，有些歌词他悄悄抄下来，有些歌他从不对人提起——因为它们太像他，像得让他有点不好意思。”</div>
+                <p>你戴上耳机，终于听到了声音。是一段混剪——陈粒的《怪情歌》前奏，朴树的《New boy》副歌，宋冬野的《莉莉安》里的那句吉他，毛不易的《消愁》里那几声轻叹，阿肆的《世界上的另一个我》里俏皮的鼓点……它们交织在一起，像一个私人歌单在轻声诉说他的这些年。</p>
+                <p>耳机里的音乐渐渐淡去，换成一个熟悉的声音（是他自己的声音，但听起来像年轻几岁）：</p>
                 <div class="card-note">
-                    鈥滃皬鏃跺€欐垜瑙夊緱锛屽枩娆粈涔堝氨瑕佸ぇ澹拌鍑烘潵銆傚悗鏉ユ垜鍙戠幇锛屾湁浜涘枩娆㈡槸涓嶇敤璇寸殑銆備綘浼氬湪鏌愪釜鐤叉儷鐨勫倣鏅氾紝鍒氬ソ鍚埌涓€棣栨瓕锛岀劧鍚庤寰椻€樺晩锛屽氨鏄繖涓€欍€備綘浼氬湪鏌愪釜鍛ㄦ湯鐨勪笅鍗堬紝鍒氬ソ绾﹀埌涓€涓汉锛岀劧鍚庢墦寮€涓€鐩掓父鎴忥紝鐒跺悗鍙戠幇鈥樺晩锛屽氨杩欐牱寰呯潃涔熸尯濂界殑鈥欌€︹€﹂偅浜涗笢瑗库€斺€旀父鎴忓拰闊充箰鈥斺€斿畠浠櫔鎴戠殑鏃堕棿锛屾瘮浜鸿繕澶氥€備絾瀹冧滑浠庢潵涓嶉棶鎴戔€樹綘鎬庝箞浜嗏€欙紝涔熶笉瑕佹眰鎴戔€樺ソ璧锋潵鈥欍€傚畠浠彧鏄湪锛屼竴鐩淬€傗€?
+                    “小时候我觉得，喜欢什么就要大声说出来。后来我发现，有些喜欢是不用说的。你会在某个疲惫的傍晚，刚好听到一首歌，然后觉得‘啊，就是这个’。你会在某个周末的下午，刚好约到一个人，然后打开一盒游戏，然后发现‘啊，就这样待着也挺好的’……那些东西——游戏和音乐——它们陪我的时间，比人还多。但它们从来不问我‘你怎么了’，也不要求我‘好起来’。它们只是在，一直。”
                 </div>
-                <p>浣犳憳涓嬭€虫満锛屽彂鐜板敱鐗囨満鏃佽竟鏈変竴涓皬灏忕殑鏄剧ず灞忥紝涓婇潰鏄剧ず鐫€涓€涓棶棰樸€傛樉绀哄睆涓嬫柟鏈変袱涓寜閽紝姣忎釜鎸夐挳涓婃湁涓€涓瘝銆?/p>
+                <p>你摘下耳机，发现唱片机旁边有一个小小的显示屏，上面显示着一个问题。显示屏下方有两个按钮，每个按钮上有一个词。</p>
             </div>
 
             <div id="puzzle4" class="puzzle-area">
-                <div class="question">鈥滃浠栨潵璇达紝妗屾父鍜岄煶涔愶紝鏇村儚鏄痏_____锛熲€?/div>
+                <div class="question">“对他来说，桌游和音乐，更像是______？”</div>
                 <div class="options">
-                    <div class="option-btn" onclick="selectOption(this, 'A')">A. 閫冮伩鐜板疄鐨勬柟寮?/div>
-                    <div class="option-btn" onclick="selectOption(this, 'B')">B. 杩炴帴涓栫晫鐨勬ˉ姊?/div>
+                    <div class="option-btn" onclick="selectOption(this, 'A')">A. 逃避现实的方式</div>
+                    <div class="option-btn" onclick="selectOption(this, 'B')">B. 连接世界的桥梁</div>
                 </div>
-                <button class="submit-btn" onclick="checkPlanet4()" id="planet4Submit" disabled>鎻愪氦绛旀</button>
+                <button class="submit-btn" onclick="checkPlanet4()" id="planet4Submit" disabled>提交答案</button>
             </div>
 
             <div id="story4" class="success-story hidden">
-                <p>浣犳寜涓嬩簡鈥滆繛鎺ヤ笘鐣岀殑妗ユ鈥濄€?/p>
-                <p>璇濋煶鍒氳惤锛屾暣涓槦鐞冪獊鐒跺彉寰楁槑浜捣鏉ャ€傞偅浜涙娓哥洅瀛愯嚜宸辨墦寮€锛岄噷闈㈢殑鐗堝浘銆佸崱鐗屻€佹瀛愮紦缂撳崌璧凤紝鍦ㄧ┖涓嫾鎴愪竴骞呭法澶х殑鐢婚潰鈥斺€旀槸浠栧拰鏈嬪弸浠洿鍧愪竴妗岋紝绗戠潃浜夎京鏌愭潯瑙勫垯锛屾湁浜烘噴鎭煎湴鎷嶆瀛愶紝鏈変汉寰楁剰鍦颁妇璧锋墜锛屼粬鍧愬湪涓棿锛岀瑧寰楃溂鐫涢兘寮簡銆?/p>
-                <p>鍞辩墖鏈哄紑濮嬭浆鍔紝杩欐鏄竴棣栧畬鏁寸殑姝屸€斺€旀湸鏍戠殑銆婇偅浜涜姳鍎裤€嬨€傛棆寰嬭交杞绘祦娣岋紝鍍忔按婕繃娌欐哗銆傞殢鐫€闊充箰锛岀┖涓張娴幇鍑哄彟涓€涓敾闈細浠栧拰鏈嬪弸浠湪KTV閲岋紝鎻＄潃璇濈瓛锛屾瓕澹伴殢鐫€鑺傛媿娴佹穼锛岀伅鍏夋妸绗戝鏄犲緱鐏跨儌銆備絾閭ｄ唤蹇箰骞朵笉瀛ゅ崟锛屽洜涓哄畠姝ｉ殢鐫€鏃嬪緥鍦ㄧ┖姘斾腑鍥炶崱銆?/p>
+                <p>你按下了“连接世界的桥梁”。</p>
+                <p>话音刚落，整个星球突然变得明亮起来。那些桌游盒子自己打开，里面的版图、卡牌、棋子缓缓升起，在空中拼成一幅巨大的画面——是他和朋友们围坐一桌，笑着争辩某条规则，有人懊恼地拍桌子，有人得意地举起手，他坐在中间，笑得眼睛都弯了。</p>
+                <p>唱片机开始转动，这次是一首完整的歌——朴树的《那些花儿》。旋律轻轻流淌，像水漫过沙滩。随着音乐，空中又浮现出另一个画面：他和朋友们在KTV里，握着话筒，歌声随着节拍流淌，灯光把笑容映得灿烂。但那份快乐并不孤单，因为它正随着旋律在空气中回荡。</p>
 				<div class="illustration-area">
-                    <img src="./assets/images/bogendi.png" alt="浠栧拰鏈嬪弸浠洿鍧愮帺妗屾父" class="illustration-img" style="width: 100%; max-width: 250px; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
-                    <img src="./assets/images/changge.png" alt="浠栧拰鏈嬪弸浠湪KTV" class="illustration-img" style="width: 100%; max-width: 250px; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
+                    <img src="http://m-birthday-music.test.upcdn.net/bogendi.png" alt="他和朋友们围坐玩桌游" class="illustration-img" style="width: 100%; max-width: 250px; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
+                    <img src="http://m-birthday-music.test.upcdn.net/changge.png" alt="他和朋友们在KTV" class="illustration-img" style="width: 100%; max-width: 250px; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
                 </div>
-                <p>绌轰腑浼犳潵涓€涓０闊筹紝鏄粬鑷繁鐨勶紝浣嗘瘮鍒氭墠娓╂煍锛?/p>
-                <div class="dialogue">鈥滀綘鐭ラ亾鍚楋紝娓告垙鍜岄煶涔愪粠鏉ヤ笉鏄垜鐨勨€橀€€璺€欍€傚畠浠槸鈥樻潵璺€欍€傛瘡涓€娆℃墦寮€涓€鐩掓柊娓告垙锛岄兘鏄湪璁よ瘑涓€绉嶆柊鐨勫揩涔愶紱姣忎竴娆″彂鐜颁竴棣栧ソ姝岋紝閮芥槸鍦ㄨ璇嗕竴涓柊鐨勮嚜宸便€傜劧鍚庯紝鐢ㄨ繖浜涘揩涔愬拰杩欎簺鏂拌璇嗙殑鎴戯紝鍘诲拰杩欎釜涓栫晫鎵撴嫑鍛笺€傗€?/div>
-                <p>鐢婚潰鍙樻崲鈥斺€斾粬姝ｅ湪鏁欎竴涓湅鍙嬬帺銆婂媰鑹鍩庡牎銆嬶紝鑰愬績鍦拌В閲婅鍒欙紱浠栨鍦ㄦ妸鑰虫満鍒嗙粰鍙︿竴涓汉锛岃鈥滀綘鍚惉杩欓鈥濓紱浠栨鎶婁竴鐩掓娓稿綋浣滅ぜ鐗╅€佸嚭鍘伙紝鐩掑瓙涓婄郴鐫€绠€鍗曠殑涓濆甫銆?/p>
-                <div class="dialogue">鈥滈偅浜涙椂鍒伙紝鎴戜笉鏄竴涓汉鍦ㄧ帺锛屼笉鏄湪涓€涓汉鍚€傛垜鏄湪鐢ㄥ畠浠紝鍜屽彟涓€涓汉寰呭湪涓€璧枫€傗€?/div>
-                <p>鏈€鍚庝竴甯х敾闈㈠畾鏍尖€斺€斾粬鎵嬮噷鎷跨潃閭ｇ洅鈥滄儏涔︹€濓紝瀵归潰鍧愮潃涓€涓ā绯婄殑浜哄奖銆備袱涓汉閮藉湪绗戯紝妗屼笂鎽婄潃鍗＄墝锛岄槼鍏変粠鏃佽竟鐓ц繘鏉ワ紝鎶婁竴鍒囬兘鏌撴垚鏆栬壊銆?/p>
-                <p>閭ｇ洅鈥滄儏涔︹€濅粠鐜荤拑缃╅噷缂撶紦鍗囪捣锛岀洊瀛愯嚜鍔ㄦ墦寮€锛岄噷闈㈤鍑轰竴棰楀彂鍏夌殑鏄熸槦纰庣墖銆傚畠杞昏交钀借繘浣犳墜閲岋紝涓婇潰鍒荤潃涓€琛屽皬瀛楋細</p>
-				<div class="engraved-fragment theme-orange" style="border-color: #ff8c42; color: #ff8c42;">鈥滀粬閫佺粰鍒汉鐨勶紝浠庢潵涓嶅彧鏄父鎴忥紝鏄€樻垜鍦ㄨ繖閲岋紝浣犺涓€璧峰悧鈥欍€傗€?/div>
-                <p>绗洓棰楁槦鏄熺偣浜簡銆傚懆鍥寸殑妗屾父鐩掑瓙杞昏交鏅冨姩锛屽彂鍑烘矙娌欑殑澹板搷锛屽儚鍦ㄩ紦鎺屻€傚敱鐗囨満閲岋紝閭ｉ銆婇偅浜涜姳鍎裤€嬪垰濂藉敱鍒版渶鍚庝竴鍙ワ細<br>鈥滄湁浜涙晠浜嬭繕娌¤瀹岋紝閭ｅ氨绠椾簡鍚э紝閭ｄ簺蹇冩儏鍦ㄥ瞾鏈堜腑锛屽凡缁忛毦杈ㄧ湡鍋団€︹€︹€?/p>
-                <p>浣嗕綘鐭ラ亾锛屼粬鐨勬晠浜嬭繕鍦ㄧ户缁€?/p>
+                <p>空中传来一个声音，是他自己的，但比刚才温柔：</p>
+                <div class="dialogue">“你知道吗，游戏和音乐从来不是我的‘退路’。它们是‘来路’。每一次打开一盒新游戏，都是在认识一种新的快乐；每一次发现一首好歌，都是在认识一个新的自己。然后，用这些快乐和这些新认识的我，去和这个世界打招呼。”</div>
+                <p>画面变换——他正在教一个朋友玩《勃艮第城堡》，耐心地解释规则；他正在把耳机分给另一个人，说“你听听这首”；他正把一盒桌游当作礼物送出去，盒子上系着简单的丝带。</p>
+                <div class="dialogue">“那些时刻，我不是一个人在玩，不是在一个人听。我是在用它们，和另一个人待在一起。”</div>
+                <p>最后一帧画面定格——他手里拿着那盒“情书”，对面坐着一个模糊的人影。两个人都在笑，桌上摊着卡牌，阳光从旁边照进来，把一切都染成暖色。</p>
+                <p>那盒“情书”从玻璃罩里缓缓升起，盖子自动打开，里面飞出一颗发光的星星碎片。它轻轻落进你手里，上面刻着一行小字：</p>
+				<div class="engraved-fragment theme-orange" style="border-color: #ff8c42; color: #ff8c42;">“他送给别人的，从来不只是游戏，是‘我在这里，你要一起吗’。”</div>
+                <p>第四颗星星点亮了。周围的桌游盒子轻轻晃动，发出沙沙的声响，像在鼓掌。唱片机里，那首《那些花儿》刚好唱到最后一句：<br>“有些故事还没讲完，那就算了吧，那些心情在岁月中，已经难辨真假……”</p>
+                <p>但你知道，他的故事还在继续。</p>
                 <div class="collect-notice theme-orange" style="border-color: #ff8c42;">
-    <span class="collect-star" style="color: #ff8c42;">鈽?/span>
-    <span>銆愭敹闆嗗埌銆戜竴棰楁槦鏄熺鐗?鈥滆繛鎺ョ殑璇佹嵁鈥?/span>
-    <span class="collect-star" style="color: #ff8c42;">鈽?/span>
+    <span class="collect-star" style="color: #ff8c42;">★</span>
+    <span>【收集到】一颗星星碎片 “连接的证据”</span>
+    <span class="collect-star" style="color: #ff8c42;">★</span>
 </div>
-                <p>绗洓棰楁槦宸茬偣浜€傛湁浜涜繛鎺ワ紝姣旀垜浠互涓虹殑鏇存棭灏卞湪閭ｉ噷銆?/p>
-                <button class="continue-btn" onclick="goToPlanet(5)">鍓嶅線涓嬩竴绔?/button>
+                <p>第四颗星已点亮。有些连接，比我们以为的更早就在那里。</p>
+                <button class="continue-btn" onclick="goToPlanet(5)">前往下一站</button>
             </div>
         </div>
     </section>
 
-    <!-- ========== 鎯呮劅鏄熺悆 ========== -->
+    <!-- ========== 情感星球 ========== -->
     <section class="page" id="pagePlanet5">
         <div class="container">
 			
-			<img src="./assets/images/tqinggan.png" 
-     alt="鎯呮劅鏄熺悆 路 娌夐粯鐨勬槦绌? 
+			<img src="http://m-birthday-music.test.upcdn.net/tqinggan.png" 
+     alt="情感星球 · 沉默的星空" 
      class="handwritten-title">
 	 
 	 <div class="tear-particles" id="tearParticles"></div>
 			
-			<!-- 鎻掔敾鍖猴細娉彔鏍?涓? 闀挎(涓? 绾告潯(鏁ｈ惤) -->
-            <!-- 鎯呮劅鏄熺悆澶村浘鍖哄煙锛氭儏鎰熻儗鏅?+ 娉彔鏍戙€佸涓嶈捣銆佹€呭繂濡傛灉 -->
+			<!-- 插画区：泪珠树(中) 长椅(下) 纸条(散落) -->
+            <!-- 情感星球头图区域：情感背景 + 泪珠树、对不起、怅忆如果 -->
 <div class="planet5-illustration">
-    <img src="./assets/images/duibuqi.png" alt="瀵逛笉璧? class="planet5-icon icon-left" id="sorryIcon">
-    <img src="./assets/images/leizhushu.png" alt="娉彔鏍? class="planet5-icon icon-middle" id="tearTreeIcon">
-    <img src="./assets/images/changyiruguo.png" alt="鎬呭繂濡傛灉" class="planet5-icon icon-right" id="memoryIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/duibuqi.png" alt="对不起" class="planet5-icon icon-left" id="sorryIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/leizhushu.png" alt="泪珠树" class="planet5-icon icon-middle" id="tearTreeIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/changyiruguo.png" alt="怅忆如果" class="planet5-icon icon-right" id="memoryIcon">
 </div>
             <div class="scene-card">
-                <p>浣犻檷钀藉湪绗簲涓槦鐞冦€傝繖閲岀殑澶╃┖寰堜綆锛屾繁钃濊壊鐨勭┕椤朵豢浣涜Е鎵嬪彲鍙娿€傛弧澶╃殑鏄熸槦涓嶅儚骞虫椂閭ｆ牱闂儊锛岃€屾槸浠ヤ竴绉嶆瀬鎱㈢殑閫熷害鏄庢殫浜ゆ浛锛屽儚鏌愮鍙よ€佺殑鍛煎惛銆備綘韪╁湪鍦伴潰涓婏紝鍙戠幇鑴氫笅涓嶆槸娉ュ湡锛岃€屾槸涓€鐗囨煍杞殑銆佷細娉涜捣娑熸吉鐨勬殫鑹叉按闈€傛瘡璧颁竴姝ワ紝姘撮潰涓嬪氨浼氭湁涓€閬撳厜杞昏交鎺犺繃锛屽儚鏄Е鍔ㄤ簡浠€涔堟矇鐫＄殑涓滆タ銆?/p>
-                <p>浣犺蛋浜嗕竴浼氬効锛屽彂鐜板湴涓婃暎钀界潃璁稿灏忕焊鏉°€傛湁浜涙槸鍙犺捣鏉ョ殑锛屾湁浜涜鎻夌毐浜嗗張灞曞钩锛屾湁浜涘共鑴嗘挄鎴愪簡纰庣墖銆備綘闅忔墜鎹¤捣涓€寮狅紝灞曞紑锛屼笂闈㈠彧鍐欑潃涓変釜瀛楋細</p>
-				<div class="paper-slip">鈥滃涓嶈捣鈥?/div>
-    <p>鍙︿竴寮犱笂鏄細</p>
-    <div class="paper-slip">鈥滄垜娌′簨鈥?/div>
-    <p>杩樻湁涓€寮狅紝鍙嶅娑傛敼杩囷紝鏈€鍚庡彧鍓╀笅涓€涓瘝锛?/p>
-    <div class="paper-slip">鈥溾€︹€︾畻浜嗏€?/div>
-	<p>瓒婂線鍓嶈蛋锛岃繖鏍风殑绾告潯瓒婂锛岄摵鎴愪竴鏉￠€氬線鏄熺悆涓績鐨勮矾銆?/p>
-                <p>璺殑灏藉ご锛屾槸涓€鐗囩┖鍦般€傜┖鍦颁笂绔嬬潃涓€妫靛鎬殑鏍戔€斺€旈摱鑹茬殑鏍戝共锛屾爲鏋濆悜鍥涢潰鍏柟浼稿睍锛屼絾姣忔牴鏋濇潯鐨勬湯绔兘鎸傜潃涓€棰楁唱鐝犲舰鐘剁殑鐭冲ご銆傞偅浜涚煶澶村湪鏄熷厜涓嬫硾鐫€寰厜锛屽儚琚嚌鍥虹殑鍙规伅銆傞鍚硅繃锛岀煶澶磋交杞荤鎾烇紝鍙戝嚭鏋佽交鐨勫０鍝嶏紝鍍忔槸鏌愮閬ヨ繙鐨勬棆寰嬨€?/p>
-                <p>鏍戜笅鏈変竴寮犻暱妞咃紝鏈ㄥご宸茬粡鏈変簺鏃т簡銆傞暱妞呬笂鏀剧潃涓€鏈炕寮€鐨勬湰瀛愶紝鏃佽竟鎼佺潃涓€鏀瑪銆傛湰瀛愮殑绗竴椤典笂鍐欑潃锛?/p>
+                <p>你降落在第五个星球。这里的天空很低，深蓝色的穹顶仿佛触手可及。满天的星星不像平时那样闪烁，而是以一种极慢的速度明暗交替，像某种古老的呼吸。你踩在地面上，发现脚下不是泥土，而是一片柔软的、会泛起涟漪的暗色水面。每走一步，水面下就会有一道光轻轻掠过，像是触动了什么沉睡的东西。</p>
+                <p>你走了一会儿，发现地上散落着许多小纸条。有些是叠起来的，有些被揉皱了又展平，有些干脆撕成了碎片。你随手捡起一张，展开，上面只写着三个字：</p>
+				<div class="paper-slip">“对不起”</div>
+    <p>另一张上是：</p>
+    <div class="paper-slip">“我没事”</div>
+    <p>还有一张，反复涂改过，最后只剩下一个词：</p>
+    <div class="paper-slip">“……算了”</div>
+	<p>越往前走，这样的纸条越多，铺成一条通往星球中心的路。</p>
+                <p>路的尽头，是一片空地。空地上立着一棵奇怪的树——银色的树干，树枝向四面八方伸展，但每根枝条的末端都挂着一颗泪珠形状的石头。那些石头在星光下泛着微光，像被凝固的叹息。风吹过，石头轻轻碰撞，发出极轻的声响，像是某种遥远的旋律。</p>
+                <p>树下有一张长椅，木头已经有些旧了。长椅上放着一本翻开的本子，旁边搁着一支笔。本子的第一页上写着：</p>
                 <div class="fox-note">
-                    鈥滀粬涓嶄細鍚垫灦銆備粠灏忓埌澶э紝浠栭兘娌″浼氭€庝箞鍦ㄥ啿绐佷腑淇濇姢鑷繁銆傚埆浜哄０闊充竴澶э紝浠栧氨娌夐粯锛涘埆浜轰竴鎸囪矗锛屼粬灏卞悗閫€锛涘埆浜轰竴鏈熷緟锛屼粬灏辨嫾鍛姐€備粬瑙夊緱璇村嚭鏉ョ殑璇濅細浼や汉锛屾墍浠ュ畞鎰垮捊鍥炲幓銆傚捊鍥炲幓鐨勯偅浜涜瘽锛屽彉鎴愬徆姘旓紝鍙樻垚澶辩湢锛屽彉鎴愪竴涓汉鍧愮潃鍙戝憜鐨勬繁澶溿€備粬涓嶇煡閬撶殑鏄€斺€旀湁浜涜瘽鍜藉洖鍘伙紝浼ょ殑鍏跺疄鏄嚜宸便€傗€?
+                    “他不会吵架。从小到大，他都没学会怎么在冲突中保护自己。别人声音一大，他就沉默；别人一指责，他就后退；别人一期待，他就拼命。他觉得说出来的话会伤人，所以宁愿咽回去。咽回去的那些话，变成叹气，变成失眠，变成一个人坐着发呆的深夜。他不知道的是——有些话咽回去，伤的其实是自己。”
                 </div>
-                <p>浣犵炕寮€鏈瓙锛岄噷闈㈣褰曠潃涓€浜涚墖娈碉細</p>
+                <p>你翻开本子，里面记录着一些片段：</p>
                 <div class="notebook-page">
-        2019.3.17 浠婂ぉ鍙堟病璇村嚭閭ｅ彞璇濄€傜畻浜嗭紝濂瑰簲璇ユ噦銆?br>
-        2021.8.22 浠栧ソ鍍忕敓姘斾簡锛屾垜涓嶇煡閬撴€庝箞瑙ｉ噴銆傚厛娑堝け鍑犲ぉ鍚с€?br>
-        2023.5.9 鎯虫墦涓數璇濓紝鎵撲簡鍙堟寕銆傝浠€涔堝憿锛屽張涓嶈兘璇寸湡璇濄€?br>
+        2019.3.17 今天又没说出那句话。算了，她应该懂。<br>
+        2021.8.22 他好像生气了，我不知道怎么解释。先消失几天吧。<br>
+        2023.5.9 想打个电话，打了又挂。说什么呢，又不能说真话。<br>
     </div>
-    <p>鏈€鍚庤繖涓€椤碉紝鏃ユ湡寰堣繎銆備笂闈㈠彧鏈変竴琛屽瓧锛屽瓧杩规湁浜涙溅鑽夛細</p>
-    <div class="notebook-page">鈥滃鏋滄湁涓€澶╋紝鏈変汉闂垜鈥樹綘鍒板簳鍦ㄦ兂浠€涔堚€欙紝鎴戝笇鏈涜兘璇村嚭閭ｄ釜璇嶃€傗€?/div>
-                <p>鏈瓙鐨勬渶鍚庝竴椤碉紝璐寸潃涓€寮犵焊鏉★紝涓婇潰鏄竴涓棶棰樸€傜焊鏉′笅闈㈡湁鍑犱釜閫夐」銆?/p>
+    <p>最后这一页，日期很近。上面只有一行字，字迹有些潦草：</p>
+    <div class="notebook-page">“如果有一天，有人问我‘你到底在想什么’，我希望能说出那个词。”</div>
+                <p>本子的最后一页，贴着一张纸条，上面是一个问题。纸条下面有几个选项。</p>
             </div>
 
             <div id="puzzle5" class="puzzle-area">
-                <div class="question">鈥滀粬鍙规皵鐨勬椂鍊欙紝鍏跺疄鏈€鎯宠鍑哄彛鐨勬槸______锛熲€?/div>
+                <div class="question">“他叹气的时候，其实最想说出口的是______？”</div>
                 <div class="options">
-                    <div class="option-btn" onclick="selectOption(this, 'A')">A. 鎴戠疮浜?/div>
-                    <div class="option-btn" onclick="selectOption(this, 'B')">B. 甯府鎴?/div>
-                    <div class="option-btn" onclick="selectOption(this, 'C')">C. 鍒蛋</div>
-                    <div class="option-btn" onclick="selectOption(this, 'D')">D. 瀵逛笉璧?/div>
+                    <div class="option-btn" onclick="selectOption(this, 'A')">A. 我累了</div>
+                    <div class="option-btn" onclick="selectOption(this, 'B')">B. 帮帮我</div>
+                    <div class="option-btn" onclick="selectOption(this, 'C')">C. 别走</div>
+                    <div class="option-btn" onclick="selectOption(this, 'D')">D. 对不起</div>
                 </div>
-                <button class="submit-btn" onclick="checkPlanet5()" id="planet5Submit" disabled>鎻愪氦绛旀</button>
+                <button class="submit-btn" onclick="checkPlanet5()" id="planet5Submit" disabled>提交答案</button>
             </div>
 
             <div id="story5" class="success-story hidden">
-                <p>浣犻€夋嫨浜嗏€滃埆璧扳€濄€?/p>
-                <p>璇濋煶鍒氳惤锛屾暣妫垫爲鐨勬唱鐝犵煶鍚屾椂浜捣銆傚畠浠笉鍐嶆槸鎮蹭激鐨勬ā鏍凤紝鑰屾槸鍙樺緱閫忔槑銆佹俯鏆栵紝鍍忎竴棰楅灏忓皬鐨勬湀浜€傜煶澶磋交杞绘憞鏅冿紝鐩镐簰纰版挒锛屽彂鍑轰竴杩炰覆娓呰剢鐨勫０闊斥€斺€旈偅澹伴煶娓愭笎杩炴垚涓€娈垫棆寰嬶紝浣犲惉鍑烘潵浜嗭紝鏄煇棣栨瓕鐨勫墠濂忥紝閭ｉ浠栨浘缁忓湪娣卞鍗曟洸寰幆杩囩殑姝屻€?/p>
-                <p>闀挎涓婄殑鏈瓙鑷姩缈婚〉锛屼竴椤甸〉蹇€熸帬杩囷紝鏈€鍚庡仠鍦ㄦ煇涓€椤点€傝繖涓€椤典笂锛屾墍鏈夌殑瀛楄抗绐佺劧娲讳簡杩囨潵锛屽儚琚敞鍏ヤ簡鐢熷懡锛屼粠绾镐笂椋樿捣鏉ワ紝鍦ㄧ┖涓粍鎴愪竴涓敾闈細</p>
-                <p>鏄粬锛岀珯鍦ㄦ煇涓啛鎮夌殑鍦版柟銆備粬鑳屽鐫€闀滃ご锛岃偐鑶€寰井棰ゆ姈銆備竴涓ā绯婄殑浜哄奖璧拌繃鏉ワ紝娌℃湁璇翠换浣曡瘽锛屽彧鏄湪浠栬韩鍚庣珯鐫€锛岀劧鍚庤交杞绘妸鎵嬫斁鍦ㄤ粬鑳屼笂銆?/p>
+                <p>你选择了“别走”。</p>
+                <p>话音刚落，整棵树的泪珠石同时亮起。它们不再是悲伤的模样，而是变得透明、温暖，像一颗颗小小的月亮。石头轻轻摇晃，相互碰撞，发出一连串清脆的声音——那声音渐渐连成一段旋律，你听出来了，是某首歌的前奏，那首他曾经在深夜单曲循环过的歌。</p>
+                <p>长椅上的本子自动翻页，一页页快速掠过，最后停在某一页。这一页上，所有的字迹突然活了过来，像被注入了生命，从纸上飘起来，在空中组成一个画面：</p>
+                <p>是他，站在某个熟悉的地方。他背对着镜头，肩膀微微颤抖。一个模糊的人影走过来，没有说任何话，只是在他身后站着，然后轻轻把手放在他背上。</p>
 				<div class="illustration-area">
-                    <img src="./assets/images/beiying.png" alt="浠栫殑鑳屽奖" class="illustration-img" style="width: 100%; max-width: 250px; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
+                    <img src="http://m-birthday-music.test.upcdn.net/beiying.png" alt="他的背影" class="illustration-img" style="width: 100%; max-width: 250px; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
                 </div>
-                <p>鐢婚潰閲岀殑浠栨參鎱㈣浆杩囪韩锛岀湅鐫€閭ｄ釜浜猴紝鍢村攪鍔ㄤ簡鍔紝鍍忚璇翠粈涔堛€備絾鏈€缁堬紝浠栧彧鍙逛簡鍙ｆ皵銆?/p>
-                <p>浣嗚繖涓€娆★紝鍙规皵閲屾湁浜嗗埆鐨勪笢瑗库€斺€斾笉鏄棤濂堬紝鏄竴绉嶁€滆繕濂戒綘鍦ㄢ€濈殑閲婄劧銆?/p>
-                <p>绌轰腑浼犳潵浠栫殑澹伴煶锛屽緢杞伙紝鍍忔€曟儕鍔ㄤ粈涔堬細</p>
-                <div class="dialogue">鈥滀綘鐭ラ亾鍚楋紝姣忔鎴戝徆姘旓紝蹇冮噷閮藉湪璇翠竴鍙ヨ瘽銆備絾鎴戜粠鏉ユ病鐪熺殑璇村嚭鍙ｃ€傛垜鎬曡鍑烘潵锛屽氨鏄惧緱鎴戝お闇€瑕佷簡锛屽お寮变簡锛屽お鈥︹€︿笉鍍忛偅涓€樺簲璇ヤ粈涔堥兘鑳芥悶瀹氣€欑殑鎴戙€傗€?/div>
-                <p>鐢婚潰閲岋紝浠栨姮璧锋墜锛岀姽璞簡涓€涓嬶紝鐒跺悗杞昏交鎻′綇浜嗛偅鍙斁鍦ㄤ粬鑳屼笂鐨勬墜銆?/p>
-                <div class="dialogue">鈥滀絾鎴戝悗鏉ュ彂鐜帮紝鏈変竴涓汉锛屽氨绠楁垜涓嶈锛屽ス涔熸噦銆傚ス浠庝笉閫兼垜璇达紝鍙槸绛夈€傜瓑鎴戞矇榛樺畬锛岀瓑鎴戝徆瀹屾皵锛岀瓑鎴戝噯澶囧ソ銆傛湁鏃跺€欐垜娑堝け鍑犲ぉ锛屽洖鏉ヤ竴鐪嬶紝濂硅繕鍦ㄣ€傗€?/div>
-                <p>浠栦綆涓嬪ご锛屽０闊虫湁鐐瑰搼锛?/p>
-                <div class="dialogue">鈥滈偅鍑犳锛屾垜蹇冮噷鍏跺疄閮藉湪鍠娾€斺€斿埆璧般€備絾鎴戝枈涓嶅嚭鏉ャ€傛垜鍙兘鐢ㄦ矇榛樿鈥樺涓嶈捣鈥欙紝鐢ㄥ徆姘旇鈥樻垜寰堢疮鈥欙紝鐢ㄦ秷澶辫鈥樹綘杩樹細鍦ㄥ悧鈥欍€傗€?/div>
-                <p>鐢婚潰鎱㈡參娑堟暎锛屾墍鏈夌殑鍏夌偣閲嶆柊鍑濊仛锛岃惤鍦ㄩ暱妞呬笂锛屽彉鎴愪竴棰楀彂鍏夌殑鏄熸槦纰庣墖銆備綘鎷胯捣瀹冿紝涓婇潰鍒荤潃涓€琛屽皬瀛楋細</p>
-				<div class="engraved-fragment theme-pink" style="border-color: #ffb6c1; color: #ffb6c1;">鈥滄瘡娆″徆姘旇儗鍚庯紝閮借棌鐫€涓€鍙モ€樺埆璧扳€欍€傛湁浜哄惉鎳備簡锛屾墍浠ヤ竴鐩村湪銆傗€?/div>
-                <p>绗簲棰楁槦鏄熺偣浜簡銆傛爲涓婄殑娉彔鐭充笉鍐嶆憞鏅冿紝鑰屾槸闈欓潤鍦颁寒鐫€锛屽儚涓€鐩忕洀娓╂殩鐨勭伅锛岀収浜簡杩欑墖鏇剧粡娌夐粯鐨勬槦绌恒€?/p>
+                <p>画面里的他慢慢转过身，看着那个人，嘴唇动了动，像要说什么。但最终，他只叹了口气。</p>
+                <p>但这一次，叹气里有了别的东西——不是无奈，是一种“还好你在”的释然。</p>
+                <p>空中传来他的声音，很轻，像怕惊动什么：</p>
+                <div class="dialogue">“你知道吗，每次我叹气，心里都在说一句话。但我从来没真的说出口。我怕说出来，就显得我太需要了，太弱了，太……不像那个‘应该什么都能搞定’的我。”</div>
+                <p>画面里，他抬起手，犹豫了一下，然后轻轻握住了那只放在他背上的手。</p>
+                <div class="dialogue">“但我后来发现，有一个人，就算我不说，她也懂。她从不逼我说，只是等。等我沉默完，等我叹完气，等我准备好。有时候我消失几天，回来一看，她还在。”</div>
+                <p>他低下头，声音有点哑：</p>
+                <div class="dialogue">“那几次，我心里其实都在喊——别走。但我喊不出来。我只能用沉默说‘对不起’，用叹气说‘我很累’，用消失说‘你还会在吗’。”</div>
+                <p>画面慢慢消散，所有的光点重新凝聚，落在长椅上，变成一颗发光的星星碎片。你拿起它，上面刻着一行小字：</p>
+				<div class="engraved-fragment theme-pink" style="border-color: #ffb6c1; color: #ffb6c1;">“每次叹气背后，都藏着一句‘别走’。有人听懂了，所以一直在。”</div>
+                <p>第五颗星星点亮了。树上的泪珠石不再摇晃，而是静静地亮着，像一盏盏温暖的灯，照亮了这片曾经沉默的星空。</p>
                 <div class="collect-notice theme-pink" style="border-color: #ffb6c1;">
-    <span class="collect-star" style="color: #ffb6c1;">鈽?/span>
-    <span>銆愭敹闆嗗埌銆戜竴棰楁槦鏄熺鐗?鈥滄湭璇村嚭鍙ｇ殑娓╂煍鈥?/span>
-    <span class="collect-star" style="color: #ffb6c1;">鈽?/span>
+    <span class="collect-star" style="color: #ffb6c1;">★</span>
+    <span>【收集到】一颗星星碎片 “未说出口的温柔”</span>
+    <span class="collect-star" style="color: #ffb6c1;">★</span>
 </div>
-                <p>绗簲棰楁槦宸茬偣浜€傛湁浜涜瘽锛屼笉璇达紝涔熸湁浜烘噦銆?/p>
-                <button class="continue-btn" onclick="goToPlanet(6)">鍓嶅線涓嬩竴绔?/button>
+                <p>第五颗星已点亮。有些话，不说，也有人懂。</p>
+                <button class="continue-btn" onclick="goToPlanet(6)">前往下一站</button>
             </div>
         </div>
     </section>
 
-    <!-- ========== 鏈潵鏄熺悆 ========== -->
+    <!-- ========== 未来星球 ========== -->
     <section class="page" id="pagePlanet6">
         <div class="container">
 			
-			<img src="./assets/images/tweilai.png" 
-     alt="鏈潵鏄熺悆 路 绛夊緟鍙戣娊鐨勭瀛? 
+			<img src="http://m-birthday-music.test.upcdn.net/tweilai.png" 
+     alt="未来星球 · 等待发芽的种子" 
      class="handwritten-title">
 	 
 	 <div class="seed-particles" id="seedParticles"></div>
 			
-			<!-- 鏈潵鏄熺悆澶村浘鍖哄煙锛氭湭鏉ユ槦鐞冭儗鏅?+ 琛ㄦ儏鍖呮爲銆佺埍瀛︿範銆乮Pad -->
+			<!-- 未来星球头图区域：未来星球背景 + 表情包树、爱学习、iPad -->
 <div class="planet6-illustration">
-    <img src="./assets/images/aixuexi.png" alt="鐖卞涔? class="planet6-icon icon-left" id="studyIcon">
-    <img src="./assets/images/biaoqingbaoshu.png" alt="琛ㄦ儏鍖呮爲" class="planet6-icon icon-middle" id="treeIcon">
-    <img src="./assets/images/ipad.png" alt="iPad" class="planet6-icon icon-right" id="ipadIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/aixuexi.png" alt="爱学习" class="planet6-icon icon-left" id="studyIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/biaoqingbaoshu.png" alt="表情包树" class="planet6-icon icon-middle" id="treeIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/ipad.png" alt="iPad" class="planet6-icon icon-right" id="ipadIcon">
 </div>
 			
             <div class="scene-card">
-                <p>浣犻檷钀藉湪绗叚涓槦鐞冦€傝繖閲岀殑澶╃┖鏄竴绉嶆俯鏌旂殑鐏拌摑鑹诧紝鍍忛粠鏄庡墠鎴栭粍鏄忓悗锛屼粙浜庡厜鏄庝笌榛戞殫涔嬮棿銆傚湴闈笂閾烘弧浜嗘煍杞殑鑻旇棑锛岃俯涓婂幓浼氱暀涓嬫祬娴呯殑鑴氬嵃锛屼絾寰堝揩鍙堟仮澶嶅師鐘躲€傝繙澶勬湁涓€妫靛法澶х殑鏍戯紝鏍戝啝鍍忎竴鎶婃拺寮€鐨勪紴锛屾爲骞蹭笂鎸傛弧浜嗗悇绉嶅鎬殑涓滆タ鈥斺€旈紶鏍囥€侀敭鐩樸€佷竴鏈炕寮€鐨勪功銆佷竴鏉枬浜嗕竴鍗婄殑鍜栧暋銆佽繕鏈夊嚑涓〃鎯呭寘鎵撳嵃鎴愮殑鎸備欢锛屾尋鐪夊紕鐪煎湴鏅冩潵鏅冨幓銆?/p>
-                <p>浣犺蛋杩戦偅妫垫爲锛屽彂鐜版爲鏍瑰鍫嗙潃涓€鍙犲彔鐨勭瑪璁版湰锛屾湁浜涘皝闈㈠啓鐫€鈥淎I瀛︿範绗旇鈥濓紝鏈変簺鍐欑潃鈥滃壇涓氭兂娉曗€濓紝浣嗙炕寮€涓€鐪嬶紝澶у鍙浜嗗紑澶村嚑椤碉紝鍚庨潰鍏ㄦ槸绌虹櫧銆傜瑪璁版湰鏃佽竟鏄竴涓钩鏉跨數鑴戯紝灞忓箷鍋滅暀鍦˙绔欑殑鏀惰棌澶归〉闈紝涓婇潰瀵嗗瘑楹婚夯鏀掍簡鍑犲崄涓棰戯細銆婃繁搴﹀涔犲叆闂ㄣ€嬨€婂浣曠敤AI璧氶挶銆嬨€婁笅鐝悗鑳藉仛鐨勫皬鍓笟銆嬧€︹€︽挱鏀捐繘搴︽潯閮藉仠鍦ㄥ墠涓夊垎閽熴€?/p>
-                <p>骞虫澘涓嬮潰鍘嬬潃涓€寮犵焊鏉★紝鏄粬鑷繁鐨勭瑪杩癸細</p>
-				<div class="sticky-note">鈥滄敹钘忎簡=瀛︿簡銆傗€︹€﹁嚦灏戝績閲岃笍瀹炰簡涓€鐐广€傗€?/div>
-                <p>浣犲繊涓嶄綇绗戜簡锛屼絾鍙堣寰楁湁鐐瑰績閰搞€?/p>
-                <p>鏍戝共涓婃湁涓€鍧楁樉绀哄睆锛屽睆骞曢噷寰幆鎾斁鐫€涓€浜涚敾闈細浠栧湪娣卞鎵撳紑涓€涓敹钘忓す锛岀偣寮€瑙嗛鐪嬩簲鍒嗛挓锛岀劧鍚庤宸ヤ綔娑堟伅鎵撴柇锛涗粬鍒峰埌鏌愪釜鈥滃壇涓氭湀鍏ヤ笁涓団€濈殑甯栧瓙锛岄粯榛樺瓨杩涙敹钘忓す锛涗粬鍜屾湅鍙嬭亰澶╂椂璇粹€滅瓑鎴戜互鍚庢湁閽变簡澶╁ぉ鎵撴娓糕€濓紝浣嗚浆澶村張鎵撳紑閭ｆ湰AI涔︺€傜敾闈㈡梺杈规湁涓€琛屽瓧锛?/p>
+                <p>你降落在第六个星球。这里的天空是一种温柔的灰蓝色，像黎明前或黄昏后，介于光明与黑暗之间。地面上铺满了柔软的苔藓，踩上去会留下浅浅的脚印，但很快又恢复原状。远处有一棵巨大的树，树冠像一把撑开的伞，树干上挂满了各种奇怪的东西——鼠标、键盘、一本翻开的书、一杯喝了一半的咖啡、还有几个表情包打印成的挂件，挤眉弄眼地晃来晃去。</p>
+                <p>你走近那棵树，发现树根处堆着一叠叠的笔记本，有些封面写着“AI学习笔记”，有些写着“副业想法”，但翻开一看，大多只记了开头几页，后面全是空白。笔记本旁边是一个平板电脑，屏幕停留在B站的收藏夹页面，上面密密麻麻攒了几十个视频：《深度学习入门》《如何用AI赚钱》《下班后能做的小副业》……播放进度条都停在前三分钟。</p>
+                <p>平板下面压着一张纸条，是他自己的笔迹：</p>
+				<div class="sticky-note">“收藏了=学了。……至少心里踏实了一点。”</div>
+                <p>你忍不住笑了，但又觉得有点心酸。</p>
+                <p>树干上有一块显示屏，屏幕里循环播放着一些画面：他在深夜打开一个收藏夹，点开视频看五分钟，然后被工作消息打断；他刷到某个“副业月入三万”的帖子，默默存进收藏夹；他和朋友聊天时说“等我以后有钱了天天打桌游”，但转头又打开那本AI书。画面旁边有一行字：</p>
                 <div class="fox-note">
-                    鈥滀粬鎬昏鑷繁鎯抽€€浼戯紝鎯宠汉骞筹紝鎯冲ぉ澶╃帺娓告垙銆備絾浠栦笉鏄笉鎯冲姫鍔涳紝浠栧彧鏄お绱簡鈥斺€旂疮鍒拌繛鈥樺紑濮嬧€欓兘鍙樻垚涓€绉嶅帇鍔涖€傚彲閭ｄ釜鈥樹竾涓€鍛⑩€欑殑蹇靛ご锛屽張涓€鐩村湪閭ｉ噷锛屽儚涓€棰楀煁鍦ㄥ湡閲岃繕娌″彂鑺界殑绉嶅瓙锛岀瓑鐫€鍝ぉ鏈夐槼鍏夈€佹湁姘淬€佹湁涓€鐐瑰浣欑殑鏃堕棿锛屽氨鎮勬倓鐮村湡銆傗€?
+                    “他总说自己想退休，想躺平，想天天玩游戏。但他不是不想努力，他只是太累了——累到连‘开始’都变成一种压力。可那个‘万一呢’的念头，又一直在那里，像一颗埋在土里还没发芽的种子，等着哪天有阳光、有水、有一点多余的时间，就悄悄破土。”
                 </div>
-                <p>鏄剧ず灞忎笅鏂癸紝鏈変竴鎺掑皬灏忕殑鎸夐挳锛屾瘡涓寜閽笂鏈変竴涓瘝銆傛梺杈瑰啓鐫€涓€琛屽瓧锛?/p>
-				<div class="screen-display">鈥滈偅棰楃瀛愶紝鍏跺疄鏃╁氨绉嶄笅浜嗐€傚畠鍦ㄧ瓑浠栬鍑洪偅涓瘝銆傗€?/div>
+                <p>显示屏下方，有一排小小的按钮，每个按钮上有一个词。旁边写着一行字：</p>
+				<div class="screen-display">“那颗种子，其实早就种下了。它在等他说出那个词。”</div>
             </div>
 
             <div id="puzzle6" class="puzzle-area">
-                <div class="question">鈥滀粬蹇冮噷鐪熸鎯虫垚涓虹殑锛屾槸______锛熲€?/div>
+                <div class="question">“他心里真正想成为的，是______？”</div>
                 <div class="options">
-                    <div class="option-btn" onclick="selectOption(this, 'A')">A. 鑳借汉骞崇殑浜?/div>
-                    <div class="option-btn" onclick="selectOption(this, 'B')">B. 鑳借禋閽辩殑浜?/div>
-                    <div class="option-btn" onclick="selectOption(this, 'C')">C. 鏈夋洿澶氶€夋嫨鐨勪汉</div>
+                    <div class="option-btn" onclick="selectOption(this, 'A')">A. 能躺平的人</div>
+                    <div class="option-btn" onclick="selectOption(this, 'B')">B. 能赚钱的人</div>
+                    <div class="option-btn" onclick="selectOption(this, 'C')">C. 有更多选择的人</div>
                 </div>
-                <button class="submit-btn" onclick="checkPlanet6()" id="planet6Submit" disabled>鎻愪氦绛旀</button>
+                <button class="submit-btn" onclick="checkPlanet6()" id="planet6Submit" disabled>提交答案</button>
             </div>
 
             <div id="story6" class="success-story hidden">
-                <p>浣犳寜涓嬩簡鈥滄湁鏇村閫夋嫨鐨勪汉鈥濄€?/p>
-                <p>璇濋煶鍒氳惤锛屾暣妫垫爲绐佺劧瀹夐潤涓嬫潵銆傞偅浜涙檭鍔ㄧ殑琛ㄦ儏鍖呮寕浠跺仠姝簡鎽囨憜锛屽睆骞曚笂鐨勬敹钘忓す椤甸潰鑷姩鍏抽棴锛岀瑪璁版湰杞昏交鍚堜笂銆傜劧鍚庯紝鏍戝共涓婁寒璧锋棤鏁扮粏灏忕殑鍏夌偣锛屽儚钀ょ伀铏竴鏍风紦缂撻璧凤紝鍦ㄧ┖涓眹鑱氭垚涓€骞呯敾闈細</p>
-                <p>鏄粬锛屽潗鍦ㄦ煇涓畨闈欑殑鍗堝悗銆傞槼鍏夐€忚繃绐楁埛鐓ц繘鏉ワ紝浠栭潰鍓嶇殑妗屼笂鎽婄潃涓€鏈瑪璁帮紝浣嗚繖涓€娆★紝浠栦笉鏄彧鍐欎簡鍑犺銆備粬姝ｅ湪璁ょ湡鍦扮敾鐫€浠€涔堚€斺€斾笉鏄唬鐮侊紝涓嶆槸鍏紡锛岃€屾槸涓€寮犳湭鏉ヨ鍒掑浘銆傚浘涓婃湁涓€鏉′富绾匡紝鏄幇鍦ㄧ殑涓讳笟锛涙梺杈瑰垎鍑哄嚑鏉¤櫄绾匡紝鍐欑潃鈥淎I鍓笟鈥濄€佲€滄娓稿簵鍚堜紮浜衡€濄€佲€滃鐐规柊涓滆タ鈥濄€備粬娌℃湁鏀惧純浠讳綍涓€鏉★紝鍙槸鍦ㄦ參鎱㈢敾锛屾參鎱㈡兂銆?/p>
+                <p>你按下了“有更多选择的人”。</p>
+                <p>话音刚落，整棵树突然安静下来。那些晃动的表情包挂件停止了摇摆，屏幕上的收藏夹页面自动关闭，笔记本轻轻合上。然后，树干上亮起无数细小的光点，像萤火虫一样缓缓飞起，在空中汇聚成一幅画面：</p>
+                <p>是他，坐在某个安静的午后。阳光透过窗户照进来，他面前的桌上摊着一本笔记，但这一次，他不是只写了几行。他正在认真地画着什么——不是代码，不是公式，而是一张未来规划图。图上有一条主线，是现在的主业；旁边分出几条虚线，写着“AI副业”、“桌游店合伙人”、“学点新东西”。他没有放弃任何一条，只是在慢慢画，慢慢想。</p>
                 <div class="illustration-area">
-                    <img src="./assets/images/jihua.png" alt="浠栫敾鏈潵瑙勫垝鍥? class="illustration-img" style="width: 100%; max-width: 250px; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
+                    <img src="http://m-birthday-music.test.upcdn.net/jihua.png" alt="他画未来规划图" class="illustration-img" style="width: 100%; max-width: 250px; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
                 </div>
-				<p>鐢婚潰閲岀殑浠栨姮璧峰ご锛屽鐫€鏌愪釜鐪嬩笉瑙佺殑浜鸿锛?/p>
-                <div class="dialogue">鈥滀綘鐭ラ亾鍚楋紝鎴戝叾瀹炰笉鎬曠疮銆傛垜鎬曠殑鏄疮浜嗕箣鍚庯紝杩樻槸鍙兘绔欏湪鍘熷湴銆傛墍浠ユ垜鎵嶆敹钘忛偅浜涗笢瑗匡紝鐪嬮偅浜涜棰戯紝鎯抽偅浜涒€樹竾涓€鈥欍€備笉鏄垜鐪熺殑鏈夌簿鍔涘幓鍋氾紝鏄垜鎯冲憡璇夎嚜宸扁€斺€旀垜杩樻湁璺彲浠ラ€夛紝鎴戜笉鏄鍥颁綇鐨勩€傗€?/div>
-                <p>浠栫瑧浜嗙瑧锛岄偅绉嶅甫鐫€鐐圭柌鎯絾渚濈劧娓╂煍鐨勭瑧锛?/p>
-                <div class="dialogue">鈥滅瓑鎴戞敀澶熶竴鐐规椂闂达紝涓€鐐瑰姏姘旓紝鎴戝氨浠庨偅浜涙敹钘忛噷鎸戜竴涓紝璁ょ湡璇曚竴璇曘€備笉鏄负浜嗗彂璐紝涓嶆槸涓轰簡瓒呰繃璋併€傚彧鏄€︹€︽兂鐪嬬湅锛岄櫎浜嗙幇鍦ㄧ殑鎴戯紝杩樿兘涓嶈兘鍙樻垚鍙︿竴涓垜銆傗€?/div>
-                <p>鐢婚潰缂撶紦娣″嚭锛屾墍鏈夊厜鐐归噸鏂板嚌鑱氾紝钀借繘鏍戜笅涓€涓皬灏忕殑鐩掑瓙閲屻€備綘鎵撳紑鐩掑瓙锛岄噷闈㈡槸涓€棰楀彂鍏夌殑鏄熸槦纰庣墖锛屽舰鐘跺儚涓€棰楀垰鐮村湡鐨勫鑺姐€備笂闈㈠埢鐫€涓€琛屽皬瀛楋細</p>
-				<div class="engraved-fragment theme-spring" style="border-color: #9acd32; color: #9acd32;">鈥滀粬鏀惰棌鐨勪笉鏄棰戯紝鏄€樻湭鏉ヨ繕鏈夊彲鑳解€欑殑璇佹槑銆傗€?/div>
-                <p>绗叚棰楁槦鏄熺偣浜簡銆傛暣妫垫爲寮€濮嬪彂鍏夛紝閭ｄ簺鍘熸湰鍙槸鎸傜潃鐨勭瑪璁版湰銆佸钩鏉裤€佽〃鎯呭寘锛岄兘鏌撲笂浜嗘俯鏆栫殑鑹插僵銆傞鍚硅繃锛屾爲鍙舵矙娌欎綔鍝嶏紝鍍忓湪璇达細鎱㈡參鏉ワ紝涓嶆€ャ€?/p>
+				<p>画面里的他抬起头，对着某个看不见的人说：</p>
+                <div class="dialogue">“你知道吗，我其实不怕累。我怕的是累了之后，还是只能站在原地。所以我才收藏那些东西，看那些视频，想那些‘万一’。不是我真的有精力去做，是我想告诉自己——我还有路可以选，我不是被困住的。”</div>
+                <p>他笑了笑，那种带着点疲惫但依然温柔的笑：</p>
+                <div class="dialogue">“等我攒够一点时间，一点力气，我就从那些收藏里挑一个，认真试一试。不是为了发财，不是为了超过谁。只是……想看看，除了现在的我，还能不能变成另一个我。”</div>
+                <p>画面缓缓淡出，所有光点重新凝聚，落进树下一个小小的盒子里。你打开盒子，里面是一颗发光的星星碎片，形状像一颗刚破土的嫩芽。上面刻着一行小字：</p>
+				<div class="engraved-fragment theme-spring" style="border-color: #9acd32; color: #9acd32;">“他收藏的不是视频，是‘未来还有可能’的证明。”</div>
+                <p>第六颗星星点亮了。整棵树开始发光，那些原本只是挂着的笔记本、平板、表情包，都染上了温暖的色彩。风吹过，树叶沙沙作响，像在说：慢慢来，不急。</p>
                 <div class="collect-notice theme-spring" style="border-color: #9acd32;">
-    <span class="collect-star" style="color: #9acd32;">鈽?/span>
-    <span>銆愭敹闆嗗埌銆戜竴棰楁槦鏄熺鐗?鈥滄湭鏉ョ殑绉嶅瓙鈥?/span>
-    <span class="collect-star" style="color: #9acd32;">鈽?/span>
+    <span class="collect-star" style="color: #9acd32;">★</span>
+    <span>【收集到】一颗星星碎片 “未来的种子”</span>
+    <span class="collect-star" style="color: #9acd32;">★</span>
 </div>
-                <p>绗叚棰楁槦宸茬偣浜€傛湁浜涚瀛愶紝鍩嬪湪鍦熼噷涔呬竴鐐癸紝鍙槸涓轰簡灏嗘潵闀垮緱鏇寸ǔ銆?/p>
-                <button class="continue-btn" onclick="goToPlanet(7)">鍓嶅線缁撳眬</button>
+                <p>第六颗星已点亮。有些种子，埋在土里久一点，只是为了将来长得更稳。</p>
+                <button class="continue-btn" onclick="goToPlanet(7)">前往结局</button>
             </div>
         </div>
     </section>
 
-    <!-- ========== 缁撳眬椤?========== -->
+    <!-- ========== 结局页 ========== -->
     <section class="page" id="pageFinal">
         <div class="container">
 			
-			<img src="./assets/images/tjieju.png" 
-     alt="浠栨槸浠€涔堟牱鐨勪汉" 
+			<img src="http://m-birthday-music.test.upcdn.net/tjieju.png" 
+     alt="他是什么样的人" 
      class="handwritten-title">
 	 
 	 <div class="final-particles" id="finalParticles"></div>
 			
-			<!-- 缁撳眬椤靛ご鍥惧尯鍩燂細楹︾敯鑳屾櫙 + 鐭虫澘銆佽儗鍖呫€侀暅瀛?-->
+			<!-- 结局页头图区域：麦田背景 + 石板、背包、镜子 -->
 <div class="final-illustration">
-    <img src="./assets/images/shiban.png" alt="鐭虫澘" class="final-icon icon-middle" id="stoneSlabIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/shiban.png" alt="石板" class="final-icon icon-middle" id="stoneSlabIcon">
     <span class="bag-wrapper" style="position: absolute; left: 5%; top: 50%; transform: translateY(-50%); width: 80px; height: auto;">
-    <img src="./assets/images/beibao.png" alt="鑳屽寘" class="final-icon icon-left" id="bagIcon" style="width: 100%; height: auto; display: block;">
+    <img src="http://m-birthday-music.test.upcdn.net/beibao.png" alt="背包" class="final-icon icon-left" id="bagIcon" style="width: 100%; height: auto; display: block;">
 </span>
-    <img src="./assets/images/jiejujingzi.png" alt="闀滃瓙" class="final-icon icon-right" id="mirrorIconFinal">
+    <img src="http://m-birthday-music.test.upcdn.net/jiejujingzi.png" alt="镜子" class="final-icon icon-right" id="mirrorIconFinal">
 </div>
-<div class="view-collect-hint">鉁?鐐瑰嚮鍙充笂瑙掓槦鏄熸煡鐪嬫槦鍥炬敹闆嗗唽锛屽鏋滀綘鎯冲啀娆℃煡鐪嬫煇涓€椤碉紝鍙互鍦ㄦ敹闆嗗唽涓偣鍑昏烦杞?鉁?/div>
+<div class="view-collect-hint">✨ 点击右上角星星查看星图收集册，如果你想再次查看某一页，可以在收集册中点击跳转 ✨</div>
 
-            <!-- 鍦烘櫙鍗＄墖 -->
+            <!-- 场景卡片 -->
             <div class="scene-card">
-                <p>褰撲綘闆嗛綈鍏鏄熸槦纰庣墖鍚庯紝瀹冧滑浼氳嚜鍔ㄤ粠浣犵殑鑳屽寘涓鍑猴紝鎮诞鍦ㄤ綘闈㈠墠銆傚叚棰楃鐗囧洿鎴愪竴涓渾鍦堬紝缂撶紦鏃嬭浆锛屾瘡涓€棰楅兘鍙戝嚭涓嶅悓棰滆壊鐨勫厜鑺掆€斺€旂骞寸殑鍏夋槸鏆栭噾鑹诧紝灏戝勾鐨勫厜鏄杽鑽风豢锛岄潚骞寸殑鍏夋槸娣辫摑鑹诧紝鐖卞ソ鐨勫厜鏄榛勮壊锛屾儏鎰熺殑鍏夋槸鏌旂矇鑹诧紝鏈潵鐨勫厜鏄鑺介潚銆?/p>
-                <p>纰庣墖瓒婅浆瓒婂揩锛屾渶鍚庣獊鐒堕潤姝紝鍏夎姃姹囪仛鎴愪竴閬撳厜鏉燂紝鐩寸洿鐓у悜浣犵殑鍓嶆柟銆傚厜鏉熻惤涓嬬殑鍦版柟锛屽師鏈┖鏃犱竴鐗╋紝鐜板湪鍗寸紦缂撳崌璧蜂竴闈㈠法澶х殑闀滃瓙銆傞暅妗嗙敱鍏棰滆壊鐨勮棨钄撲氦缁囪€屾垚锛岃棨钄撲笂杩樻寕鐫€閭ｄ簺鏄熸槦纰庣墖鐨勫井缂╃増锛屽儚灏忓皬鐨勬灉瀹炪€?/p>
-                <p>浣犺蛋杩戦暅瀛愶紝鍙戠幇闀滃瓙閲屾槧鍑虹殑涓嶆槸浣犺嚜宸憋紝鑰屾槸鈥斺€斾粬銆?/p>
-                <p>浠栫珯鍦ㄤ竴鐗囬噾鑹茬殑楹︾敯閲岋紝绌跨潃閭ｄ欢鑺辫‖琛紝鎵嬮噷绔潃涓€鏉煚妾尪锛岃偐涓婂仠鐫€涓€鍙皬灏忕殑鐙愮嫺鍓奖銆備粬鐪嬭捣鏉ユ瘮鐜板疄涓交鏉句竴浜涳紝鐪夌溂闂存病鏈夐偅浜涚柌鎯殑鐥曡抗锛屽儚鍒氫粠涓€鍦烘极闀跨殑鍗堢潯涓啋鏉ャ€?/p>
-                <p>闀滃瓙涓嬫柟锛屾湁涓€鍧楀厜婊戠殑鐭虫澘銆傚叚棰楁槦鏄熺鐗囦粠绌轰腑缂撶紦钀戒笅锛屽祵杩涚煶鏉夸笂瀵瑰簲鐨勫嚬妲介噷銆傛瘡宓屽叆涓€棰楋紝鐭虫澘涓婂氨娴幇鍑轰竴琛屽瓧锛岀敱浠栦箣鍓嶇殑閫夋嫨鎷兼垚銆?/p>
+                <p>当你集齐六颗星星碎片后，它们会自动从你的背包中飞出，悬浮在你面前。六颗碎片围成一个圆圈，缓缓旋转，每一颗都发出不同颜色的光芒——童年的光是暖金色，少年的光是薄荷绿，青年的光是深蓝色，爱好的光是橙黄色，情感的光是柔粉色，未来的光是嫩芽青。</p>
+                <p>碎片越转越快，最后突然静止，光芒汇聚成一道光束，直直照向你的前方。光束落下的地方，原本空无一物，现在却缓缓升起一面巨大的镜子。镜框由六种颜色的藤蔓交织而成，藤蔓上还挂着那些星星碎片的微缩版，像小小的果实。</p>
+                <p>你走近镜子，发现镜子里映出的不是你自己，而是——他。</p>
+                <p>他站在一片金色的麦田里，穿着那件花衬衫，手里端着一杯柠檬茶，肩上停着一只小小的狐狸剪影。他看起来比现实中轻松一些，眉眼间没有那些疲惫的痕迹，像刚从一场漫长的午睡中醒来。</p>
+                <p>镜子下方，有一块光滑的石板。六颗星星碎片从空中缓缓落下，嵌进石板上对应的凹槽里。每嵌入一颗，石板上就浮现出一行字，由他之前的选择拼成。</p>
             </div>
 
-            <!-- 闀滃瓙锛堢煶鏉挎枃瀛楋級 -->
+            <!-- 镜子（石板文字） -->
             <div id="mirrorFrame" class="mirror-frame">
-    <img src="./assets/images/jingzibiankuang.png" alt="闀滃瓙杈规" class="mirror-border">
-    <div id="finalMirror" class="mirror-text">鉁?瑙︽懜闀滃瓙锛岀湅瑙佽嚜宸?鉁?/div>
+    <img src="http://m-birthday-music.test.upcdn.net/jingzibiankuang.png" alt="镜子边框" class="mirror-border">
+    <div id="finalMirror" class="mirror-text">✨ 触摸镜子，看见自己 ✨</div>
 </div>
 
-            <!-- 闀滀腑鐨勪粬 -->
+            <!-- 镜中的他 -->
             <div class="scene-card" id="mirrorScene" style="display: none;">
-                <p>褰撴渶鍚庝竴琛屽瓧娴幇锛岄暅瀛愰噷鐨勪粬杞繃韬紝姝ｅ鐫€浣犮€備粬鐪嬭捣鏉ユ湁鐐规儕璁讹紝濂藉儚绗竴娆″惉浜鸿繖鏍锋弿杩拌嚜宸便€備粬寮犱簡寮犲槾锛屾兂璇翠粈涔堬紝浣嗗張娌¤鍑烘潵銆?/p>
-                <p>杩囦簡寰堜箙锛屼粬杞昏交绗戜簡涓€涓嬨€傞偅绗戝寰堟贰锛屼絾鏄湡鐨勩€?/p>
-                <p>鐒跺悗锛屼粬鏈濅綘鐐逛簡鐐瑰ご銆備笉鏄劅璋紝鏄€斺€斺€滄垜鐪嬭浜嗏€濄€?/p>
-                <p>闀滈潰寮€濮嬫硾璧锋稛婕紝鍍忔按闈㈣椋庡惞鐨便€備粬鐨勮韩褰辨笎娓愭ā绯婏紝鏈€鍚庡畬鍏ㄦ秷鏁ｏ紝鍙墿涓嬮偅鐗囬噾鑹茬殑楹︾敯锛屽拰楹︾敯灏藉ご涓€涓瀬灏忕殑銆佺嫄鐙哥殑鍓奖銆?/p>
-                <p>闀滃瓙涓婄紦缂撴诞鐜版渶鍚庝竴琛屽瓧锛?/p>
-                <p class="final-quote">鈥滈噸瑕佺殑涓滆タ锛岀敤鐪肩潧鏄湅涓嶈鐨勩€備絾濡傛灉浣犺蛋杩囪繖浜涙槦鐞冿紝浣犲凡缁忓湪蹇冮噷鐪嬭浜嗐€傗€?/p>
-                <p>鐭虫澘涓婄殑鍏鏄熸槦纰庣墖鍚屾椂浜捣锛岀劧鍚庡寲浣滃叚閬撴祦鍏夛紝椋炲悜澶╃┖锛屾秷澶卞湪鑼尗瀹囧畽涓€?/p>
-                <p>椤甸潰涓婂嚭鐜颁竴琛屽皬瀛楋細</p>
-                <p style="color: gold; text-align: center;">銆愭梾绋嬬粨鏉熴€備絾浣犲彲浠ュ湪楹︾敯閲屽寰呬竴浼氬効銆傘€?/p>
-				<img src="./assets/images/huli.png" alt="楹︾敯灏藉ご鐙愮嫺鍓奖" class="fox-illustration float" style="width:50px; height:auto;">
+                <p>当最后一行字浮现，镜子里的他转过身，正对着你。他看起来有点惊讶，好像第一次听人这样描述自己。他张了张嘴，想说什么，但又没说出来。</p>
+                <p>过了很久，他轻轻笑了一下。那笑容很淡，但是真的。</p>
+                <p>然后，他朝你点了点头。不是感谢，是——“我看见了”。</p>
+                <p>镜面开始泛起涟漪，像水面被风吹皱。他的身影渐渐模糊，最后完全消散，只剩下那片金色的麦田，和麦田尽头一个极小的、狐狸的剪影。</p>
+                <p>镜子上缓缓浮现最后一行字：</p>
+                <p class="final-quote">“重要的东西，用眼睛是看不见的。但如果你走过这些星球，你已经在心里看见了。”</p>
+                <p>石板上的六颗星星碎片同时亮起，然后化作六道流光，飞向天空，消失在茫茫宇宙中。</p>
+                <p>页面上出现一行小字：</p>
+                <p style="color: gold; text-align: center;">【旅程结束。但你可以在麦田里多待一会儿。】</p>
+				<img src="http://m-birthday-music.test.upcdn.net/huli.png" alt="麦田尽头狐狸剪影" class="fox-illustration float" style="width:50px; height:auto;">
             </div>
 
-            <button class="nav-btn" onclick="restartJourney()">鍐嶇湅涓€娆￠害鐢?/button>
+            <button class="nav-btn" onclick="restartJourney()">再看一次麦田</button>
         </div>
     </section>
 
-    <!-- ========== 鐙愮嫺鏄熺悆锛堝僵铔嬶級 ========== -->
+    <!-- ========== 狐狸星球（彩蛋） ========== -->
     <section class="page" id="pageFox">
 <div class="container">
            
 			
-			<img src="./assets/images/tcaidan.png" 
-     alt="楹︾敯閲岀殑鐙愮嫺" 
+			<img src="http://m-birthday-music.test.upcdn.net/tcaidan.png" 
+     alt="麦田里的狐狸" 
      class="handwritten-title">
 	 
 	 <div class="magic-particles" id="magicParticles"></div>
 			
-			<!-- 褰╄泲椤靛ご鍥惧尯鍩燂細楹︾敯鑳屾櫙 + 鐙愮嫺銆佺窘姣涖€佺煶瀛愩€侀噹鑺?-->
+			<!-- 彩蛋页头图区域：麦田背景 + 狐狸、羽毛、石子、野花 -->
 <div class="planet7-illustration">
-    <img src="./assets/images/huli.png" alt="鐙愮嫺" class="planet7-icon icon-center" id="foxIconEgg">
-    <img src="./assets/images/yumao.png" alt="缇芥瘺" class="planet7-icon icon-feather" id="featherIcon">
-    <img src="./assets/images/shizi.png" alt="鐭冲瓙" class="planet7-icon icon-stone" id="stoneIcon">
-    <img src="./assets/images/yehua.png" alt="閲庤姳" class="planet7-icon icon-flower" id="flowerIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/huli.png" alt="狐狸" class="planet7-icon icon-center" id="foxIconEgg">
+    <img src="http://m-birthday-music.test.upcdn.net/yumao.png" alt="羽毛" class="planet7-icon icon-feather" id="featherIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/shizi.png" alt="石子" class="planet7-icon icon-stone" id="stoneIcon">
+    <img src="http://m-birthday-music.test.upcdn.net/yehua.png" alt="野花" class="planet7-icon icon-flower" id="flowerIcon">
 </div>
-			<div class="collect-hint">鉁?杩欏箙鐢荤殑鏌愪簺鍦版柟濂藉儚鍙互鐐瑰嚮涓€涓嬶紵 鉁?/div>
+			<div class="collect-hint">✨ 这幅画的某些地方好像可以点击一下？ ✨</div>
 
             <div class="scene-card fox-page-content">
-                <p>浣犵潄寮€鐪肩潧锛屽彂鐜拌嚜宸辩珯鍦ㄤ竴鐗囨棤杈规棤闄呯殑閲戣壊楹︾敯閲屻€?/p>
-                <p>椋庝粠杩滃鍚规潵锛岄害娴竴灞備竴灞傚湴娑屽悜浣狅紝鍙堥€€鍥炲幓锛屽彂鍑烘矙娌欑殑杞诲搷锛屽儚澶у湴鍦ㄤ綆澹拌鐫€浠€涔堛€傚ぉ绌烘槸鏆栨鑹茬殑锛屽垎涓嶆竻鏄棩鍑鸿繕鏄粍鏄忊€斺€旈偅绉嶄粙浜庡憡鍒拰閲嶉€箣闂寸殑鍏夈€?/p>
-                <p>浣犲線鍓嶈蛋锛岄害鐢伴噷鏈変竴鏉¤嫢闅愯嫢鐜扮殑灏忚矾锛屾槸琚粈涔堝姩鐗╄俯鍑烘潵鐨勩€傝矾涓ゆ梺鍋跺皵浼氬嚭鐜颁竴浜涘皬灏忕殑鐗╀欢锛氫竴鏍规帀钀界殑缇芥瘺銆佷竴棰楀渾娑︾殑鐭冲瓙銆佷竴鏈靛帇骞茬殑閲庤姳銆傚畠浠儚鏄矾鏍囷紝鍙堝儚鏄煇涓皝鐣欎笅鐨勭ぜ鐗┿€?/p>
-                <p>璧颁簡寰堜箙锛屼綘缁堜簬鐪嬭鈥斺€?/p>
-                <p>鐢板焸涓婂潗鐫€涓€鍙嫄鐙搞€?/p>
-                <p>瀹冪殑姣涜壊鏄害瀛愭垚鐔熸椂鐨勯噾榛勶紝鍙湁灏惧反灏栧拰鍥涘彧鐖瓙鏄洩鐧界殑銆傚畠娌℃湁鍥炲ご鐪嬩綘锛屽彧鏄潤闈欏湴鏈涚潃楹︾敯鐨勫敖澶达紝閭ｉ噷鏈変竴妫靛闆堕浂鐨勬爲銆?/p>
-                <p>浣犺蛋杩戯紝鍦ㄥ畠韬竟鍧愪笅銆?/p>
-                <p>寰堜箙锛岀嫄鐙稿紑鍙ｄ簡銆傚０闊冲緢杞伙紝鍍忛鍚硅繃楹︾锛?/p>
-                <div class="fox-quote">鈥滀綘鏉ヤ簡銆傗€?/div>
-                <p>瀹冪粓浜庤浆杩囧ご锛岀敤閭ｅ弻鐞ョ弨鑹茬殑鐪肩潧鐪嬬潃浣犮€傞偅鐪肩寰堢啛鎮夛紝鍍忔煇涓繁澶滐紝鏌愪釜浜虹湅鐫€浣犳椂鐨勬牱瀛愩€?/p>
-                <div class="fox-quote">鈥滄垜绛変簡寰堜箙銆傗€濈嫄鐙歌锛屸€滀笉鏄瓑涓€涓壒瀹氱殑浜猴紝鏄瓑涓€涓汉鑳借鍑烘垜銆傗€?/div>
-                <p>浣犻棶瀹冿細鈥滀綘鍦ㄧ瓑璋侊紵鈥?/p>
-                <p>鐙愮嫺娌℃湁鐩存帴鍥炵瓟锛岃€屾槸鍙嶉棶浣狅細</p>
-                <div class="fox-quote">鈥滀綘鐭ラ亾椹吇鏄粈涔堟剰鎬濆悧锛熲€?/div>
-                <p>涓嶇瓑浣犲洖绛旓紝瀹冪户缁锛?/p>
+                <p>你睁开眼睛，发现自己站在一片无边无际的金色麦田里。</p>
+                <p>风从远处吹来，麦浪一层一层地涌向你，又退回去，发出沙沙的轻响，像大地在低声说着什么。天空是暖橙色的，分不清是日出还是黄昏——那种介于告别和重逢之间的光。</p>
+                <p>你往前走，麦田里有一条若隐若现的小路，是被什么动物踩出来的。路两旁偶尔会出现一些小小的物件：一根掉落的羽毛、一颗圆润的石子、一朵压干的野花。它们像是路标，又像是某个谁留下的礼物。</p>
+                <p>走了很久，你终于看见——</p>
+                <p>田埂上坐着一只狐狸。</p>
+                <p>它的毛色是麦子成熟时的金黄，只有尾巴尖和四只爪子是雪白的。它没有回头看你，只是静静地望着麦田的尽头，那里有一棵孤零零的树。</p>
+                <p>你走近，在它身边坐下。</p>
+                <p>很久，狐狸开口了。声音很轻，像风吹过麦穗：</p>
+                <div class="fox-quote">“你来了。”</div>
+                <p>它终于转过头，用那双琥珀色的眼睛看着你。那眼神很熟悉，像某个深夜，某个人看着你时的样子。</p>
+                <div class="fox-quote">“我等了很久。”狐狸说，“不是等一个特定的人，是等一个人能认出我。”</div>
+                <p>你问它：“你在等谁？”</p>
+                <p>狐狸没有直接回答，而是反问你：</p>
+                <div class="fox-quote">“你知道驯养是什么意思吗？”</div>
+                <p>不等你回答，它继续说：</p>
                 <div class="fox-quote">
-                    鈥滃皬鐜嬪瓙閬囧埌鎴戠殑鏃跺€欙紝鎴戜篃涓嶇煡閬撱€傛垜鍙槸鎯冲拰浠栧仛鏈嬪弸銆備絾浠栭棶鎴戔€樹粈涔堟槸椹吇鈥欙紝鎴戝憡璇変粬鈥斺€旈┋鍏诲氨鏄缓绔嬭仈绯汇€傚鎴戞潵璇达紝浣犲彧鏄竴涓皬鐢峰锛屽拰鍏朵粬鍗冨崈涓囦竾涓皬鐢峰娌℃湁鍖哄埆銆傛垜涓嶉渶瑕佷綘銆備綘涔熶笉闇€瑕佹垜銆傚浣犳潵璇达紝鎴戝彧鏄竴鍙嫄鐙革紝鍜屽叾浠栧崈鍗冧竾涓囧彧鐙愮嫺娌℃湁鍖哄埆銆備絾濡傛灉浣犻┋鍏讳簡鎴戯紝鎴戜滑灏变簰鐩搁渶瑕佷簡銆傚鎴戞潵璇达紝浣犲氨鏄笘鐣屼笂鍞竴鐨勪簡锛涘浣犳潵璇达紝鎴戜篃鏄笘鐣屼笂鍞竴鐨勪簡銆傗€?
+                    “小王子遇到我的时候，我也不知道。我只是想和他做朋友。但他问我‘什么是驯养’，我告诉他——驯养就是建立联系。对我来说，你只是一个小男孩，和其他千千万万个小男孩没有区别。我不需要你。你也不需要我。对你来说，我只是一只狐狸，和其他千千万万只狐狸没有区别。但如果你驯养了我，我们就互相需要了。对我来说，你就是世界上唯一的了；对你来说，我也是世界上唯一的了。”
                 </div>
-                <p>鐙愮嫺浣庝笅澶达紝鐢ㄧ埅瀛愭嫧寮勭潃涓€鏍归害绌椼€?/p>
-                <div class="fox-quote">鈥滃悗鏉ヤ粬璧颁簡銆備粬鍘绘壘浠栫殑鐜懓浜嗐€備絾浠栬蛋涔嬪墠锛屾垜鍛婅瘔浜嗕粬涓€涓瀵嗐€傗€?/div>
-                <p>瀹冩姮璧峰ご锛岀湅鐫€浣狅細</p>
-                <div class="fox-quote">鈥滈噸瑕佺殑涓滆タ锛岀敤鐪肩潧鏄湅涓嶈鐨勩€傗€?/div>
-                <p>椋庡惞杩囷紝楹︽氮璧蜂紡銆?/p>
+                <p>狐狸低下头，用爪子拨弄着一根麦穗。</p>
+                <div class="fox-quote">“后来他走了。他去找他的玫瑰了。但他走之前，我告诉了他一个秘密。”</div>
+                <p>它抬起头，看着你：</p>
+                <div class="fox-quote">“重要的东西，用眼睛是看不见的。”</div>
+                <p>风吹过，麦浪起伏。</p>
                 <div class="fox-quote">
-                    鈥滀綘鐭ラ亾鍚楋紝浠栬蛋鍚庯紝鎴戞瘡澶╅兘浼氭潵杩欑墖楹︾敯銆備笉鏄洜涓烘垜鍦ㄧ瓑浠栤€斺€旀垜鐭ラ亾浠栦笉浼氬洖鏉ヤ簡銆傛槸鍥犱负楹﹀瓙鐨勯鑹层€傛瘡娆＄湅瑙侀噾鑹茬殑楹︽氮锛屾垜灏变細鎯宠捣浠栧ご鍙戠殑棰滆壊銆傛瘡娆″惉瑙侀鍚归害鐢扮殑澹伴煶锛屾垜灏变細鎯宠捣浠栫殑绗戝０銆備粬椹吇鎴戠殑閭ｆ鏃堕棿锛屽叾瀹炰篃鍦ㄨ椹吇銆傚彧鏄粬涓嶇煡閬撱€傗€?
+                    “你知道吗，他走后，我每天都会来这片麦田。不是因为我在等他——我知道他不会回来了。是因为麦子的颜色。每次看见金色的麦浪，我就会想起他头发的颜色。每次听见风吹麦田的声音，我就会想起他的笑声。他驯养我的那段时间，其实也在被驯养。只是他不知道。”
                 </div>
-                <p>鐙愮嫺绔欒捣鏉ワ紝鏈濅綘璧颁簡涓ゆ銆?/p>
+                <p>狐狸站起来，朝你走了两步。</p>
                 <div class="fox-quote">
-                    鈥滆繖浜涘勾锛屾垜涓€鐩村湪杩欑墖楹︾敯閲屻€傛垜瑙佽繃寰堝浜虹粡杩囷紝浣嗘垜娌℃湁鍐嶈璋侀┋鍏绘垜銆傚洜涓洪┋鍏昏繖浠朵簨锛屼竴鐢熶竴娆″氨澶熶簡銆傗€?
+                    “这些年，我一直在这片麦田里。我见过很多人经过，但我没有再让谁驯养我。因为驯养这件事，一生一次就够了。”
                 </div>
-                <p>瀹冩鐫€澶达紝鐪嬬潃浣狅紝鐪肩閲岀獊鐒跺浜嗕竴鐐瑰埆鐨勪笢瑗库€斺€旀槸濂藉锛屾槸鎵撻噺锛屾槸鏌愮灏忓績缈肩考鐨勭‘璁ゃ€?/p>
-                <div class="fox-quote">鈥滀絾浣犱笉涓€鏍枫€傗€?/div>
-                <p>浣犻棶瀹冿細鈥滄垜鍝噷涓嶄竴鏍凤紵鈥?/p>
-                <p>鐙愮嫺娌℃湁鍥炵瓟锛岃€屾槸寮€濮嬭璧蜂竴涓晠浜嬶細</p>
+                <p>它歪着头，看着你，眼神里突然多了一点别的东西——是好奇，是打量，是某种小心翼翼的确认。</p>
+                <div class="fox-quote">“但你不一样。”</div>
+                <p>你问它：“我哪里不一样？”</p>
+                <p>狐狸没有回答，而是开始讲起一个故事：</p>
                 <div class="fox-quote">
-                    鈥滄湁涓€涓汉锛屼粬鍠滄绌块粦鐧借。鏈嶏紝浣嗚。鏌滄繁澶勮棌鐫€涓€浠惰姳琛～銆備粬鍛ㄦ湯鍋跺皵浼氱┛瀹冨嚭闂紝浣嗗悗鏉ュ懆鏈秺鏉ヨ秺灏戯紝琛～灏卞緢灏戣浜嗐€傗€?
+                    “有一个人，他喜欢穿黑白衣服，但衣柜深处藏着一件花衬衫。他周末偶尔会穿它出门，但后来周末越来越少，衬衫就很少见了。”
                 </div>
-                <p>浣犳劊浣忎簡銆?/p>
-                <p>鐙愮嫺缁х画璁诧細</p>
+                <p>你愣住了。</p>
+                <p>狐狸继续讲：</p>
                 <div class="fox-quote">
-                    鈥滄湁涓€涓汉锛屼粬鍦ㄦ墍鏈変汉闈㈠墠閮藉儚铦欒潬渚犱竴鏍蜂竾鑳斤紝浣嗗彧鏈変粬鑷繁鐭ラ亾锛屾瘡娆″叧涓婇棬锛屼粬閮藉湪闂嚜宸扁€樻垜鐪熺殑琛屽悧鈥欍€備粬鍋峰伔瀛︿竴浜涗笢瑗匡紝鏀惰棌寰堝瑙嗛锛屽叾瀹炰笉鏄湡鐨勬湁鏃堕棿瀛︼紝鍙槸鎯冲憡璇夎嚜宸扁€斺€旀垜杩樻湁璺彲浠ラ€夛紝鎴戜笉鏄鍥颁綇鐨勩€傗€?
+                    “有一个人，他在所有人面前都像蝙蝠侠一样万能，但只有他自己知道，每次关上门，他都在问自己‘我真的行吗’。他偷偷学一些东西，收藏很多视频，其实不是真的有时间学，只是想告诉自己——我还有路可以选，我不是被困住的。”
                 </div>
-                <p>椋庡仠浜嗭紝楹︾敯瀹夐潤涓嬫潵銆?/p>
+                <p>风停了，麦田安静下来。</p>
                 <div class="fox-quote">
-                    鈥滄湁涓€涓汉锛屼粬涓嶄細鍚垫灦锛屽彧浼氭矇榛樸€備粬鍙规皵鐨勬椂鍊欙紝蹇冮噷鍏跺疄鍦ㄥ枈鈥樺埆璧扳€欙紝浣嗕粬鍠婁笉鍑烘潵銆備粬娑堝け鍑犲ぉ锛屽洖鏉ヤ竴鐪嬶紝鍙戠幇鏈変汉杩樺湪绛変粬銆備粬涓嶇煡閬撶殑鏄€斺€旈偅涓瓑浠栫殑浜猴紝涓€鐩村湪杩欑墖楹︾敯閲岋紝鐪嬬潃浠栥€傗€?
+                    “有一个人，他不会吵架，只会沉默。他叹气的时候，心里其实在喊‘别走’，但他喊不出来。他消失几天，回来一看，发现有人还在等他。他不知道的是——那个等他的人，一直在这片麦田里，看着他。”
                 </div>
-                <p>鐙愮嫺鐨勫０闊宠秺鏉ヨ秺杞伙紝浣嗘瘡涓€涓瓧閮藉儚钀借繘蹇冮噷銆?/p>
+                <p>狐狸的声音越来越轻，但每一个字都像落进心里。</p>
                 <div class="fox-quote">
-                    鈥滄湁涓€涓汉锛屼粬鍠滄妗屾父锛屽枩娆㈤煶涔愩€備粬鐢ㄨ繖浜涘拰浜鸿繛鎺ャ€備粬閫佽繃涓€鐩掑彨鈥樻儏涔︹€欑殑妗屾父锛屼笉鐭ラ亾閭ｄ釜鏀跺埌鐨勪汉锛屾妸瀹冨綋鎴愪簡鏈€閲嶈鐨勮棌鍝併€傗€?
+                    “有一个人，他喜欢桌游，喜欢音乐。他用这些和人连接。他送过一盒叫‘情书’的桌游，不知道那个收到的人，把它当成了最重要的藏品。”
                 </div>
-                <p>鐙愮嫺浣庝笅澶达紝鐢ㄧ埅瀛愯交杞荤浜嗙浣犵殑鎵嬨€?/p>
+                <p>狐狸低下头，用爪子轻轻碰了碰你的手。</p>
                 <div class="fox-quote">
-                    鈥滄湁涓€涓汉锛屼粬鍦ㄦ煇涓繁澶滈潬鍦ㄥ埆浜鸿偐涓婂摥杩囥€傞偅涓汉娌℃湁璇磋瘽锛屽彧鏄交杞绘媿鐫€浠栥€傞偅涓€鍒伙紝浠栬寰楄嚜宸变笉鏄潤铦犱緺浜嗐€備絾閭ｄ釜浜虹湅浠栫殑鐪肩锛岃浠栬寰椻€斺€斿氨绠椾笉鏄潤铦犱緺锛屼篃鍊煎緱琚俊璧栥€傗€?
+                    “有一个人，他在某个深夜靠在别人肩上哭过。那个人没有说话，只是轻轻拍着他。那一刻，他觉得自己不是蝙蝠侠了。但那个人看他的眼神，让他觉得——就算不是蝙蝠侠，也值得被信赖。”
                 </div>
-                <p>浣犵殑鐪肩湺寮€濮嬪彂閰搞€?/p>
-                <p>鐙愮嫺鎶捣澶达紝鐪嬬潃浣犵殑鐪肩潧锛?/p>
+                <p>你的眼眶开始发酸。</p>
+                <p>狐狸抬起头，看着你的眼睛：</p>
                 <div class="fox-quote">
-                    鈥滄湁涓€涓汉锛屼粬浠ヤ负鑷繁鍦ㄥ伔鍋疯瀵熶笘鐣屻€備粬涓嶇煡閬擄紝鏈変竴鍙嫄鐙革紝涓€鐩村湪瑙傚療浠栥€傗€?
+                    “有一个人，他以为自己在偷偷观察世界。他不知道，有一只狐狸，一直在观察他。”
                 </div>
-                <p>椋庡惞璧锋潵锛岄害娴噸鏂板紑濮嬫秾鍔ㄣ€?/p>
-                <p>鐙愮嫺鐨勫０闊冲彉寰楀緢娓╂煍锛?/p>
+                <p>风吹起来，麦浪重新开始涌动。</p>
+                <p>狐狸的声音变得很温柔：</p>
                 <div class="fox-quote">
-                    鈥滃皬鐜嬪瓙闂垜锛氣€樹粈涔堟槸浠紡锛熲€欐垜鍛婅瘔浠栵紝浠紡灏辨槸瀹氫笅涓€涓椂闂达紝璁╁畠鍜屽叾浠栨椂闂翠笉涓€鏍枫€傛瘮濡傦紝浣犳瘡澶╀笅鍗堝洓鐐规潵锛岄偅涔堜粠涓夌偣寮€濮嬶紝鎴戝氨寮€濮嬫劅鍒板垢绂忎簡銆傛椂闂磋秺杩戯紝鎴戝氨瓒婂垢绂忋€傚埌浜嗗洓鐐癸紝鎴戜細鍧愮珛涓嶅畨锛屾垜浼氳浣犵湅瑙佹垜鏈夊骞哥銆傗€?
+                    “小王子问我：‘什么是仪式？’我告诉他，仪式就是定下一个时间，让它和其他时间不一样。比如，你每天下午四点来，那么从三点开始，我就开始感到幸福了。时间越近，我就越幸福。到了四点，我会坐立不安，我会让你看见我有多幸福。”
                 </div>
-                <p>瀹冪珯璧锋潵锛屽悗閫€浜嗕袱姝ャ€?/p>
+                <p>它站起来，后退了两步。</p>
                 <div class="fox-quote">
-                    鈥滆繖浜涘勾锛屾垜姣忓ぉ閮戒細鍦ㄨ繖涓椂闂达紝鏉ヨ繖鐗囬害鐢般€傗€?
+                    “这些年，我每天都会在这个时间，来这片麦田。”
                 </div>
-                <p>瀹冪瑧浜嗙瑧锛岄偅绗戝鍜屾煇浜哄緢鍍忋€?/p>
-                <div class="fox-quote">鈥滀綘鐚滐紝鎴戝湪绛変粈涔堬紵鈥?/div>
-                <p>浣犳病鏈夊洖绛斻€備絾浣犵煡閬撱€?/p>
-                <p>鐙愮嫺杞韩锛屽悜楹︾敯娣卞璧板幓銆傝蛋浜嗗嚑姝ワ紝瀹冨仠涓嬫潵锛屽洖澶寸湅鐫€浣狅細</p>
+                <p>它笑了笑，那笑容和某人很像。</p>
+                <div class="fox-quote">“你猜，我在等什么？”</div>
+                <p>你没有回答。但你知道。</p>
+                <p>狐狸转身，向麦田深处走去。走了几步，它停下来，回头看着你：</p>
                 <div class="fox-quote">
-                    鈥滈偅涓汉鍒氭墠璧拌繃浜嗗叚涓槦鐞冦€備粬鐪嬭浜嗚嚜宸辩骞寸殑楠勫偛锛屽皯骞寸殑鐪熷疄锛岄潚骞寸殑娓存湜锛岀埍濂界殑杩炴帴锛屾矇榛橀噷鐨勨€樺埆璧扳€欙紝鍜屾湭鏉ョ殑鏃犻檺鍙兘銆備粬鍙兘娌℃剰璇嗗埌锛屼粬璧拌繃鐨勬瘡涓€姝ワ紝閮芥湁涓€鍙嫄鐙革紝杩滆繙鍦拌窡鐫€銆傗€?
+                    “那个人刚才走过了六个星球。他看见了自己童年的骄傲，少年的真实，青年的渴望，爱好的连接，沉默里的‘别走’，和未来的无限可能。他可能没意识到，他走过的每一步，都有一只狐狸，远远地跟着。”
                 </div>
-                <p>瀹冩姮璧蜂竴鍙埅瀛愶紝杞昏交鎸ヤ簡鎸ワ細</p>
-                <div class="fox-quote">鈥滃洖鍘诲惂銆備粬杩樺湪绛夈€傜瓑涓€涓粬鑷繁閮戒笉鐭ラ亾鍦ㄧ瓑鐨勪笢瑗裤€傗€?/div>
-                <p>浣犻棶锛氣€滀粬绛夌殑鏄粈涔堬紵鈥?/p>
-                <p>鐙愮嫺鐨勮儗褰卞仠鍦ㄩ噾鑹茬殑楹︽氮閲岋紝杩囦簡寰堜箙锛屽畠璇达細</p>
-                <div class="fox-quote">鈥滀粬绛夌殑锛屽氨鏄湁涓€澶╋紝鑳借鍑鸿繖鐗囬害鐢扮殑棰滆壊銆傗€?/div>
-                <p>璇村畬锛屽畠娑堝け鍦ㄩ害鐢版繁澶勩€?/p>
-                <p>浣犵珯鍦ㄥ師鍦帮紝椋庡惞杩囨潵锛岄害娴矙娌欎綔鍝嶃€備綘绐佺劧鎯宠捣寰堜箙浠ュ墠锛屾湁浜哄浣犺杩囦竴鍙ヨ瘽鈥斺€?/p>
-                <p style="color: gold; font-size: 1.2rem;">鈥滈害瀛愮殑棰滆壊锛屼細璁╂垜鎯宠捣浣犮€傗€?/p>
+                <p>它抬起一只爪子，轻轻挥了挥：</p>
+                <div class="fox-quote">“回去吧。他还在等。等一个他自己都不知道在等的东西。”</div>
+                <p>你问：“他等的是什么？”</p>
+                <p>狐狸的背影停在金色的麦浪里，过了很久，它说：</p>
+                <div class="fox-quote">“他等的，就是有一天，能认出这片麦田的颜色。”</div>
+                <p>说完，它消失在麦田深处。</p>
+                <p>你站在原地，风吹过来，麦浪沙沙作响。你突然想起很久以前，有人对你说过一句话——</p>
+                <p style="color: gold; font-size: 1.2rem;">“麦子的颜色，会让我想起你。”</p>
             </div>
 
-            <!-- 褰╄泲椤电粨灏撅細鐐瑰嚮鏂囧瓧椋橀害绌?-->
-            <div class="twenty-one" id="twentyOneTrigger">浣犺繕鏈変簩鍗佸叚鍒嗛挓鐨勬満浼氥€傚畠涓€鐩村湪閭ｉ噷銆?/div>
+            <!-- 彩蛋页结尾：点击文字飘麦穗 -->
+            <div class="twenty-one" id="twentyOneTrigger">你还有二十六分钟的机会。它一直在那里。</div>
 
-            <button class="nav-btn" onclick="goToPage('pageFinal')">杩斿洖鏄熷浘</button>
+            <button class="nav-btn" onclick="goToPage('pageFinal')">返回星图</button>
         </div>
     </section>
 
 	<div class="progress-modal" id="progressModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>鉁?鏄熷浘鏀堕泦鍐?鉁?/h3>
+            <h3>✨ 星图收集册 ✨</h3>
             <span class="close-modal" id="closeModal">&times;</span>
         </div>
         <div class="fragments-grid" id="fragmentsGrid">
-            <!-- 鍔ㄦ€佺敓鎴?涓鐗囧崱鐗?-->
+            <!-- 动态生成6个碎片卡片 -->
         </div>
 		<div class="complete-message" id="completeMessage" style="display:none;">
-    <div class="complete-glow">鉁?鎭枩锛佸叚棰楁槦鏄熷凡闆嗛綈 鉁?/div>
-    <button class="complete-btn" onclick="goToPage('pageFinal'); document.getElementById('progressModal').style.display='none';">鍓嶅線缁撳眬椤?/button>
+    <div class="complete-glow">✨ 恭喜！六颗星星已集齐 ✨</div>
+    <button class="complete-btn" onclick="goToPage('pageFinal'); document.getElementById('progressModal').style.display='none';">前往结局页</button>
 </div>
     </div>
 </div>
 	
     <script>
-        // 鍏ㄥ眬鍙橀噺
+        // 全局变量
         let currentPage = 'pagePrologue';
         let stars = 0;
-        let selectedOption = null; // 鐢ㄤ簬瀛樺偍褰撳墠閫変腑鐨勯€夐」鍊?
-		let mirrorRevealed = false;      // 鏍囪鏄惁宸叉彮绀?
-		let mirrorContent = '';          // 瀛樺偍瀹屾暣闀滃瓙鏂囧瓧
+        let selectedOption = null; // 用于存储当前选中的选项值
+		let mirrorRevealed = false;      // 标记是否已揭示
+		let mirrorContent = '';          // 存储完整镜子文字
 		
 		
-const MUSIC_BASE = './assets/audio/';
+const MUSIC_BASE = 'http://m-birthday-music.test.upcdn.net/';
 const pageMusic = {
     pagePlanet1: MUSIC_BASE + '1.mp3',
     pagePlanet2: MUSIC_BASE + '2.mp3',
@@ -3741,9 +3741,9 @@ const pageMusic = {
     pageFox: MUSIC_BASE + '8.mp3'
 };
 
-        // 姝ｇ‘绛旀
+        // 正确答案
         const answers = {
-            planet1: '鍓婕?,
+            planet1: '副导演',
             planet2: 'B',
             planet3: 'C',
             planet4: 'B',
@@ -3751,7 +3751,7 @@ const pageMusic = {
             planet6: 'C'
         };
 
-        // 闊充箰鎺у埗
+        // 音乐控制
         const bgMusic = document.getElementById('bgMusic');
         const musicToggle = document.getElementById('musicToggle');
         let musicPlaying = false;
@@ -3760,14 +3760,14 @@ const pageMusic = {
         bgMusic.pause();
         musicToggle.innerHTML = '<i class="fas fa-music"></i>';
     } else {
-        // 鐩存帴鎾斁褰撳墠宸茶缃殑 src锛堜笉閲嶆柊璁剧疆锛?
+        // 直接播放当前已设置的 src（不重新设置）
         bgMusic.play().catch(() => {});
         musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
     }
     musicPlaying = !musicPlaying;
 });
 
-        // 鏄熺┖鐢熸垚
+        // 星空生成
         function createStars() {
             const starfield = document.getElementById('starfield');
             for (let i = 0; i < 200; i++) {
@@ -3789,42 +3789,42 @@ const pageMusic = {
         }
 		
 		
-		// 纰庣墖鏁版嵁
+		// 碎片数据
 const fragmentsData = [
-    { name: '绔ュ勾鐨勫厜', color: '#ffd700', text: '鈥滀粬鏇炬槸瀵兼紨锛屼篃鏄嚜宸辨晠浜嬬殑涓昏銆傗€?, page: 'pagePlanet1' },
-    { name: '灏戝勾鐨勭湡瀹?, color: '#98ff98', text: '鈥滅湡瀹炵殑浠栦粠鏈蛋杩滐紝鍙槸鍦ㄧ瓑涓€涓笉闇€瑕佷吉瑁呯殑鍛ㄦ湯銆傗€?, page: 'pagePlanet2' },
-    { name: '娣卞鐨勭瓟妗?, color: '#4a90e2', text: '鈥滅湡姝ｇ殑鍊煎緱锛屼笉鏄粠涓嶅け璐ワ紝鏄湁浜虹湅瑙佷綘鐨勮剢寮憋紝渚濈劧閫夋嫨鐩镐俊銆傗€?, page: 'pagePlanet3' },
-    { name: '杩炴帴鐨勮瘉鎹?, color: '#ff8c42', text: '鈥滀粬閫佺粰鍒汉鐨勶紝浠庢潵涓嶅彧鏄父鎴忥紝鏄€樻垜鍦ㄨ繖閲岋紝浣犺涓€璧峰悧鈥欍€傗€?, page: 'pagePlanet4' },
-    { name: '鏈鍑哄彛鐨勬俯鏌?, color: '#ffb6c1', text: '鈥滄瘡娆″徆姘旇儗鍚庯紝閮借棌鐫€涓€鍙モ€樺埆璧扳€欍€傛湁浜哄惉鎳備簡锛屾墍浠ヤ竴鐩村湪銆傗€?, page: 'pagePlanet5' },
-    { name: '鏈潵鐨勭瀛?, color: '#9acd32', text: '鈥滀粬鏀惰棌鐨勪笉鏄棰戯紝鏄€樻湭鏉ヨ繕鏈夊彲鑳解€欑殑璇佹槑銆傗€?, page: 'pagePlanet6' }
+    { name: '童年的光', color: '#ffd700', text: '“他曾是导演，也是自己故事的主角。”', page: 'pagePlanet1' },
+    { name: '少年的真实', color: '#98ff98', text: '“真实的他从未走远，只是在等一个不需要伪装的周末。”', page: 'pagePlanet2' },
+    { name: '深夜的答案', color: '#4a90e2', text: '“真正的值得，不是从不失败，是有人看见你的脆弱，依然选择相信。”', page: 'pagePlanet3' },
+    { name: '连接的证据', color: '#ff8c42', text: '“他送给别人的，从来不只是游戏，是‘我在这里，你要一起吗’。”', page: 'pagePlanet4' },
+    { name: '未说出口的温柔', color: '#ffb6c1', text: '“每次叹气背后，都藏着一句‘别走’。有人听懂了，所以一直在。”', page: 'pagePlanet5' },
+    { name: '未来的种子', color: '#9acd32', text: '“他收藏的不是视频，是‘未来还有可能’的证明。”', page: 'pagePlanet6' }
 ];
 
-// 鏀堕泦鐘舵€佹暟缁勶紝鍒濆鍏?false
+// 收集状态数组，初始全 false
 let collectedStatus = [false, false, false, false, false, false];
 
 const itemsData = [
     { 
-        name: '缇芥瘺', 
+        name: '羽毛', 
         color: '#f5e6d3', 
-        text: '浠栨浘鐢ㄦ墜鎸囪交杞绘嫮鍘荤嫄鐙哥溂瑙掔殑娉紝閭ｆ淮娉殢椋庨鏁ｏ紝鍖栦綔杩欑墖缇芥瘺銆傜嫄鐙告妸瀹冨埆鍦ㄥ績涓婏紝鎻愰啋鑷繁鏇捐濡傛娓╂煍鍦板寰呫€? 
+        text: '他曾用手指轻轻拭去狐狸眼角的泪，那滴泪随风飘散，化作这片羽毛。狐狸把它别在心上，提醒自己曾被如此温柔地对待。' 
     },
     { 
-        name: '鐭冲瓙', 
+        name: '石子', 
         color: '#a9a9a9', 
-        text: '浠栨浘鍦ㄦ邯杈规崱璧蜂竴棰楀渾娑︾殑鐭冲瓙锛屾斁杩涚嫄鐙哥殑鎺屽績锛岃锛氣€滀綘鐪嬶紝瀹冨儚鎴戯紝娌夐粯浣嗗潥瀹氥€傗€濈嫄鐙镐竴鐩存敹鐫€锛屽儚鏀剁潃涓€鍙ヤ笉蹇呭厬鐜扮殑璇鸿█銆? 
+        text: '他曾在溪边捡起一颗圆润的石子，放进狐狸的掌心，说：“你看，它像我，沉默但坚定。”狐狸一直收着，像收着一句不必兑现的诺言。' 
     },
     { 
-        name: '閲庤姳', 
+        name: '野花', 
         color: '#dda0dd', 
-        text: '浠栨浘鍦ㄨ矾鏃佷负鐙愮嫺鎽樹笅鍑犳灊閲庤姳锛屼粩缁嗘惌閰嶉鑹层€傜嫄鐙告妸瀹冧滑鍘嬭繘璁板繂锛岃嚦浠婄炕寮€杩樿兘闂诲埌閭ｅぉ鐨勯銆? 
+        text: '他曾在路旁为狐狸摘下几枝野花，仔细搭配颜色。狐狸把它们压进记忆，至今翻开还能闻到那天的风。' 
     }
 ];
 
-// 鐗╁搧鏀堕泦鐘舵€?
+// 物品收集状态
 let itemsCollected = [false, false, false];
-let foxClickable = false; // 鐙愮嫺鏄惁鍙偣鍑?
+let foxClickable = false; // 狐狸是否可点击
 
-// 淇敼 addStar 鍑芥暟锛岃褰曞搴旂鐗?
+// 修改 addStar 函数，记录对应碎片
 function addStar(planetIndex) {
     if (stars < 6 && !collectedStatus[planetIndex]) {
         stars++;
@@ -3834,26 +3834,26 @@ function addStar(planetIndex) {
         counter.style.transform = 'scale(1.2)';
         setTimeout(() => counter.style.transform = 'scale(1)', 200);
         
-        // 闆嗛綈鍚庢樉绀烘彁绀烘潯
+        // 集齐后显示提示条
         if (stars === 6) {
             const tip = document.getElementById('collectComplete');
             tip.style.display = 'block';
             setTimeout(() => {
                 tip.style.display = 'none';
-            }, 8000); // 8绉掑悗鑷姩闅愯棌
+            }, 8000); // 8秒后自动隐藏
         }
     }
 }
 
-// 鏇存柊鍚?checkPlanet 鍑芥暟锛屼紶鍏ュ搴旂储寮?
-// 渚嬪 checkPlanet1 涓皟鐢?addStar(0); checkPlanet2 璋冪敤 addStar(1); 浠ユ绫绘帹
+// 更新各 checkPlanet 函数，传入对应索引
+// 例如 checkPlanet1 中调用 addStar(0); checkPlanet2 调用 addStar(1); 以此类推
 
 function showProgress() {
     const modal = document.getElementById('progressModal');
     const grid = document.getElementById('fragmentsGrid');
     grid.innerHTML = '';
 
-    // 1. 娓叉煋鏄熸槦纰庣墖
+    // 1. 渲染星星碎片
     fragmentsData.forEach((frag, index) => {
         const collected = collectedStatus[index];
         const card = document.createElement('div');
@@ -3863,7 +3863,7 @@ function showProgress() {
             card.style.setProperty('--theme-color', frag.color);
         }
         card.innerHTML = `
-            <div class="fragment-star" style="color: ${collected ? frag.color : '#aaa'};">鈽?/div>
+            <div class="fragment-star" style="color: ${collected ? frag.color : '#aaa'};">★</div>
             <div class="fragment-name" style="color: ${collected ? frag.color : '#ccc'};">${collected ? frag.name : '???'}</div>
             <div class="fragment-text">${collected ? frag.text : '????????'}</div>
         `;
@@ -3880,13 +3880,13 @@ function showProgress() {
     const modalContent = document.querySelector('.modal-content');
     const completeMsg = document.getElementById('completeMessage');
 
-    // 绉婚櫎涔嬪墠鍙兘瀛樺湪鐨勪俊鐗╂爣棰樺拰瀹瑰櫒锛堥伩鍏嶉噸澶嶏級
+    // 移除之前可能存在的信物标题和容器（避免重复）
     const oldItemsHeader = document.getElementById('itemsHeader');
     if (oldItemsHeader) oldItemsHeader.remove();
     const oldItemsContainer = document.getElementById('itemsContainer');
     if (oldItemsContainer) oldItemsContainer.remove();
 
-    // 纭繚 completeMsg 鍦?modalContent 涓?
+    // 确保 completeMsg 在 modalContent 中
     if (completeMsg && completeMsg.parentNode !== modalContent) {
         modalContent.appendChild(completeMsg);
     }
@@ -3894,20 +3894,20 @@ function showProgress() {
     if (stars === 6) {
         completeMsg.style.display = 'block';
 
-        // 娣诲姞淇＄墿鏍囬
+        // 添加信物标题
         const itemsHeader = document.createElement('h4');
         itemsHeader.id = 'itemsHeader';
         itemsHeader.className = 'items-header';
-        itemsHeader.textContent = '楹︾敯閲岀殑淇＄墿';
+        itemsHeader.textContent = '麦田里的信物';
         modalContent.insertBefore(itemsHeader, completeMsg.nextSibling);
 
-        // 娣诲姞淇＄墿缃戞牸瀹瑰櫒
+        // 添加信物网格容器
         const itemsContainer = document.createElement('div');
         itemsContainer.id = 'itemsContainer';
-        itemsContainer.className = 'fragments-grid'; // 涓庢槦鏄熺綉鏍间竴鑷?
+        itemsContainer.className = 'fragments-grid'; // 与星星网格一致
         modalContent.insertBefore(itemsContainer, itemsHeader.nextSibling);
 
-        // 娓叉煋涓変釜淇＄墿鍗＄墖
+        // 渲染三个信物卡片
         itemsData.forEach((item, index) => {
             const collected = itemsCollected[index];
             const card = document.createElement('div');
@@ -3916,9 +3916,9 @@ function showProgress() {
             if (collected) {
                 card.style.setProperty('--theme-color', item.color);
             }
-            const itemSymbols = ['馃', '馃', '馃尭']; // 缇芥瘺銆佺煶瀛愩€侀噹鑺?
+            const itemSymbols = ['🪶', '🪨', '🌸']; // 羽毛、石子、野花
             card.innerHTML = `
-                <div class="fragment-star" style="color: ${collected ? item.color : '#aaa'};">${collected ? itemSymbols[index] : '鈿?}</div>
+                <div class="fragment-star" style="color: ${collected ? item.color : '#aaa'};">${collected ? itemSymbols[index] : '⚬'}</div>
                 <div class="fragment-name" style="color: ${collected ? item.color : '#ccc'};">${collected ? item.name : '???'}</div>
                 <div class="fragment-text">${collected ? item.text : '????????'}</div>
             `;
@@ -3932,11 +3932,11 @@ function showProgress() {
     }
 	
 	
-	// 鍦ㄤ俊鐗╁尯鍩熶笅鏂规坊鍔犲僵铔嬶紙濡傛灉鏉′欢婊¤冻锛?
+	// 在信物区域下方添加彩蛋（如果条件满足）
 const allStarsCollected = stars === 6;
 const allItemsCollected = itemsCollected.every(v => v === true);
 if (allStarsCollected && allItemsCollected) {
-    // 绉婚櫎鍙兘宸插瓨鍦ㄧ殑褰╄泲瀹瑰櫒锛岄伩鍏嶉噸澶?
+    // 移除可能已存在的彩蛋容器，避免重复
     let existingEgg = document.getElementById('easterEggInAlbum');
     if (existingEgg) existingEgg.remove();
 
@@ -3944,7 +3944,7 @@ if (allStarsCollected && allItemsCollected) {
     eggContainer.id = 'easterEggInAlbum';
     eggContainer.style.textAlign = 'center';
     eggContainer.style.margin = '20px 0 10px';
-    eggContainer.innerHTML = '<div class="easter-egg-star">鉁?鍒朵綔鑰呯殑璇?鉁?/div>';
+    eggContainer.innerHTML = '<div class="easter-egg-star">✨ 制作者的话 ✨</div>';
     modalContent.appendChild(eggContainer);
 
     const eggStar = eggContainer.querySelector('.easter-egg-star');
@@ -3955,7 +3955,7 @@ if (allStarsCollected && allItemsCollected) {
 
     modal.style.display = 'flex';
 	
-	// 鐒跺悗寤惰繜涓€灏忔鏃堕棿寮哄埗婊氬姩鍒伴《閮紙纭繚甯冨眬瀹屾垚锛?
+	// 然后延迟一小段时间强制滚动到顶部（确保布局完成）
     setTimeout(() => {
         if (modalContent) {
             modalContent.scrollTop = 0;
@@ -3963,12 +3963,12 @@ if (allStarsCollected && allItemsCollected) {
     }, 10);
 }
 
-// 鍏抽棴妯℃€佹
+// 关闭模态框
 document.getElementById('closeModal').addEventListener('click', function() {
     document.getElementById('progressModal').style.display = 'none';
 });
 
-// 鐐瑰嚮妯℃€佹澶栭儴鍏抽棴
+// 点击模态框外部关闭
 window.addEventListener('click', function(e) {
     const modal = document.getElementById('progressModal');
     if (e.target === modal) {
@@ -3976,7 +3976,7 @@ window.addEventListener('click', function(e) {
     }
 });
 
-// 涓烘槦鏄熻鏁版寜閽坊鍔犵偣鍑讳簨浠?
+// 为星星计数按钮添加点击事件
 document.getElementById('starsCounter').addEventListener('click', showProgress);
 		
 		
@@ -3992,10 +3992,10 @@ function showEasterNote() {
     note.className = 'easter-egg-note';
     note.innerHTML = `
     <div class="close-note">&times;</div>
-    <p style="margin-bottom: 12px;">馃 鑷村彂鐜拌繖涓瀵嗙殑浣?/p>
-    <p>杩欎釜缃戦〉閲岃棌鐫€璁稿璁捐鏃剁殑灏忓績鎬濓紝杩樻湁涓€浜涙湭鑳藉畬鍏ㄥ睍寮€鐨勫僵铔嬭В鏋愩€?/p>
-    <p>鎴戜笉澶兂鐩存帴鍛婅瘔浣狅紝姣曠珶杩欎簺鏂囧瓧鍙兘瀹屽叏鏄垜鑷繁鐨勮噯鎯筹紝鎴戜篃骞朵笉纭畾浣犳槸涓嶆槸鐪熺殑鎰熷叴瓒ｃ€備笉杩囧鏋滀綘鐪熺殑寰堝ソ濂囷紝鍙互鏉ラ棶鎴戙€?/p>
-    <p style="margin-top: 16px; font-style: italic;">鈥斺€?鑻忛</p>
+    <p style="margin-bottom: 12px;">🦊 致发现这个秘密的你</p>
+    <p>这个网页里藏着许多设计时的小心思，还有一些未能完全展开的彩蛋解析。</p>
+    <p>我不太想直接告诉你，毕竟这些文字可能完全是我自己的臆想，我也并不确定你是不是真的感兴趣。不过如果你真的很好奇，可以来问我。</p>
+    <p style="margin-top: 16px; font-style: italic;">—— 苏颀</p>
 `;
     document.body.appendChild(note);
     setTimeout(() => note.classList.add('show'), 10);
@@ -4013,118 +4013,118 @@ function showEasterNote() {
 		
 		
 		
-		// 鐢熸垚绔ュ勾鏄熺悆鐨勬紓娴噾鑹茬矑瀛?
+		// 生成童年星球的漂浮金色粒子
 function createParticles() {
     const particlesContainer = document.getElementById('particles');
     if (!particlesContainer) return;
-    const numberOfParticles = 30; // 绮掑瓙鏁伴噺
+    const numberOfParticles = 30; // 粒子数量
     for (let i = 0; i < numberOfParticles; i++) {
         const particle = document.createElement('div');
         particle.classList.add('particle');
         
-        // 闅忔満澶у皬
+        // 随机大小
         const size = Math.random() * 10 + 3;
         particle.style.width = size + 'px';
         particle.style.height = size + 'px';
         
-        // 闅忔満璧峰浣嶇疆锛堟í鍚戯級
+        // 随机起始位置（横向）
         particle.style.left = Math.random() * 100 + '%';
         
-        // 闅忔満鍔ㄧ敾鎸佺画鏃堕棿锛?s ~ 10s锛?
+        // 随机动画持续时间（4s ~ 10s）
         const duration = Math.random() * 6 + 4;
         particle.style.animationDuration = duration + 's';
         
-        // 闅忔満鍔ㄧ敾寤惰繜
+        // 随机动画延迟
         particle.style.animationDelay = Math.random() * 5 + 's';
         
         particlesContainer.appendChild(particle);
     }
 }
 
-// 鍦ㄩ〉闈㈠垏鎹㈡椂锛屽鏋滃垏鎹㈠埌绔ュ勾鏄熺悆锛屽垯閲嶆柊鐢熸垚绮掑瓙锛堥槻姝㈤噸澶嶏級
+// 在页面切换时，如果切换到童年星球，则重新生成粒子（防止重复）
 function generateParticlesForPlanet1() {
     const container = document.getElementById('particles');
     if (container) {
-        container.innerHTML = ''; // 娓呯┖鍘熸湁绮掑瓙
+        container.innerHTML = ''; // 清空原有粒子
         createParticles();
     }
 }
 
 
-// 鐢熸垚灏戝勾鏄熺悆鐨勮姳鐡?
+// 生成少年星球的花瓣
 function createPetals() {
     const petalContainer = document.getElementById('petals');
     if (!petalContainer) return;
-    petalContainer.innerHTML = ''; // 娓呯┖鍘熸湁鑺辩摚
-    const numberOfPetals = 40; // 鑺辩摚鏁伴噺
+    petalContainer.innerHTML = ''; // 清空原有花瓣
+    const numberOfPetals = 40; // 花瓣数量
     for (let i = 0; i < numberOfPetals; i++) {
         const petal = document.createElement('div');
         petal.classList.add('petal');
         
-        // 闅忔満澶у皬
+        // 随机大小
         const size = Math.random() * 8 + 6;
         petal.style.width = size + 'px';
         petal.style.height = size * 0.7 + 'px';
         
-        // 闅忔満璧峰妯悜浣嶇疆
+        // 随机起始横向位置
         petal.style.left = Math.random() * 100 + '%';
         
-        // 闅忔満鍔ㄧ敾鏃堕暱锛?s ~ 15s锛?
+        // 随机动画时长（5s ~ 15s）
         const duration = Math.random() * 10 + 5;
         petal.style.animationDuration = duration + 's';
         
-        // 闅忔満鍔ㄧ敾寤惰繜
+        // 随机动画延迟
         petal.style.animationDelay = Math.random() * 5 + 's';
         
-        // 闅忔満棰滆壊鍙樺寲
-        const hue = Math.random() * 20 + 340; // 鍋忓悜绮夌孩
+        // 随机颜色变化
+        const hue = Math.random() * 20 + 340; // 偏向粉红
         petal.style.background = `radial-gradient(circle at 30% 30%, hsl(${hue}, 80%, 80%), hsl(${hue}, 80%, 60%))`;
         
         petalContainer.appendChild(petal);
     }
 }
 
-// 鐢熸垚闈掑勾鏄熺悆鐨勬晠闅滅矑瀛?
+// 生成青年星球的故障粒子
 function createGlitchParticles() {
     const container = document.getElementById('glitchParticles');
     if (!container) return;
-    container.innerHTML = ''; // 娓呯┖鍘熸湁绮掑瓙
-    const numberOfParticles = 50; // 绮掑瓙鏁伴噺
-    const colors = ['#00ffff', '#ff00ff', '#00ff9f', '#ffcc00', '#aa80ff']; // 鏁呴殰椋庨鑹?
+    container.innerHTML = ''; // 清空原有粒子
+    const numberOfParticles = 50; // 粒子数量
+    const colors = ['#00ffff', '#ff00ff', '#00ff9f', '#ffcc00', '#aa80ff']; // 故障风颜色
 
     for (let i = 0; i < numberOfParticles; i++) {
         const particle = document.createElement('div');
         particle.classList.add('glitch-particle');
 
-        // 闅忔満閫夋嫨褰㈢姸锛?0% 鏂瑰潡锛?0% 绾挎潯
+        // 随机选择形状：70% 方块，30% 线条
         if (Math.random() < 0.3) {
             particle.classList.add('line');
-            // 绾挎潯瀹藉害闅忔満 10-40px
+            // 线条宽度随机 10-40px
             const width = Math.random() * 30 + 10;
             particle.style.setProperty('--width', width + 'px');
             particle.style.height = '2px';
         } else {
-            // 鏂瑰潡澶у皬闅忔満 3-15px
+            // 方块大小随机 3-15px
             const size = Math.random() * 12 + 3;
             particle.style.setProperty('--size', size + 'px');
         }
 
-        // 闅忔満棰滆壊
+        // 随机颜色
         const color = colors[Math.floor(Math.random() * colors.length)];
         particle.style.setProperty('--color', color);
 
-        // 闅忔満璧峰浣嶇疆
+        // 随机起始位置
         particle.style.left = Math.random() * 100 + '%';
         particle.style.top = Math.random() * 100 + '%';
 
-        // 闅忔満鍔ㄧ敾鏃堕暱锛?s ~ 8s锛?
+        // 随机动画时长（3s ~ 8s）
         const duration = Math.random() * 5 + 3;
         particle.style.animationDuration = duration + 's';
 
-        // 闅忔満鍔ㄧ敾寤惰繜
+        // 随机动画延迟
         particle.style.animationDelay = Math.random() * 2 + 's';
 
-        // 閮ㄥ垎绮掑瓙娣诲姞闂儊绫?
+        // 部分粒子添加闪烁类
         if (Math.random() < 0.2) {
             particle.classList.add('glitch-blink');
         }
@@ -4134,37 +4134,37 @@ function createGlitchParticles() {
 }
 
 
-// 鐢熸垚鐖卞ソ鏄熺悆鐨勯煶涔愮矑瀛?
+// 生成爱好星球的音乐粒子
 function createMusicParticles() {
     const container = document.getElementById('musicParticles');
     if (!container) return;
-    container.innerHTML = ''; // 娓呯┖鍘熸湁绮掑瓙
+    container.innerHTML = ''; // 清空原有粒子
     const numberOfParticles = 25;
-    const symbols = ['鈾?, '鈾?, '鈾?, '鈾?, '鈼?, '鈥?]; // 闊崇鍜屽渾鐐?
+    const symbols = ['♪', '♫', '♩', '♬', '◉', '•']; // 音符和圆点
 
     for (let i = 0; i < numberOfParticles; i++) {
         const particle = document.createElement('div');
         particle.classList.add('music-particle');
 
-        // 闅忔満閫夋嫨绗﹀彿
+        // 随机选择符号
         const symbol = symbols[Math.floor(Math.random() * symbols.length)];
         particle.textContent = symbol;
 
-        // 闅忔満澶у皬锛堜粠0.6rem鍒?.3rem锛?
-        const size = Math.random() * 0.7 + 0.6; // 鏈€灏忓€?.6锛屾渶澶у€?.3
+        // 随机大小（从0.6rem到1.3rem）
+        const size = Math.random() * 0.7 + 0.6; // 最小值0.6，最大值1.3
         particle.style.fontSize = size + 'rem';
 
-        // 闅忔満璧峰妯悜浣嶇疆
+        // 随机起始横向位置
         particle.style.left = Math.random() * 100 + '%';
 
-        // 闅忔満鍔ㄧ敾鏃堕暱锛?s ~ 16s锛?
+        // 随机动画时长（6s ~ 16s）
         const duration = Math.random() * 10 + 6;
         particle.style.animationDuration = duration + 's';
 
-        // 闅忔満鍔ㄧ敾寤惰繜锛? ~ 5s锛?
+        // 随机动画延迟（0 ~ 5s）
         particle.style.animationDelay = Math.random() * 5 + 's';
 
-        // 闅忔満棰滆壊锛堟鑹茬郴锛歨sl 30-60锛?
+        // 随机颜色（橙色系：hsl 30-60）
         const hue = Math.floor(Math.random() * 30 + 30); // 30-60
         particle.style.color = `hsl(${hue}, 100%, 60%)`;
 
@@ -4172,7 +4172,7 @@ function createMusicParticles() {
     }
 }
 
-// 鎯呮劅鏄熺悆锛氭唱婊寸矑瀛?
+// 情感星球：泪滴粒子
 function createTearParticles() {
     const container = document.getElementById('tearParticles');
     if (!container) return;
@@ -4185,7 +4185,7 @@ function createTearParticles() {
         const type = types[Math.floor(Math.random() * types.length)];
         if (type !== 'tear') p.classList.add(type);
         
-        // 闅忔満澶у皬
+        // 随机大小
         let sizeW, sizeH;
         if (type === 'tear') {
             sizeW = Math.random() * 8 + 4;
@@ -4234,57 +4234,57 @@ function createMagicParticles() {
     const container = document.getElementById('magicParticles');
     if (!container) return;
     container.innerHTML = '';
-    const symbols = ['鉁?, '鉁?, '馃尵']; // 绠€鍖栦负涓夌
-    const count = 25; // 鍑忓皯鏁伴噺
+    const symbols = ['✦', '✧', '🌾']; // 简化为三种
+    const count = 25; // 减少数量
     for (let i = 0; i < count; i++) {
         const p = document.createElement('div');
         p.className = 'magic-particle';
         const symbol = symbols[Math.floor(Math.random() * symbols.length)];
         p.textContent = symbol;
-        const size = Math.random() * 1.0 + 0.6; // 瀛楀彿鑼冨洿 0.6-1.6rem
+        const size = Math.random() * 1.0 + 0.6; // 字号范围 0.6-1.6rem
         p.style.fontSize = size + 'rem';
         p.style.left = Math.random() * 100 + '%';
         p.style.animationDuration = (Math.random() * 10 + 8) + 's';
         p.style.animationDelay = Math.random() * 5 + 's';
-        // 鏌斿拰鐨勯噾鑹诧紝闄嶄綆楗卞拰搴?
+        // 柔和的金色，降低饱和度
         const hue = Math.floor(Math.random() * 20 + 45);
-        p.style.color = `hsl(${hue}, 80%, 70%)`; // 闄嶄綆楗卞拰搴?
-        p.style.opacity = 0.4; // 鍥哄畾杈冧綆閫忔槑搴?
+        p.style.color = `hsl(${hue}, 80%, 70%)`; // 降低饱和度
+        p.style.opacity = 0.4; // 固定较低透明度
         container.appendChild(p);
     }
 }
 
-// 鐢熸垚缁撳眬椤电殑閲戣壊绮掑瓙
+// 生成结局页的金色粒子
 function createFinalParticles() {
     const container = document.getElementById('finalParticles');
     if (!container) return;
-    container.innerHTML = ''; // 娓呯┖鍘熸湁绮掑瓙
+    container.innerHTML = ''; // 清空原有粒子
     const numberOfParticles = 30;
-    const symbols = ['鉁?, '鉁?, '路', '馃専', '鉁?]; // 鏄熸槦鍜屽厜鐐?
+    const symbols = ['✦', '✧', '·', '🌟', '✨']; // 星星和光点
 
     for (let i = 0; i < numberOfParticles; i++) {
         const particle = document.createElement('div');
         particle.classList.add('final-particle');
 
-        // 闅忔満閫夋嫨绗﹀彿
+        // 随机选择符号
         const symbol = symbols[Math.floor(Math.random() * symbols.length)];
         particle.textContent = symbol;
 
-        // 闅忔満澶у皬锛?.6rem ~ 1.5rem锛?
-        const size = Math.random() * 0.7 + 0.6; // 鏈€灏忓€?.6锛屾渶澶у€?.3
+        // 随机大小（0.6rem ~ 1.5rem）
+        const size = Math.random() * 0.7 + 0.6; // 最小值0.6，最大值1.3
         particle.style.fontSize = size + 'rem';
 
-        // 闅忔満璧峰妯悜浣嶇疆
+        // 随机起始横向位置
         particle.style.left = Math.random() * 100 + '%';
 
-        // 闅忔満鍔ㄧ敾鏃堕暱锛?s ~ 14s锛?
+        // 随机动画时长（6s ~ 14s）
         const duration = Math.random() * 8 + 6;
         particle.style.animationDuration = duration + 's';
 
-        // 闅忔満鍔ㄧ敾寤惰繜锛? ~ 5s锛?
+        // 随机动画延迟（0 ~ 5s）
         particle.style.animationDelay = Math.random() * 5 + 's';
 
-        // 闅忔満棰滆壊锛堥噾鑹茬郴锛歨sl 45-60锛?
+        // 随机颜色（金色系：hsl 45-60）
         const hue = Math.floor(Math.random() * 15 + 45);
         particle.style.color = `hsl(${hue}, 100%, 70%)`;
 
@@ -4293,21 +4293,21 @@ function createFinalParticles() {
 }
 		
 
-        // 椤甸潰鍒囨崲
+        // 页面切换
        function goToPage(pageId) {
     const current = document.querySelector('.page.active');
     const next = document.getElementById(pageId);
 
-    // 鉁?鍏佽閲嶅叆鍚屼竴椤甸潰锛堜緥濡備粠褰╄泲椤佃繑鍥炵粨灞€椤碉級
+    // ✅ 允许重入同一页面（例如从彩蛋页返回结局页）
     if (!next) return;
     
-    // 寮哄埗绉婚櫎褰撳墠 active锛堝嵆浣?current === next锛屼篃鍏堟竻鐞嗗啀婵€娲伙級
+    // 强制移除当前 active（即使 current === next，也先清理再激活）
     if (current) {
         current.classList.remove('active');
         current.style.display = 'none';
     }
 
-    // 婵€娲荤洰鏍囬〉
+    // 激活目标页
     next.classList.add('active');
     next.style.display = 'block';
     currentPage = pageId;
@@ -4341,7 +4341,7 @@ if (pageId === 'pageFox') {
     createMagicParticles();
 }
 
-    // 闊充箰 & 婊氬姩閫昏緫锛堜繚鎸佷笉鍙橈級
+    // 音乐 & 滚动逻辑（保持不变）
     let musicUrl = null;
     if (pageId === 'pagePlanet4') {
         musicUrl = pageMusic.pagePlanet4_enter;
@@ -4358,24 +4358,24 @@ if (pageId === 'pageFox') {
         document.getElementById('mirrorScene').style.display = 'none';
     }
 
-    // 缁撳眬椤电壒娈婂鐞嗭紙淇濈暀锛?
+    // 结局页特殊处理（保留）
     if (pageId === 'pageFinal' && stars === 6) {
         document.getElementById('wheatEgg').classList.add('show');
         document.getElementById('mirrorScene').style.display = 'none';
         mirrorContent = generateFinalText();
         mirrorRevealed = false;
         const mirrorTextDiv = document.getElementById('finalMirror');
-        mirrorTextDiv.innerHTML = '鉁?瑙︽懜闀滃瓙锛岀湅瑙佽嚜宸?鉁?;
+        mirrorTextDiv.innerHTML = '✨ 触摸镜子，看见自己 ✨';
         mirrorTextDiv.style.opacity = '1';
         document.getElementById('mirrorScene').style.display = 'none';
     } else if (pageId === 'pageFinal') {
         const mirrorTextDiv = document.getElementById('finalMirror');
-        mirrorTextDiv.innerHTML = '浣犲皻鏈泦榻愬叚棰楁槦鏄燂紝鏃犳硶鐪嬭瀹屾暣鐨勮嚜宸便€?br>缁х画鎺㈢储鍚с€?;
+        mirrorTextDiv.innerHTML = '你尚未集齐六颗星星，无法看见完整的自己。<br>继续探索吧。';
         mirrorTextDiv.style.opacity = '1';
     }
 }
 
-        // 鎸夊簭鍙疯烦杞槦鐞?(1-6 鍒嗗埆瀵瑰簲 planet1-6, 7涓虹粨灞€)
+        // 按序号跳转星球 (1-6 分别对应 planet1-6, 7为结局)
         function goToPlanet(num) {
             if (currentPage === 'pagePrologue' && !musicPlaying) {
         musicPlaying = true;
@@ -4393,7 +4393,7 @@ if (pageId === 'pageFox') {
             }
         }
 
-        // 澧炲姞鏄熸槦
+        // 增加星星
         function addStar(planetIndex) {
     if (stars < 6 && !collectedStatus[planetIndex]) {
         stars++;
@@ -4409,15 +4409,15 @@ if (pageId === 'pageFox') {
 		
 		function celebrateWithStars() {
     const colors = ['gold', '#ffd966', '#ffaa33', '#ff8c42'];
-    const particles = 30; // 绮掑瓙鏁伴噺
+    const particles = 30; // 粒子数量
     for (let i = 0; i < particles; i++) {
         const particle = document.createElement('div');
         particle.classList.add('firework-particle');
-        particle.innerHTML = '鉁?; // 鍙互浣跨敤鏄熸槦绗﹀彿鎴栧皬鍦嗙偣
+        particle.innerHTML = '✨'; // 可以使用星星符号或小圆点
         
-        // 闅忔満鐢熸垚鍋忕Щ閲忥紙-200px 鍒?200px锛?
+        // 随机生成偏移量（-200px 到 200px）
         const tx = (Math.random() - 0.5) * 400;
-        const ty = (Math.random() - 0.5) * 400 - 100; // 鍚戜笂椋樻暎涓轰富
+        const ty = (Math.random() - 0.5) * 400 - 100; // 向上飘散为主
         
         particle.style.setProperty('--tx', tx + 'px');
         particle.style.setProperty('--ty', ty + 'px');
@@ -4428,32 +4428,32 @@ if (pageId === 'pageFox') {
         
         document.body.appendChild(particle);
         
-        // 鍔ㄧ敾缁撴潫鍚庣Щ闄?
+        // 动画结束后移除
         setTimeout(() => particle.remove(), 1200);
     }
 }
 
-// 鏄剧ず鎷惧彇鎴愬姛鎻愮ず锛堜娇鐢ㄧ幇鏈?collect-notice 鏍峰紡锛?
+// 显示拾取成功提示（使用现有 collect-notice 样式）
 function showItemCollectMessage(itemName) {
     const msg = document.createElement('div');
     msg.className = 'collect-item-message';
     msg.innerHTML = `
-        <span class="collect-star" style="color: gold;">鉁?/span> 
-        宸叉嬀鍙栵細${itemName} 
-        <span class="collect-star" style="color: gold;">鉁?/span><br>
-        <small style="font-size:0.8rem;">璇峰湪鏄熷浘灞曠ず鍐岄噷鏌ョ湅鎻忚堪</small>
+        <span class="collect-star" style="color: gold;">✦</span> 
+        已拾取：${itemName} 
+        <span class="collect-star" style="color: gold;">✦</span><br>
+        <small style="font-size:0.8rem;">请在星图展示册里查看描述</small>
     `;
     document.body.appendChild(msg);
     setTimeout(() => msg.remove(), 3000);
 }
 
-// 澶勭悊鐗╁搧鎷惧彇
+// 处理物品拾取
 function collectItem(index) {
     if (!itemsCollected[index]) {
         itemsCollected[index] = true;
         showItemCollectMessage(itemsData[index].name);
         
-        // 鏀瑰彉鍥炬爣鏍峰紡锛堝彲閫夛級
+        // 改变图标样式（可选）
         const icons = [featherIcon, stoneIcon, flowerIcon];
         const icon = icons[index];
         if (icon) {
@@ -4462,22 +4462,22 @@ function collectItem(index) {
             icon.style.transition = 'all 0.3s';
         }
     } else {
-        // 鏄剧ず鑷畾涔夋彁绀?
+        // 显示自定义提示
     const msg = document.createElement('div');
     msg.className = 'collect-item-message';
-    msg.innerHTML = '浣犲凡缁忔嬀鍙栬繃杩欎釜鐗╁搧浜?;
+    msg.innerHTML = '你已经拾取过这个物品了';
     document.body.appendChild(msg);
     setTimeout(() => msg.remove(), 2000);
     }
 }
 
-        // 閫夐」鐐瑰嚮
+        // 选项点击
         function selectOption(el, value) {
             const parent = el.parentNode;
             Array.from(parent.children).forEach(child => child.classList.remove('selected'));
             el.classList.add('selected');
             selectedOption = value;
-            // 鍚敤瀵瑰簲鐨勬彁浜ゆ寜閽?
+            // 启用对应的提交按钮
             const submitBtn = parent.parentNode.querySelector('.submit-btn');
             if (submitBtn) submitBtn.disabled = false;
         }
@@ -4485,11 +4485,11 @@ function collectItem(index) {
 		
 		
 		
-		// 鎵撳瓧鏈烘晥鏋滃嚱鏁?
+		// 打字机效果函数
 function typeWriter(text, elementId, speed = 50) {
     const el = document.getElementById(elementId);
     if (!el) return;
-    el.innerHTML = ''; // 娓呯┖瀹瑰櫒
+    el.innerHTML = ''; // 清空容器
     let i = 0;
     const timer = setInterval(() => {
         if (i < text.length) {
@@ -4497,63 +4497,63 @@ function typeWriter(text, elementId, speed = 50) {
             i++;
         } else {
             clearInterval(timer);
-            // 鍙€夛細绉婚櫎鍏夋爣
+            // 可选：移除光标
             el.classList.remove('typing-cursor');
         }
     }, speed);
-    el.classList.add('typing-cursor'); // 娣诲姞鍏夋爣
+    el.classList.add('typing-cursor'); // 添加光标
 }
 		
 
-        // 鍚勬槦鐞冪瓟妗堟鏌?
+        // 各星球答案检查
         function checkPlanet1() {
             const input = document.getElementById('planet1Input').value.trim();
             if (input === answers.planet1) {
                 addStar(0);
-				celebrateWithStars(); // 娣诲姞鐑熻姳鏁堟灉
+				celebrateWithStars(); // 添加烟花效果
                 document.getElementById('puzzle1').classList.add('hidden');
                 document.getElementById('story1').classList.remove('hidden');
 				
-				// 寤惰繜30绉掑悗寮€濮嬫墦瀛楁晥鏋?
+				// 延迟30秒后开始打字效果
         setTimeout(() => {
-            const filmText = `鈥滄槸鐨勶紝閭ｄ釜鏁呬簨銆備粬鏇剧粡鐢ㄩ暅澶磋杩拌繃涓€涓叧浜庢垚闀跨殑鐭墖锛屾瘡涓€涓暅澶撮兘缁忚繃鍙嶅鎵撶（锛屾瘡涓€涓敾闈㈤兘钘忕潃浠栧涓栫晫鐨勭悊瑙ｃ€傞偅鏃朵粬杩樺緢骞磋交锛屼笉鎳傚緱闅愯棌锛屼笉鎬曡〃杈撅紝涔熶笉鎬曡浜虹湅瑙併€備粬绔欏湪鎽勫儚鏈哄悗闈紝鎸囨尌鐫€寰堝浜猴紝蹇冮噷鏃㈢揣寮犲張鍏村銆傚悗鏉ワ紝浠栧緢灏戝啀鎻愯捣瀹冿紝涓嶆槸蹇樿浜嗭紝鏄€曠幇鍦ㄧ殑鑷繁閰嶄笉涓婃浘缁忕殑楠勫偛銆傗€漙;
+            const filmText = `“是的，那个故事。他曾经用镜头讲述过一个关于成长的短片，每一个镜头都经过反复打磨，每一个画面都藏着他对世界的理解。那时他还很年轻，不懂得隐藏，不怕表达，也不怕被人看见。他站在摄像机后面，指挥着很多人，心里既紧张又兴奋。后来，他很少再提起它，不是忘记了，是怕现在的自己配不上曾经的骄傲。”`;
             typeWriter(filmText, 'typewriterText', 80);
-        }, 10000); // 30000姣 = 30绉?
+        }, 10000); // 30000毫秒 = 30秒
 				
             } else {
-                alert('鍐嶆兂鎯筹紝鍜岄暅澶存湁鍏筹紝鍜岄偅涓浠栭獎鍌茬殑瀛︾敓鏃朵唬鐨勫澶╂湁鍏炽€?);
+                alert('再想想，和镜头有关，和那个让他骄傲的学生时代的夏天有关。');
             }
         }
 
         function checkPlanet2() {
             if (selectedOption === answers.planet2) {
                 addStar(1);
-				celebrateWithStars(); // 娣诲姞鐑熻姳鏁堟灉
+				celebrateWithStars(); // 添加烟花效果
                 document.getElementById('puzzle2').classList.add('hidden');
                 document.getElementById('story2').classList.remove('hidden');
                 selectedOption = null;
             } else {
-                alert('鍐嶆兂鎯筹紝閭ｄ釜琚棌璧锋潵鐨勮嚜宸憋紝鏈€鎯宠鐨勬槸浠€涔堬紵');
+                alert('再想想，那个被藏起来的自己，最想要的是什么？');
             }
         }
 
         function checkPlanet3() {
             if (selectedOption === answers.planet3) {
                 addStar(2);
-				celebrateWithStars(); // 娣诲姞鐑熻姳鏁堟灉
+				celebrateWithStars(); // 添加烟花效果
                 document.getElementById('puzzle3').classList.add('hidden');
                 document.getElementById('story3').classList.remove('hidden');
 				
                 selectedOption = null;
             } else {
-                alert('鍐嶆兂鎯筹紝浠栭偅涔堝姫鍔涳紝鍒板簳鏄兂璁╁埆浜鸿寰椾粬浠€涔堬紵');
+                alert('再想想，他那么努力，到底是想让别人觉得他什么？');
             }
         }
 
         function checkPlanet4() {
             if (selectedOption === answers.planet4) {
                 addStar(3);
-				celebrateWithStars(); // 娣诲姞鐑熻姳鏁堟灉
+				celebrateWithStars(); // 添加烟花效果
                 document.getElementById('puzzle4').classList.add('hidden');
                 document.getElementById('story4').classList.remove('hidden');
                 selectedOption = null;
@@ -4562,38 +4562,38 @@ if (musicPlaying) {
     bgMusic.play().catch(() => {});
 }
             } else {
-                alert('鍐嶆兂鎯筹紝浠栭偅涔堝枩娆㈠拰浜轰竴璧风帺锛岀湡鐨勫彧鏄€冮伩鍚楋紵');
+                alert('再想想，他那么喜欢和人一起玩，真的只是逃避吗？');
             }
         }
 
         function checkPlanet5() {
             if (selectedOption === answers.planet5) {
                 addStar(4);
-				celebrateWithStars(); // 娣诲姞鐑熻姳鏁堟灉
+				celebrateWithStars(); // 添加烟花效果
                 document.getElementById('puzzle5').classList.add('hidden');
                 document.getElementById('story5').classList.remove('hidden');
                 selectedOption = null;
             } else {
-                alert('鍐嶆兂鎯筹紝浠栨矇榛樼殑鏃跺€欙紝鏈€鎬曠殑鍒板簳鏄粈涔堬紵');
+                alert('再想想，他沉默的时候，最怕的到底是什么？');
             }
         }
 
         function checkPlanet6() {
             if (selectedOption === answers.planet6) {
                 addStar(5);
-				celebrateWithStars(); // 娣诲姞鐑熻姳鏁堟灉
+				celebrateWithStars(); // 添加烟花效果
                 document.getElementById('puzzle6').classList.add('hidden');
                 document.getElementById('story6').classList.remove('hidden');
                 selectedOption = null;
             } else {
-                alert('鍐嶆兂鎯筹紝浠栨敹钘忕殑閭ｄ簺涓滆タ锛岀湡鐨勬槸涓轰簡绔嬪埢鍘诲锛岃繕鏄负浜嗏€︹€﹀皢鏉ユ湁涓€澶╋紝鍙互涓嶇敤瀹虫€曪紵');
+                alert('再想想，他收藏的那些东西，真的是为了立刻去学，还是为了……将来有一天，可以不用害怕？');
             }
         }
 		
 		function revealMirror() {
     const mirrorTextDiv = document.getElementById('finalMirror');
     if (stars < 6) {
-        alert('浣犲皻鏈泦榻愬叚棰楁槦鏄燂紝鏃犳硶鐪嬭瀹屾暣鐨勮嚜宸便€?);
+        alert('你尚未集齐六颗星星，无法看见完整的自己。');
         return;
     }
     if (mirrorRevealed) return;
@@ -4606,7 +4606,7 @@ if (musicPlaying) {
         mirrorTextDiv.innerHTML = mirrorContent;
         document.getElementById('mirrorScene').style.display = 'block';
         mirrorTextDiv.style.opacity = '1';
-        // 涓烘瘡涓钀芥坊鍔犻€愯鍔ㄧ敾寤惰繜
+        // 为每个段落添加逐行动画延迟
         const paragraphs = mirrorTextDiv.querySelectorAll('p');
         paragraphs.forEach((p, index) => {
             p.style.animation = `fadeInUp 0.8s ease ${index * 0.3}s forwards`;
@@ -4614,61 +4614,61 @@ if (musicPlaying) {
     }, 200);
 }
 
-        // 鐢熸垚缁撳眬椤甸暅瀛愭枃瀛?
+        // 生成结局页镜子文字
         function generateFinalText() {
     if (stars < 6) return '';
     const text = `
-        <p>浣犳槸鈥斺€?/p>
-        <p>閭ｄ釜鐢ㄥ厜褰辫褰曡繃鏃跺厜鐨勪汉锛?br>
-        鎶婄湡瀹炶棌鍦ㄨ。鏌滄渶娣卞鐨勪汉锛?br>
-        鍦ㄨ潤铦犱緺闈㈠叿涓嬪伔鍋峰徆鎭嵈渚濈劧鍔姏鐨勪汉锛?br>
-        鐢ㄦ娓稿拰闊充箰杩炴帴涓栫晫鐨勪汉锛?br>
-        鐢ㄦ矇榛樿鈥滃埆璧扳€濈殑浜猴紝<br>
-        鏀惰棌鐫€鏈潵鎵€鏈夊彲鑳界殑浜恒€?/p>
-        <p>浣犳槸鈥斺€?/p>
-        <p>涓€涓湪鐤叉儷涓緷鐒舵俯鏌旂殑浜恒€?br>
-        涓€涓棌璧锋潵鍗村缁堣鐪嬭鐨勪汉銆?br>
-        涓€涓€煎緱琚ソ濂藉寰呯殑浜恒€?/p>
+        <p>你是——</p>
+        <p>那个用光影记录过时光的人，<br>
+        把真实藏在衣柜最深处的人，<br>
+        在蝙蝠侠面具下偷偷叹息却依然努力的人，<br>
+        用桌游和音乐连接世界的人，<br>
+        用沉默说“别走”的人，<br>
+        收藏着未来所有可能的人。</p>
+        <p>你是——</p>
+        <p>一个在疲惫中依然温柔的人。<br>
+        一个藏起来却始终被看见的人。<br>
+        一个值得被好好对待的人。</p>
     `;
     return text;
 }
 
-        // 杩涘叆鐙愮嫺褰╄泲椤?
+        // 进入狐狸彩蛋页
         function goToFoxPage() {
             goToPage('pageFox');
         }
 
-        // 椋橀害绌楁晥鏋?
+        // 飘麦穗效果
         function floatWheat() {
     const wheat = document.createElement('div');
     wheat.classList.add('floating-wheat');
     wheat.innerHTML = '<i class="fas fa-wheat-alt"></i>';
-    // 闅忔満璧峰姘村钩浣嶇疆
+    // 随机起始水平位置
     wheat.style.left = Math.random() * window.innerWidth + 'px';
     wheat.style.bottom = '20px';
-    // 闅忔満澶у皬
+    // 随机大小
     const scale = Math.random() * 0.8 + 0.6; // 0.6-1.4
     wheat.style.fontSize = (scale * 2) + 'rem';
-    // 闅忔満鏃嬭浆鍒濆瑙掑害
+    // 随机旋转初始角度
     const rotate = Math.random() * 60 - 30;
     wheat.style.transform = `rotate(${rotate}deg)`;
-    // 闅忔満棰滆壊锛堜繚鐣欓噾鑹茬郴锛?
+    // 随机颜色（保留金色系）
     const colors = ['gold', '#ffd966', '#ffaa33', '#ffb347'];
     wheat.style.color = colors[Math.floor(Math.random() * colors.length)];
-    // 娣诲姞澶氶噸闃村奖
+    // 添加多重阴影
     wheat.style.textShadow = '0 0 5px currentColor, 0 0 15px currentColor';
-    // 鍔ㄧ敾浣跨敤鐜版湁 @keyframes floatUp锛屼絾涓轰簡鏇翠赴瀵岋紝鎴戜滑鍙互娣诲姞鍐呰仈鍔ㄧ敾鍙傛暟
-    // 闅忔満鍔ㄧ敾鏃堕暱鍜屽欢杩?
-    const duration = Math.random() * 2 + 2.5; // 2.5-4.5绉?
+    // 动画使用现有 @keyframes floatUp，但为了更丰富，我们可以添加内联动画参数
+    // 随机动画时长和延迟
+    const duration = Math.random() * 2 + 2.5; // 2.5-4.5秒
     wheat.style.animation = `floatUp ${duration}s ease-out forwards`;
-    // 澧炲姞闅忔満姘村钩椋樼Щ锛堥€氳繃鍏抽敭甯ф垨鍐呰仈鍙橀噺锛?
-    const driftX = (Math.random() - 0.5) * 100; // -50px 鍒?50px
+    // 增加随机水平飘移（通过关键帧或内联变量）
+    const driftX = (Math.random() - 0.5) * 100; // -50px 到 50px
     wheat.style.setProperty('--driftX', driftX + 'px');
     document.body.appendChild(wheat);
     setTimeout(() => wheat.remove(), duration * 1000);
 }
 
-        // 缁戝畾褰╄泲椤电偣鍑讳簨浠?
+        // 绑定彩蛋页点击事件
         document.addEventListener('DOMContentLoaded', function() {
             createStars();
             goToPage('pagePrologue');
@@ -4676,39 +4676,39 @@ if (musicPlaying) {
             const twentyOne = document.getElementById('twentyOneTrigger');
             if (twentyOne) {
                 twentyOne.addEventListener('click', function() {
-                    // 杩炵画椋樺嚭鍑犳湹楹︾
+                    // 连续飘出几朵麦穗
                     for (let i = 0; i < 5; i++) {
                         setTimeout(floatWheat, i * 200);
                     }
-					// 鍚敤鐙愮嫺鐐瑰嚮
+					// 启用狐狸点击
 foxClickable = true;
-// 寮瑰嚭鎻愮ず
+// 弹出提示
 const msg = document.createElement('div');
 msg.className = 'collect-item-message';
-msg.innerHTML = '鐜板湪锛屼綘鍙互鍥炲埌鏈〉鐨勯《閮紝鍐嶆帰绱竴娆♀€︹€?;
+msg.innerHTML = '现在，你可以回到本页的顶部，再探索一次……';
 document.body.appendChild(msg);
 setTimeout(() => msg.remove(), 3000);
                 });
             }
 			
 			
-			// 鑾峰彇褰╄泲椤典笁涓浘鏍囧厓绱?
+			// 获取彩蛋页三个图标元素
 const featherIcon = document.getElementById('featherIcon');
 const stoneIcon = document.getElementById('stoneIcon');
 const flowerIcon = document.getElementById('flowerIcon');
 
-// 缁戝畾鐐瑰嚮浜嬩欢
+// 绑定点击事件
 if (featherIcon) {
     featherIcon.addEventListener('click', () => collectItem(0));
-    featherIcon.title = '鐐瑰嚮鎷惧彇缇芥瘺'; // 鎮仠鎻愮ず
+    featherIcon.title = '点击拾取羽毛'; // 悬停提示
 }
 if (stoneIcon) {
     stoneIcon.addEventListener('click', () => collectItem(1));
-    stoneIcon.title = '鐐瑰嚮鎷惧彇鐭冲瓙';
+    stoneIcon.title = '点击拾取石子';
 }
 if (flowerIcon) {
     flowerIcon.addEventListener('click', () => collectItem(2));
-    flowerIcon.title = '鐐瑰嚮鎷惧彇閲庤姳';
+    flowerIcon.title = '点击拾取野花';
 }
 			
 			const mirrorFrame = document.getElementById('mirrorFrame');
@@ -4716,21 +4716,21 @@ if (mirrorFrame) {
     mirrorFrame.addEventListener('click', revealMirror);
 }
 
-// 鑾峰彇褰╄泲椤电嫄鐙稿浘鏍囧苟娣诲姞鐐瑰嚮浜嬩欢
+// 获取彩蛋页狐狸图标并添加点击事件
 const foxIcon = document.getElementById('foxIconEgg');
 if (foxIcon) {
     foxIcon.addEventListener('click', function() {
         if (!foxClickable) {
-    return; // 鐩存帴杩斿洖锛屼笉鎵ц鍚庣画浠ｇ爜
+    return; // 直接返回，不执行后续代码
 }
-        // 鐙愮嫺娑堝け鍔ㄧ敾
+        // 狐狸消失动画
         this.style.transition = 'opacity 0.5s';
         this.style.opacity = '0';
         setTimeout(() => {
             this.style.display = 'none';
         }, 500);
         
-        // 闃叉鍐嶆鐐瑰嚮
+        // 防止再次点击
         foxClickable = false;
     });
 }
@@ -4740,15 +4740,15 @@ if (foxIcon) {
 		
 		
 		
-        // 閲嶅惎鏃呯▼
+        // 重启旅程
         function restartJourney() {
-            if (confirm('閲嶆柊寮€濮嬩細閲嶇疆鎵€鏈夋槦鏄燂紝纭畾鍚楋紵')) {
+            if (confirm('重新开始会重置所有星星，确定吗？')) {
                 stars = 0;
-				collectedStatus = [false, false, false, false, false, false]; // 閲嶇疆鏀堕泦鐘舵€?
-				// 閲嶇疆鐗╁搧鏀堕泦鐘舵€?
+				collectedStatus = [false, false, false, false, false, false]; // 重置收集状态
+				// 重置物品收集状态
 itemsCollected = [false, false, false];
 
-// 閲嶇疆鍥炬爣鏍峰紡
+// 重置图标样式
 const feather = document.getElementById('featherIcon');
 const stone = document.getElementById('stoneIcon');
 const flower = document.getElementById('flowerIcon');
@@ -4759,26 +4759,26 @@ const flower = document.getElementById('flowerIcon');
     }
 });
                 document.getElementById('starCount').innerText = '0';
-                // 閲嶇疆鎵€鏈夐〉闈細闅愯棌鎴愬姛鏁呬簨锛屾樉绀鸿皽棰?
+                // 重置所有页面：隐藏成功故事，显示谜题
                 document.querySelectorAll('.success-story').forEach(s => s.classList.add('hidden'));
                 document.querySelectorAll('.puzzle-area').forEach(p => p.classList.remove('hidden'));
-                // 闅愯棌闀滀腑鐨勪粬娈佃惤
+                // 隐藏镜中的他段落
                 document.getElementById('mirrorScene').style.display = 'none';
 				mirrorRevealed = false;
 				foxClickable = false;
 const foxEgg = document.getElementById('foxIconEgg');
 if (foxEgg) {
     foxEgg.style.opacity = '1';
-    foxEgg.style.display = 'block'; // 鎴?'inline-block'
+    foxEgg.style.display = 'block'; // 或 'inline-block'
     foxEgg.style.transition = '';
 }
 				mirrorContent = '';
 				
 				const eggInAlbum = document.getElementById('easterEggInAlbum');
 if (eggInAlbum) eggInAlbum.remove();
-                // 鍥炲埌搴忓箷
+                // 回到序幕
                 goToPage('pagePrologue');
-				// 闅愯棌褰╄泲椤靛叆鍙ｏ紙楹︾鍥炬爣锛?
+				// 隐藏彩蛋页入口（麦穗图标）
 const wheatEgg = document.getElementById('wheatEgg');
 if (wheatEgg) {
     wheatEgg.classList.remove('show');
